@@ -1,0 +1,209 @@
+{
+  "baseTemplates": [
+    {
+      "question": "Which statement best describes \"{{title}}\"?",
+      "options": [
+        "{{description}}",
+        "It is optional for job readiness",
+        "It does not require practice",
+        "It is only for final-year students"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "question": "What should you prioritize in {{week}}?",
+      "options": [
+        "Skip tasks and watch random videos",
+        "{{task1}}",
+        "Jump to final modules directly",
+        "Ignore practical work"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "question": "How is real progress validated in PathForge?",
+      "options": [
+        "Only by opening links",
+        "By passing test + marking course done",
+        "By logging out and in",
+        "By changing skill track"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "question": "Which resource is part of this module?",
+      "options": [
+        "{{resource1}}",
+        "Random unverified internet thread",
+        "No resource should be used",
+        "Only paid coaching links"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "question": "What is the best learning sequence for {{title}}?",
+      "options": [
+        "Read once and move on",
+        "Learn, practice, build mini output, then test",
+        "Only memorize theory",
+        "Attempt test without prep"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "question": "Which task supports completion strongly?",
+      "options": [
+        "{{task2}}",
+        "Skip weekly tasks",
+        "Do unrelated advanced topic first",
+        "Avoid revision"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "question": "When is a module treated as completed?",
+      "options": [
+        "After clicking Start Course",
+        "When both Course Done and test pass are true",
+        "When one question is answered",
+        "After opening dashboard"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "question": "Which outcome matches this module?",
+      "options": [
+        "{{outcome}}",
+        "No clear outcome is required",
+        "Only attendance matters",
+        "Outcome is unrelated to employability"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "question": "How should you use module resources?",
+      "options": [
+        "Use only one random source",
+        "Use {{resource1}} and {{resource2}} with practical tasks",
+        "Do not use resources",
+        "Use resources but skip tasks"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "question": "Which action is most useful after studying concepts?",
+      "options": [
+        "Apply concepts in a mini project",
+        "Ignore hands-on work",
+        "Wait for next week",
+        "Retake onboarding quiz"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "question": "What should be avoided while learning {{skillName}}?",
+      "options": [
+        "Consistent daily effort",
+        "Skipping practical implementation",
+        "Reviewing mistakes",
+        "Using reliable references"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "question": "What makes weekly learning effective?",
+      "options": [
+        "Structured tasks with practice and review",
+        "Only passive reading",
+        "No goals and no tracking",
+        "Jumping between unrelated topics"
+      ],
+      "correctIndex": 0
+    },
+    {
+      "question": "A smart way to improve test score is:",
+      "options": [
+        "Attempt without revising",
+        "Revise key points and solve quick practice first",
+        "Skip difficult concepts always",
+        "Depend only on guessing"
+      ],
+      "correctIndex": 1
+    },
+    {
+      "question": "What is the purpose of {{week}} in the roadmap?",
+      "options": [
+        "To build practical capability step by step",
+        "To collect random certificates only",
+        "To delay project work",
+        "To avoid skill depth"
+      ],
+      "correctIndex": 0
+    }
+  ],
+  "skillTemplates": {
+    "Frontend Development": [
+      {
+        "question": "In frontend learning, what matters most early on?",
+        "options": [
+          "Strong fundamentals plus regular UI practice",
+          "Copy-paste projects without understanding",
+          "Ignoring browser behavior",
+          "Skipping responsiveness"
+        ],
+        "correctIndex": 0
+      }
+    ],
+    "Backend Development": [
+      {
+        "question": "For backend readiness, what should be tested regularly?",
+        "options": [
+          "API routes, validation, and error handling",
+          "Only frontend colors",
+          "Only database names",
+          "Nothing until deployment day"
+        ],
+        "correctIndex": 0
+      }
+    ],
+    "Artificial Intelligence": [
+      {
+        "question": "In AI learning, a good balance is:",
+        "options": [
+          "Math intuition + coding practice + evaluation",
+          "Prompting only with no fundamentals",
+          "Reading papers only",
+          "Skipping model testing"
+        ],
+        "correctIndex": 0
+      }
+    ]
+  },
+  "weekTemplates": {
+    "Week 1": [
+      {
+        "question": "Why is Week 1 important?",
+        "options": [
+          "It builds foundation for all next modules",
+          "It can be skipped completely",
+          "It is only for revision",
+          "It does not impact outcomes"
+        ],
+        "correctIndex": 0
+      }
+    ],
+    "Week 6": [
+      {
+        "question": "What is a key focus in Week 6 usually?",
+        "options": [
+          "Portfolio/project polish and applying opportunities",
+          "Restarting from Week 1",
+          "Avoiding interview preparation",
+          "Removing completed work"
+        ],
+        "correctIndex": 0
+      }
+    ]
+  },
+  "moduleTemplates": {}
+}
