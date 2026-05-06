@@ -1,71 +1,101 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const ParticleBackground = () => {
-  const particles = useMemo(() => {
-    return Array.from({ length: 28 }, (_, i) => ({
-      id: i,
-      size: Math.random() * 220 + 60,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: Math.random() * 18 + 12,
-      delay: Math.random() * -20,
-      opacity: Math.random() * 0.13 + 0.04,
-      color: i % 3 === 0
-        ? 'rgba(255, 107, 53,'
-        : i % 3 === 1
-          ? 'rgba(155, 89, 182,'
-          : 'rgba(52, 152, 219,',
-      drift: (Math.random() - 0.5) * 60,
-      driftY: (Math.random() - 0.5) * 40,
-    }));
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   return (
     <>
       <style>{`
-        @keyframes floatOrb {
-          0%   { transform: translate(0px, 0px) scale(1); }
-          25%  { transform: translate(var(--dx), calc(var(--dy) * -1)) scale(1.05); }
-          50%  { transform: translate(calc(var(--dx) * -0.6), var(--dy)) scale(0.97); }
-          75%  { transform: translate(calc(var(--dx) * 0.8), calc(var(--dy) * 0.4)) scale(1.03); }
-          100% { transform: translate(0px, 0px) scale(1); }
+        @keyframes auroraMove1 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50%      { transform: translate(8vw, 12vh) scale(1.15); }
         }
-        .pf-particle {
+        @keyframes auroraMove2 {
+          0%, 100% { transform: translate(0, 0) scale(1); }
+          50%      { transform: translate(-10vw, -10vh) scale(1.1); }
+        }
+        @keyframes auroraMove3 {
+          0%, 100% { transform: translate(0, 0) scale(1.1); }
+          50%      { transform: translate(5vw, -8vh) scale(0.95); }
+        }
+        .pf-aurora-wrapper {
+          position: fixed;
+          inset: 0;
+          overflow: hidden;
+          pointer-events: none;
+          z-index: 0;
+          background: var(--bg-base);
+        }
+        .pf-aurora-blob {
           position: absolute;
           border-radius: 50%;
-          filter: blur(60px);
+          filter: blur(140px);
+          opacity: 0.12;
           pointer-events: none;
-          animation: floatOrb var(--dur) ease-in-out var(--delay) infinite;
           will-change: transform;
+          mix-blend-mode: multiply;
+        }
+        @media (max-width: 768px) {
+          .pf-aurora-blob {
+            filter: blur(90px);
+            opacity: 0.15;
+          }
         }
       `}</style>
-      <div style={{
-        position: 'fixed',
-        inset: 0,
-        overflow: 'hidden',
-        pointerEvents: 'none',
-        zIndex: 0,
-      }}>
-        {particles.map(p => (
+      <div className="pf-aurora-wrapper">
+        {/* Golden Yellow Blob */}
+        <div
+          className="pf-aurora-blob"
+          style={{
+            width: isMobile ? '80vw' : '55vw',
+            height: isMobile ? '80vw' : '55vw',
+            left: '-10vw',
+            top: '-10vh',
+            background: 'var(--brand-yellow)',
+            animation: 'auroraMove1 60s ease-in-out infinite',
+          }}
+        />
+        
+        {/* Coral Blob */}
+        <div
+          className="pf-aurora-blob"
+          style={{
+            width: isMobile ? '90vw' : '50vw',
+            height: isMobile ? '90vw' : '50vw',
+            right: '-10vw',
+            bottom: '-10vh',
+            background: 'var(--brand-coral)',
+            animation: 'auroraMove2 55s ease-in-out infinite alternate',
+          }}
+        />
+        
+        {/* Mint Teal Blob - Desktop Only */}
+        {!isMobile && (
           <div
-            key={p.id}
-            className="pf-particle"
+            className="pf-aurora-blob"
             style={{
-              width: `${p.size}px`,
-              height: `${p.size}px`,
-              left: `${p.x}%`,
-              top: `${p.y}%`,
-              background: `radial-gradient(circle, ${p.color}${p.opacity + 0.05}) 0%, ${p.color}0) 70%)`,
-              '--dur': `${p.duration}s`,
-              '--delay': `${p.delay}s`,
-              '--dx': `${p.drift}px`,
-              '--dy': `${p.driftY}px`,
+              width: '45vw',
+              height: '45vw',
+              right: '15vw',
+              top: '25vh',
+              background: 'var(--brand-teal)',
+              animation: 'auroraMove3 70s ease-in-out infinite',
             }}
           />
-        ))}
+        )}
       </div>
     </>
   );
 };
 
 export default ParticleBackground;
+

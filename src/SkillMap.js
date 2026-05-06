@@ -165,30 +165,28 @@ function getStatus(node, expId, isSkilled) {
   return 'gap';
 }
 
-
-
 export default function SkillMap({ userData, onBack, onNext, theme }) {
   const defaultTheme = {
-    pageBg: '#1D2226',
-    cardBg: '#1B1F23',
-    inputBg: '#283039',
-    border: '#38434F',
-    textPrimary: '#E7E9EA',
-    textMuted: '#B0B7BF',
-    accent: '#0A66C2',
-    accentHover: '#004182',
-    accentLight: '#70B5F9',
-    success: '#057642',
-    warning: '#F5C518',
-    error: '#CC1016',
+    pageBg: 'var(--bg-base)',
+    cardBg: 'var(--glass-bg)',
+    inputBg: 'rgba(255, 255, 255, 0.6)',
+    border: 'var(--glass-border)',
+    textPrimary: 'var(--text-heading)',
+    textMuted: 'var(--text-body)',
+    accent: 'var(--brand-teal)',
+    accentHover: 'var(--brand-yellow)',
+    accentLight: 'rgba(0, 212, 170, 0.2)',
+    success: 'var(--brand-teal)',
+    warning: 'var(--brand-yellow)',
+    error: 'var(--brand-coral)',
   };
   const currentTheme = theme || defaultTheme;
   
   const statusConfig = {
-    you:      { color: currentTheme.accent, radius: 28 },
-    known:    { color: currentTheme.success, radius: 20 },
-    learning: { color: currentTheme.warning, radius: 20 },
-    gap:      { color: currentTheme.error, radius: 20 },
+    you:      { color: 'var(--brand-teal)', radius: 32 },
+    known:    { color: 'var(--brand-teal)', radius: 24 },
+    learning: { color: 'var(--brand-yellow)', radius: 24 },
+    gap:      { color: 'var(--brand-coral)', radius: 24 },
   };
 
   const svgRef = useRef(null);
@@ -198,7 +196,6 @@ export default function SkillMap({ userData, onBack, onNext, theme }) {
   const rawNodes = skillNodes[skillName] || skillNodes['default'];
   const rawLinks = skillLinks[skillName] || skillLinks['default'];
 
-  // Calculate readiness status based on profile completion
   const calculateReadiness = () => {
     const hasOnboarding = userData?.onboardingCompleted;
     const hasSkill = userData?.skill?.title;
@@ -207,7 +204,7 @@ export default function SkillMap({ userData, onBack, onNext, theme }) {
     const totalModules = userData?.learningProgress?.total || 0;
     
     const profileComplete = hasOnboarding && hasSkill && hasExperience;
-    const learningComplete = totalModules > 0 && completedModules >= totalModules * 0.8; // 80% completion
+    const learningComplete = totalModules > 0 && completedModules >= totalModules * 0.8;
     
     if (!profileComplete) {
       return { status: 'not_ready', message: 'Profile incomplete', percentage: 0 };
@@ -224,7 +221,6 @@ export default function SkillMap({ userData, onBack, onNext, theme }) {
 
   const readiness = calculateReadiness();
 
-  // Assign status dynamically based on experience
   const processedNodes = rawNodes.map(n => ({
     ...n,
     status: getStatus(n, expId, userData?.onboardingType === 'skilled'),
@@ -238,7 +234,7 @@ export default function SkillMap({ userData, onBack, onNext, theme }) {
     const svg = d3.select(svgRef.current);
     svg.selectAll('*').remove();
 
-    const W = 560, H = 420;
+    const W = 600, H = 450;
     svg.attr('viewBox', `0 0 ${W} ${H}`);
 
     const nodes = [
@@ -251,23 +247,22 @@ export default function SkillMap({ userData, onBack, onNext, theme }) {
       .filter(l => nodeIds.has(l.source) && nodeIds.has(l.target));
 
     const sim = d3.forceSimulation(nodes)
-      .force('link', d3.forceLink(links).id(d => d.id).distance(110))
-      .force('charge', d3.forceManyBody().strength(-280))
+      .force('link', d3.forceLink(links).id(d => d.id).distance(130))
+      .force('charge', d3.forceManyBody().strength(-400))
       .force('center', d3.forceCenter(W / 2, H / 2))
-      .force('collision', d3.forceCollide(38));
+      .force('collision', d3.forceCollide(45));
 
-    // Glow filter
     const defs = svg.append('defs');
     const filter = defs.append('filter').attr('id', 'glow');
-    filter.append('feGaussianBlur').attr('stdDeviation', '3').attr('result', 'coloredBlur');
+    filter.append('feGaussianBlur').attr('stdDeviation', '4').attr('result', 'coloredBlur');
     const feMerge = filter.append('feMerge');
     feMerge.append('feMergeNode').attr('in', 'coloredBlur');
     feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
 
     const link = svg.append('g').selectAll('line')
       .data(links).join('line')
-      .attr('stroke', currentTheme.border)
-      .attr('stroke-width', 1.5);
+      .attr('stroke', 'rgba(0,0,0,0.06)')
+      .attr('stroke-width', 2);
 
     const node = svg.append('g').selectAll('g')
       .data(nodes).join('g')
@@ -286,18 +281,20 @@ export default function SkillMap({ userData, onBack, onNext, theme }) {
 
     node.append('circle')
       .attr('r', d => statusConfig[d.status].radius)
-      .attr('fill', d => `${statusConfig[d.status].color}22`)
+      .attr('fill', d => d.status === 'you' ? 'white' : `rgba(255, 255, 255, 0.9)`)
       .attr('stroke', d => statusConfig[d.status].color)
-      .attr('stroke-width', d => d.status === 'you' ? 3 : 2)
+      .attr('stroke-width', d => d.status === 'you' ? 4 : 3)
       .attr('filter', d => d.status === 'you' ? 'url(#glow)' : null);
 
     node.append('text')
-      .text(d => d.label)
+      .text(d => d.label.toUpperCase())
       .attr('text-anchor', 'middle')
       .attr('dy', '0.35em')
-      .attr('fill', currentTheme.textPrimary)
-      .attr('font-size', d => d.status === 'you' ? '11px' : '10px')
-      .attr('font-weight', d => d.status === 'you' ? 'bold' : 'normal')
+      .attr('fill', d => d.status === 'you' ? 'var(--brand-teal)' : 'var(--text-heading)')
+      .attr('font-family', 'var(--font-display)')
+      .attr('font-size', d => d.status === 'you' ? '12px' : '10px')
+      .attr('font-weight', '900')
+      .attr('letter-spacing', '0.5px')
       .attr('pointer-events', 'none');
 
     sim.on('tick', () => {
@@ -313,241 +310,218 @@ export default function SkillMap({ userData, onBack, onNext, theme }) {
   return (
     <div style={{
       minHeight: '100vh',
-      background: currentTheme.pageBg,
-      color: currentTheme.textPrimary,
-      fontFamily: 'Arial, sans-serif',
-      padding: '30px 20px',
+      background: 'var(--bg-base)',
+      color: 'var(--text-body)',
+      fontFamily: 'var(--font-main)',
+      padding: '80px 20px',
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', maxWidth: '900px', margin: '0 auto 24px' }}>
-        <button onClick={onBack} style={{
-          background: 'transparent', color: currentTheme.textMuted,
-          border: `1px solid ${currentTheme.border}`, padding: '8px 18px',
-          borderRadius: '20px', cursor: 'pointer', fontSize: '13px'
-        }}>← Back</button>
-        <h1 style={{ color: currentTheme.accent, fontSize: '22px', fontWeight: 'bold' }}>⚡ PathForge</h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent:'space-between', maxWidth: '1200px', margin: '0 auto 60px' }}>
+        <button onClick={onBack} className="pf-glass" style={{
+          border: 'none', padding: '16px 35px',
+          cursor: 'pointer', fontSize: '13px', fontWeight: '900', borderRadius:'25px', letterSpacing:'1.5px', textTransform:'uppercase'
+        }}>← BACK</button>
+        <h1 className="pf-shimmer-text" style={{ fontSize: '32px', fontWeight: '900', fontFamily:'var(--font-display)', margin:0, letterSpacing:'-1px' }}>⚡ PathForge DNA</h1>
       </div>
 
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
 
-        <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-          <h2 style={{ fontSize: '26px', fontWeight: 'bold' }}>
-            🧬 {userData?.name || 'User'}'s Skill DNA Map
+        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+          <h2 style={{ fontSize: '64px', fontWeight: '900', letterSpacing: '-2.5px', fontFamily: 'var(--font-display)', color:'var(--text-heading)', lineHeight:1.1 }}>
+            <span className="pf-shimmer-text">{userData?.name || 'User'}'s Skill DNA Map</span>
           </h2>
-          <p style={{ color: currentTheme.textMuted, marginTop: '6px' }}>
-            {userData?.skill?.icon} {skillName} · Level: {userData?.experience?.label} · Drag nodes to explore
+          <p style={{ color: 'var(--text-muted)', marginTop: '20px', fontWeight: '800', fontSize:'22px', letterSpacing:'1px' }}>
+            {userData?.skill?.icon} {skillName.toUpperCase()} · EXPERIENCE: {userData?.experience?.label.toUpperCase()}
           </p>
         </div>
 
-        {/* Readiness Status Card */}
-        <div style={{
-          background: readiness.status === 'ready' ? currentTheme.success + '1A' : 
-                     readiness.status === 'in_progress' ? currentTheme.warning + '1A' : 
-                     currentTheme.error + '1A',
-          border: readiness.status === 'ready' ? `1px solid ${currentTheme.success}4D` : 
-                  readiness.status === 'in_progress' ? `1px solid ${currentTheme.warning}4D` : 
-                  `1px solid ${currentTheme.error}4D`,
-          borderRadius: '16px', padding: '24px', marginBottom: '24px',
+        <div className="pf-glass" style={{
+          padding: '60px', marginBottom: '60px', background:'white !important', borderRadius:'50px', border:'none',
+          borderLeft: `12px solid ${readiness.status === 'ready' ? 'var(--brand-teal)' : 
+                                    readiness.status === 'in_progress' ? 'var(--brand-yellow)' : 'var(--brand-coral)'} !important`
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '40px' }}>
             <div>
               <h3 style={{ 
-                fontSize: '20px', 
-                fontWeight: 'bold', 
+                fontSize: '38px', 
+                fontWeight: '900', 
                 margin: 0,
-                color: readiness.status === 'ready' ? currentTheme.success : 
-                       readiness.status === 'in_progress' ? currentTheme.warning : currentTheme.error
+                fontFamily: 'var(--font-display)',
+                color: readiness.status === 'ready' ? 'var(--brand-teal)' : 
+                       readiness.status === 'in_progress' ? 'var(--brand-yellow)' : 'var(--brand-coral)',
+                letterSpacing:'-1px'
               }}>
-                {readiness.status === 'ready' ? '✅ Ready for Opportunities' : 
-                 readiness.status === 'in_progress' ? '📚 In Progress' : 
-                 '❌ Not Ready Yet'}
+                {readiness.status === 'ready' ? '✅ JOB READY STATUS' : 
+                 readiness.status === 'in_progress' ? '📚 LEARNING ASCENSION' : 
+                 '❌ PROFILE INCOMPLETE'}
               </h3>
-              <p style={{ color: currentTheme.textMuted, margin: '4px 0 0 0', fontSize: '14px' }}>
+              <p style={{ color: 'var(--text-muted)', margin: '10px 0 0 0', fontSize: '18px', fontWeight: '700' }}>
                 {readiness.message}
               </p>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div style={{ 
-                fontSize: '32px', 
-                fontWeight: 'bold',
-                color: readiness.status === 'ready' ? currentTheme.success : 
-                       readiness.status === 'in_progress' ? currentTheme.warning : currentTheme.error
+                fontSize: '64px', 
+                fontWeight: '900',
+                fontFamily: 'var(--font-display)',
+                color: readiness.status === 'ready' ? 'var(--brand-teal)' : 
+                       readiness.status === 'in_progress' ? 'var(--brand-yellow)' : 'var(--brand-coral)',
+                letterSpacing:'-2px'
               }}>
                 {readiness.percentage}%
               </div>
-              <div style={{ fontSize: '12px', color: currentTheme.textMuted }}>Complete</div>
+              <div style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: '900', textTransform: 'uppercase', letterSpacing:'1.5px' }}>DNA SYNC</div>
             </div>
           </div>
           
-          {/* Progress Bar */}
           <div style={{
-            width: '100%', height: '8px', background: currentTheme.border,
-            borderRadius: '4px', overflow: 'hidden', marginBottom: '16px'
+            width: '100%', height: '18px', background: 'rgba(0,0,0,0.03)',
+            borderRadius: '9px', overflow: 'hidden', marginBottom: '40px', padding:'4px'
           }}>
             <div style={{
               width: `${readiness.percentage}%`, height: '100%',
-              background: readiness.status === 'ready' ? currentTheme.success : 
-                         readiness.status === 'in_progress' ? currentTheme.warning : currentTheme.error,
-              borderRadius: '4px', transition: 'width 0.3s ease'
+              background: readiness.status === 'ready' ? 'var(--brand-teal)' : 
+                         readiness.status === 'in_progress' ? 'var(--brand-yellow)' : 'var(--brand-coral)',
+              borderRadius: '5px', transition: 'width 1.5s cubic-bezier(0.16, 1, 0.3, 1)',
+              boxShadow: `0 0 20px ${readiness.status === 'ready' ? 'var(--brand-teal)' : readiness.status === 'in_progress' ? 'var(--brand-yellow)' : 'var(--brand-coral)'}55`
             }} />
           </div>
 
-          {/* Completion Guidance */}
-          {readiness.status === 'not_ready' && (
-            <div style={{ fontSize: '14px', lineHeight: '1.6' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: currentTheme.error }}>
-                🎯 To get ready, complete these steps:
-              </div>
-              <div style={{ color: currentTheme.textMuted }}>
-                {!userData?.onboardingCompleted && (
-                  <div style={{ marginBottom: '8px' }}>
-                    1️⃣ <strong>Complete Onboarding Quiz</strong> - Take the skill assessment to personalize your journey
-                  </div>
-                )}
-                {!userData?.skill?.title && (
-                  <div style={{ marginBottom: '8px' }}>
-                    2️⃣ <strong>Choose Your Track</strong> - Select your career path (Frontend, Backend, AI, etc.)
-                  </div>
-                )}
-                {!userData?.experience?.id && (
-                  <div style={{ marginBottom: '8px' }}>
-                    3️⃣ <strong>Set Experience Level</strong> - Define your current skill level
-                  </div>
-                )}
-                <div style={{ marginTop: '12px', padding: '12px', background: currentTheme.accent + '1A', borderRadius: '8px' }}>
-                  💡 <strong>Quick Start:</strong> Click "Start Your Journey" on the home page to begin the onboarding process
+          <div style={{ background:'rgba(0,0,0,0.02)', padding:'40px', borderRadius:'30px', border:'none' }}>
+            {readiness.status === 'not_ready' && (
+              <div style={{ fontSize: '16px', lineHeight: '2' }}>
+                <div style={{ fontWeight: '900', marginBottom: '15px', color: 'var(--brand-coral)', letterSpacing:'1px', textTransform:'uppercase' }}>
+                  🎯 ACTION REQUIRED TO SYNC DNA:
+                </div>
+                <div style={{ color: 'var(--text-muted)', fontWeight:'700' }}>
+                  {!userData?.onboardingCompleted && (
+                    <div style={{ marginBottom: '12px', display:'flex', gap:'15px' }}>
+                      <span>1️⃣</span> <strong>COMPLETE ASSESSMENT</strong> - Baseline your skill level for personalization
+                    </div>
+                  )}
+                  {!userData?.skill?.title && (
+                    <div style={{ marginBottom: '12px', display:'flex', gap:'15px' }}>
+                      <span>2️⃣</span> <strong>SELECT CAREER TRACK</strong> - Define your focus area in the talent economy
+                    </div>
+                  )}
+                  {!userData?.experience?.id && (
+                    <div style={{ marginBottom: '12px', display:'flex', gap:'15px' }}>
+                      <span>3️⃣</span> <strong>CALIBRATE EXPERIENCE</strong> - Set your current competency benchmark
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {readiness.status === 'in_progress' && (
-            <div style={{ fontSize: '14px', lineHeight: '1.6' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: currentTheme.warning }}>
-                🚀 Keep going! You're making great progress:
-              </div>
-              <div style={{ color: currentTheme.textMuted }}>
-                <div style={{ marginBottom: '8px' }}>
-                  📈 <strong>Current Progress:</strong> {Object.values(userData?.learningProgress?.modules || {}).filter(m => m.completed).length} of {userData?.learningProgress?.total || 0} modules completed
+            {readiness.status === 'in_progress' && (
+              <div style={{ fontSize: '16px', lineHeight: '2' }}>
+                <div style={{ fontWeight: '900', marginBottom: '15px', color: 'var(--brand-yellow)', letterSpacing:'1px', textTransform:'uppercase' }}>
+                  🚀 DNA ASCENSION IN PROGRESS:
                 </div>
-                <div style={{ marginBottom: '8px' }}>
-                  🎯 <strong>Next Steps:</strong> Continue with your learning roadmap to reach 80% completion
-                </div>
-                <div style={{ marginTop: '12px', padding: '12px', background: currentTheme.warning + '1A', borderRadius: '8px' }}>
-                  💡 <strong>Tip:</strong> Focus on completing modules marked as "Learning" (orange nodes) in your Skill DNA map
+                <div style={{ color: 'var(--text-muted)', fontWeight:'700' }}>
+                  <div style={{ marginBottom: '12px', display:'flex', gap:'15px' }}>
+                    <span>📈</span> <strong>SYNC STATUS:</strong> {Object.values(userData?.learningProgress?.modules || {}).filter(m => m.completed).length} / {userData?.learningProgress?.total || 0} sequences completed
+                  </div>
+                  <div style={{ marginBottom: '12px', display:'flex', gap:'15px' }}>
+                    <span>🎯</span> <strong>NEXT PHASE:</strong> Continue your roadmap to achieve 80% DNA saturation
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {readiness.status === 'ready' && (
-            <div style={{ fontSize: '14px', lineHeight: '1.6' }}>
-              <div style={{ fontWeight: 'bold', marginBottom: '8px', color: currentTheme.success }}>
-                🎉 Excellent! You're ready for job opportunities:
-              </div>
-              <div style={{ color: currentTheme.textMuted }}>
-                <div style={{ marginBottom: '8px' }}>
-                  ✅ <strong>Profile Complete:</strong> Your skill assessment and learning journey are done
+            {readiness.status === 'ready' && (
+              <div style={{ fontSize: '16px', lineHeight: '2' }}>
+                <div style={{ fontWeight: '900', marginBottom: '15px', color: 'var(--brand-teal)', letterSpacing:'1px', textTransform:'uppercase' }}>
+                  🎉 DNA SYNC COMPLETE:
                 </div>
-                <div style={{ marginBottom: '8px' }}>
-                  💼 <strong>Next Steps:</strong> Explore company finder and apply for jobs that match your skills
-                </div>
-                <div style={{ marginTop: '12px', padding: '12px', background: currentTheme.success + '1A', borderRadius: '8px' }}>
-                  🚀 <strong>Pro Tip:</strong> Visit the Company Search page to find opportunities matching your {skillName} skills
+                <div style={{ color: 'var(--text-muted)', fontWeight:'700' }}>
+                  <div style={{ marginBottom: '12px', display:'flex', gap:'15px' }}>
+                    <span>✅</span> <strong>VERIFIED STATUS:</strong> Your competency profile is fully mapped and industry-ready
+                  </div>
+                  <div style={{ marginBottom: '12px', display:'flex', gap:'15px' }}>
+                    <span>💼</span> <strong>OPPORTUNITIES:</strong> Explore the Industry Dashboard to connect with hiring partners
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-        {/* Legend */}
-        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', marginBottom: '20px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: '25px', justifyContent: 'center', marginBottom: '40px', flexWrap: 'wrap' }}>
           {[
-            { color: currentTheme.success, label: '✅ Known' },
-            { color: currentTheme.warning, label: '📚 Learning' },
-            { color: currentTheme.error, label: '❌ Skill Gap' },
-            { color: currentTheme.accent, label: '⚡ You' },
+            { color: 'var(--brand-teal)', label: 'VERIFIED' },
+            { color: 'var(--brand-yellow)', label: 'LEARNING' },
+            { color: 'var(--brand-coral)', label: 'GAP' },
+            { color: 'white', border:'2px solid var(--brand-teal)', label: 'YOU' },
           ].map((l, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <div style={{ width: '12px', height: '12px', borderRadius: '50%', background: l.color }} />
-              <span style={{ fontSize: '13px', color: currentTheme.textMuted }}>{l.label}</span>
+            <div key={i} className="pf-glass" style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'white !important', padding: '12px 25px', borderRadius:'20px', border: 'none', boxShadow:'0 10px 25px rgba(0,0,0,0.03)' }}>
+              <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: l.color, border: l.border || 'none' }} />
+              <span style={{ fontSize: '14px', color: 'var(--text-heading)', fontWeight: '900', letterSpacing:'1px' }}>{l.label}</span>
             </div>
           ))}
         </div>
 
-        {/* D3 Graph */}
-        <div style={{
-          background: currentTheme.cardBg,
-          border: `1px solid ${currentTheme.border}`,
-          borderRadius: '20px', padding: '10px', marginBottom: '24px',
+        <div className="pf-glass" style={{
+          padding: '40px', marginBottom: '60px', overflow: 'hidden', background:'white !important', borderRadius:'50px', border:'none', boxShadow:'0 40px 100px rgba(0,0,0,0.05)'
         }}>
-          <svg ref={svgRef} style={{ width: '100%', height: '420px' }} />
+          <svg ref={svgRef} style={{ width: '100%', height: '450px', borderRadius: '30px', background:'rgba(0,0,0,0.01)' }} />
         </div>
 
-        {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '30px', marginBottom: '60px' }}>
           {[
-            { label: 'Skills Known',        value: known,    color: currentTheme.success, emoji: '✅' },
-            { label: 'Currently Learning',  value: learning, color: currentTheme.warning, emoji: '📚' },
-            { label: 'Skill Gaps',          value: gap,      color: currentTheme.error, emoji: '❌' },
+            { label: 'Verified Skills',     value: known,    color: 'var(--brand-teal)', emoji: '✅' },
+            { label: 'Active Sequences',    value: learning, color: 'var(--brand-yellow)', emoji: '📚' },
+            { label: 'Identified Gaps',     value: gap,      color: 'var(--brand-coral)', emoji: '❌' },
           ].map((s, i) => (
-            <div key={i} style={{
-              background: currentTheme.cardBg,
-              border: `1px solid ${s.color}44`,
-              borderRadius: '14px', padding: '20px', textAlign: 'center',
+            <div key={i} className="pf-glass" style={{
+              padding: '45px 30px', textAlign: 'center', background:'white !important', borderRadius:'40px', border:'none', borderBottom: `8px solid ${s.color} !important`, transition:'all 0.4s ease'
             }}>
-              <div style={{ fontSize: '32px', marginBottom: '6px' }}>{s.emoji}</div>
-              <div style={{ fontSize: '28px', fontWeight: 'bold', color: s.color }}>{s.value}</div>
-              <div style={{ fontSize: '13px', color: currentTheme.textMuted, marginTop: '4px' }}>{s.label}</div>
+              <div style={{ fontSize: '56px', marginBottom: '20px' }}>{s.emoji}</div>
+              <div style={{ fontSize: '48px', fontWeight: '900', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-1.5px' }}>{s.value}</div>
+              <div style={{ fontSize: '14px', color: 'var(--text-muted)', marginTop: '10px', fontWeight: '900', textTransform: 'uppercase', letterSpacing:'1.5px' }}>{s.label}</div>
             </div>
           ))}
         </div>
 
-        {/* Gap alert */}
         {gap > 0 && (
-          <div style={{
-            background: currentTheme.error + '1A',
-            border: `1px solid ${currentTheme.error}4D`,
-            borderRadius: '14px', padding: '18px 24px', marginBottom: '24px',
+          <div className="pf-glass" style={{
+            padding: '40px 50px', marginBottom: '60px', background:'rgba(255,107,107,0.03) !important', borderRadius:'40px',
+            borderLeft: `12px solid var(--brand-coral) !important`, border:'none'
           }}>
-            <div style={{ fontWeight: 'bold', marginBottom: '8px', color: currentTheme.error }}>
-              🚨 You have {gap} skill gap{gap > 1 ? 's' : ''} — here's what to learn:
+            <div style={{ fontWeight: '900', marginBottom: '20px', color: 'var(--brand-coral)', fontSize: '22px', fontFamily:'var(--font-display)', letterSpacing:'-0.5px' }}>
+              🚨 {gap} CRITICAL SKILL DNA GAP{gap > 1 ? 'S' : ''} DETECTED:
             </div>
-            <div style={{ color: currentTheme.textMuted, fontSize: '14px', lineHeight: '1.8' }}>
+            <div style={{ color: 'var(--text-muted)', fontSize: '18px', lineHeight: '2.2', fontWeight: '700' }}>
               {processedNodes.filter(n => n.status === 'gap').map(n => (
-                <div key={n.id}>→ Learn <strong style={{ color: currentTheme.textPrimary }}>{n.label}</strong> to unlock more opportunities</div>
+                <div key={n.id} style={{ display:'flex', alignItems:'center', gap:'15px' }}>
+                  <span style={{color:'var(--brand-coral)', fontSize:'20px'}}>→</span> Initiate learning sequence for <strong style={{ color: 'var(--text-heading)', fontWeight:'900' }}>{n.label.toUpperCase()}</strong> to unlock tier ascension
+                </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* Beginner encouragement */}
         {expId === 'beginner' && (
-          <div style={{
-            background: currentTheme.accent + '1A',
-            border: `1px solid ${currentTheme.accent}4D`,
-            borderRadius: '14px', padding: '18px 24px', marginBottom: '24px',
-            textAlign: 'center',
+          <div className="pf-glass" style={{
+            padding: '60px', marginBottom: '60px', background:'rgba(0, 212, 170, 0.03) !important', borderRadius:'50px',
+            textAlign: 'center', borderBottom: `10px solid var(--brand-teal) !important`, border:'none'
           }}>
-            <div style={{ fontSize: '24px', marginBottom: '8px' }}>🌱</div>
-            <div style={{ fontWeight: 'bold', color: currentTheme.accent, marginBottom: '6px' }}>
-              Everyone starts from zero — and that's perfectly fine!
+            <div style={{ fontSize: '80px', marginBottom: '25px' }}>🌱</div>
+            <div style={{ fontWeight: '900', color: 'var(--brand-teal)', marginBottom: '15px', fontSize: '32px', fontFamily: 'var(--font-display)', letterSpacing:'-1px' }}>
+              BASE LEVEL SYNCHRONIZATION
             </div>
-            <div style={{ color: currentTheme.textMuted, fontSize: '14px' }}>
-              Your roadmap is ready. Start with the first skill and build from there.
+            <div style={{ color: 'var(--text-muted)', fontSize: '20px', fontWeight: '700', lineHeight: 1.6, maxWidth:'800px', margin:'0 auto' }}>
+              Every master was once a beginner. Your DNA sequence is primed for growth. Start your first module to begin ascension.
             </div>
           </div>
         )}
 
-        <div style={{ textAlign: 'center' }}>
-          <button onClick={onNext} style={{
-            background: currentTheme.accent, color: currentTheme.textPrimary, border: 'none',
-            padding: '16px 48px', borderRadius: '30px',
-            fontSize: '17px', fontWeight: 'bold', cursor: 'pointer',
+        <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+          <button onClick={onNext} className="pf-glow-btn" style={{
+            padding: '24px 80px', fontSize: '20px', fontWeight: '900', cursor: 'pointer', borderRadius:'45px', textTransform:'uppercase', letterSpacing:'2.5px', border:'none'
           }}>
-            View My Employability Score →
+            Analyze Employability Score →
           </button>
         </div>
-
       </div>
     </div>
   );

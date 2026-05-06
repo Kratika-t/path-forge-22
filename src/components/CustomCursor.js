@@ -20,13 +20,12 @@ const CustomCursor = () => {
 
     const onClick = () => {
       setClicked(true);
-      setTimeout(() => setClicked(false), 600);
+      setTimeout(() => setClicked(false), 400);
     };
 
     const onMouseEnterDoc = () => setHidden(false);
     const onMouseLeaveDoc = () => setHidden(true);
 
-    // Magnetic hover detection
     const onHoverStart = () => setHovering(true);
     const onHoverEnd = () => setHovering(false);
 
@@ -41,10 +40,10 @@ const CustomCursor = () => {
     document.addEventListener('mouseenter', onMouseEnterDoc);
     document.addEventListener('mouseleave', onMouseLeaveDoc);
 
-    // Smooth trailing ring animation
+    // Smooth trailing ring animation (approx 200ms lerp lag -> 0.15lerp)
     const animateRing = () => {
-      ring.current.x += (pos.current.x - ring.current.x) * 0.12;
-      ring.current.y += (pos.current.y - ring.current.y) * 0.12;
+      ring.current.x += (pos.current.x - ring.current.x) * 0.15;
+      ring.current.y += (pos.current.y - ring.current.y) * 0.15;
       if (ringRef.current) {
         ringRef.current.style.transform = `translate(${ring.current.x}px, ${ring.current.y}px)`;
       }
@@ -86,74 +85,48 @@ const CustomCursor = () => {
     width: hovering ? '10px' : '8px',
     height: hovering ? '10px' : '8px',
     borderRadius: '50%',
-    background: hovering ? '#FF9A6C' : '#0A66C2',
-    boxShadow: `0 0 ${hovering ? '16px' : '10px'} ${hovering ? '#FF9A6C' : '#0A66C2'}`,
+    background: 'var(--brand-yellow)',
+    boxShadow: `0 0 10px var(--brand-yellow)`,
     pointerEvents: 'none',
     zIndex: 99999,
     marginLeft: hovering ? '-5px' : '-4px',
     marginTop: hovering ? '-5px' : '-4px',
-    transition: 'width 0.2s, height 0.2s, background 0.2s, box-shadow 0.2s, opacity 0.3s',
+    transition: 'width 0.2s, height 0.2s, background 0.2s, margin 0.2s, opacity 0.3s',
     opacity: hidden ? 0 : 1,
     willChange: 'transform',
   };
 
+  const cursorSize = hovering ? 56 : clicked ? 32 : 40;
+  
   const ringStyle = {
     position: 'fixed',
     top: 0,
     left: 0,
-    width: hovering ? '50px' : clicked ? '60px' : '36px',
-    height: hovering ? '50px' : clicked ? '60px' : '36px',
+    width: `${cursorSize}px`,
+    height: `${cursorSize}px`,
     borderRadius: '50%',
-    border: hovering
-      ? '2px solid rgba(255, 154, 108, 0.9)'
-      : clicked
-        ? '2px solid rgba(255, 107, 53, 0.5)'
-        : '2px solid rgba(255, 107, 53, 0.75)',
-    background: hovering ? 'rgba(255, 107, 53, 0.08)' : 'transparent',
-    backdropFilter: hovering ? 'blur(4px)' : 'none',
+    border: '1px solid rgba(255, 255, 255, 0.75)',
+    background: 'linear-gradient(135deg, rgba(245, 166, 35, 0.3), rgba(255, 107, 107, 0.3))',
+    backdropFilter: 'blur(4px)',
     boxShadow: hovering
-      ? '0 0 20px rgba(255, 107, 53, 0.3), inset 0 0 10px rgba(255, 107, 53, 0.1)'
-      : clicked
-        ? '0 0 30px rgba(255, 107, 53, 0.6)'
-        : '0 0 10px rgba(255, 107, 53, 0.2)',
+      ? '0 8px 32px rgba(0, 0, 0, 0.12)'
+      : '0 4px 16px rgba(0, 0, 0, 0.08)',
     pointerEvents: 'none',
     zIndex: 99998,
-    marginLeft: hovering ? '-25px' : clicked ? '-30px' : '-18px',
-    marginTop: hovering ? '-25px' : clicked ? '-30px' : '-18px',
-    transition: 'width 0.3s cubic-bezier(0.34,1.56,0.64,1), height 0.3s cubic-bezier(0.34,1.56,0.64,1), border 0.3s, background 0.3s, box-shadow 0.3s, opacity 0.3s, margin 0.3s',
+    marginLeft: `-${cursorSize / 2}px`,
+    marginTop: `-${cursorSize / 2}px`,
+    transition: 'width 0.25s cubic-bezier(0.34,1.56,0.64,1), height 0.25s cubic-bezier(0.34,1.56,0.64,1), margin 0.25s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s',
     opacity: hidden ? 0 : 1,
     willChange: 'transform',
   };
-
-  // Click burst ripple
-  const burstStyle = clicked ? {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    width: '80px',
-    height: '80px',
-    borderRadius: '50%',
-    border: '1px solid rgba(255, 107, 53, 0.5)',
-    pointerEvents: 'none',
-    zIndex: 99997,
-    marginLeft: '-40px',
-    marginTop: '-40px',
-    animation: 'cursorBurst 0.6s ease-out forwards',
-    transform: `translate(${pos.current.x}px, ${pos.current.y}px)`,
-  } : null;
 
   return (
     <>
       <style>{`
         * { cursor: none !important; }
-        @keyframes cursorBurst {
-          0%   { transform: translate(${pos.current.x}px, ${pos.current.y}px) scale(0.3); opacity: 0.8; }
-          100% { transform: translate(${pos.current.x}px, ${pos.current.y}px) scale(1.5); opacity: 0; }
-        }
       `}</style>
       <div ref={dotRef} style={dotStyle} />
       <div ref={ringRef} style={ringStyle} />
-      {burstStyle && <div style={burstStyle} />}
     </>
   );
 };

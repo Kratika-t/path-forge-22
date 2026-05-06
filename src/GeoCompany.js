@@ -47,12 +47,26 @@ const BASE_COMPANIES = {
   ],
 };
 
-const modeColor = {'In-Person':'#057642','Hybrid':'#F5C518','Online':'#3498DB'};
-const typeColor = {'MNC':'#9B59B6','Startup':'#0A66C2','Govt':'#057642'};
+const modeColor = {'In-Person':'#057642','Hybrid':'var(--brand-yellow)','Online':'var(--brand-teal)'};
+const typeColor = {'MNC':'#9B59B6','Startup':'var(--brand-teal)','Govt':'#057642'};
 
-const defaultTheme = { pageBg:'#1D2226', cardBg:'#1B1F23', inputBg:'#283039', border:'#38434F', textPrimary:'#E7E9EA', textMuted:'#B0B7BF', accent:'#0A66C2', accentHover:'#004182', accentLight:'#70B5F9', success:'#057642', warning:'#F5C518', error:'#CC1016' };
+const defaultTheme = {
+  pageBg: 'transparent',
+  cardBg: 'rgba(255, 255, 255, 0.7)',
+  inputBg: 'rgba(255, 255, 255, 0.8)',
+  border: 'none',
+  textPrimary: 'var(--text-heading)',
+  textMuted: 'var(--text-body)',
+  accent: 'var(--brand-teal)',
+  accentHover: 'var(--brand-yellow)',
+  accentLight: 'rgba(0, 212, 170, 0.1)',
+  success: 'var(--brand-teal)',
+  warning: 'var(--brand-yellow)',
+  error: 'var(--brand-coral)',
+};
 
 export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate, theme = defaultTheme }) {
+  const currentTheme = theme || defaultTheme;
   const skillName = userData?.skill?.title || 'default';
   const [userLoc, setUserLoc] = useState(null);
   const [userCity, setUserCity] = useState('Detecting location...');
@@ -72,7 +86,6 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
   const routeLayer = useRef(null);
   const companyMarkers = useRef([]);
 
-  // Sync statuses with real time (and when appliedJobs is cleared)
   useEffect(() => {
     const syncAppliedStatuses = () => {
       const jobs = userData?.appliedJobs;
@@ -98,13 +111,14 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
     return () => clearInterval(checkInterval);
   }, [userData]);
 
-  const handleApply = (company) => {
-    // Redirect to company's career website
-    if (company.website) {
+  const handleApply = async (companyName) => {
+    const updatedJobs = { ...(userData?.appliedJobs || {}), [companyName]: Date.now() };
+    if (onProgressUpdate) {
+      await onProgressUpdate({ appliedJobs: updatedJobs });
+    }
+    const company = companies.find(c => c.name === companyName);
+    if (company?.website) {
       window.open(company.website, '_blank');
-    } else {
-      // Fallback to a generic job search if no website is specified
-      window.open(`https://www.google.com/search?q=${encodeURIComponent(company.name + ' careers jobs')}`, '_blank');
     }
   };
 
@@ -123,7 +137,6 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
     });
   };
 
-  // Step 1: Get live GPS
   useEffect(() => {
     if (!navigator.geolocation) {
       setLocError('Geolocation not supported by your browser.');
@@ -152,11 +165,8 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
       },
       { enableHighAccuracy: true, timeout: 12000 }
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-  // Step 2: Calculate real distances
   useEffect(() => {
     if (!userLoc) return;
     const raw = BASE_COMPANIES[skillName] || BASE_COMPANIES['default'];
@@ -164,7 +174,6 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
     setCompanies(withDist);
   }, [userLoc, skillName]);
 
-  // Step 3: Init Leaflet map
   useEffect(() => {
     if (!showMap || !mapRef.current || mapInst.current) return;
     const map = L.map(mapRef.current).setView([28.5355, 77.3910], 11);
@@ -174,27 +183,24 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
     mapInst.current = map;
   }, [showMap]);
 
-  // Step 4: Update map markers when location/companies ready
   useEffect(() => {
     if (!showMap || !mapInst.current || !userLoc || companies.length === 0) return;
     const map = mapInst.current;
 
-    // User dot
     const userIcon = L.divIcon({
-      html: `<div style="width:18px;height:18px;background:${theme.accentLight};border:3px solid ${theme.textPrimary};border-radius:50%;box-shadow:0 0 12px ${theme.accentLight}E6"></div>`,
-      iconSize: [18,18], iconAnchor: [9,9], className: ''
+      html: `<div style="width:20px;height:20px;background:var(--brand-teal);border:4px solid white;border-radius:50%;box-shadow:0 0 20px var(--brand-teal)"></div>`,
+      iconSize: [20,20], iconAnchor: [10,10], className: ''
     });
     L.marker([userLoc.lat, userLoc.lng], { icon: userIcon }).addTo(map)
       .bindPopup(`<b>📍 You are here</b><br>${userCity}`).openPopup();
     map.setView([userLoc.lat, userLoc.lng], 11);
 
-    // Remove old company markers
     companyMarkers.current.forEach(m => m.remove());
     companyMarkers.current = [];
 
     companies.forEach(c => {
       const icon = L.divIcon({
-        html: `<div style="background:${theme.accent};color:#FFFFFF;padding:3px 8px;border-radius:10px;font-size:10px;font-weight:bold;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,0.4);cursor:pointer">${c.name}</div>`,
+        html: `<div style="background:var(--brand-teal);color:#FFFFFF;padding:5px 12px;border-radius:12px;font-size:11px;font-weight:900;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,0.1);cursor:pointer;border:1px solid rgba(255,255,255,0.3)">${c.name}</div>`,
         className: '', iconAnchor: [0,0]
       });
       const marker = L.marker([c.lat, c.lng], { icon })
@@ -205,7 +211,6 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
     });
   }, [showMap, userLoc, companies, userCity]);
 
-  // Step 5: Draw route via OSRM
   const getRoute = async (company) => {
     if (!userLoc || !mapInst.current) return;
     setSelected(company);
@@ -219,7 +224,7 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
       if (data.routes?.[0]) {
         const route = data.routes[0];
         const coords = route.geometry.coordinates.map(([lng, lat]) => [lat, lng]);
-        routeLayer.current = L.polyline(coords, { color: '#0A66C2', weight: 5, opacity: 0.85 }).addTo(mapInst.current);
+        routeLayer.current = L.polyline(coords, { color: 'var(--brand-teal)', weight: 6, opacity: 0.8 }).addTo(mapInst.current);
         mapInst.current.fitBounds(routeLayer.current.getBounds(), { padding: [40, 40] });
         setRouteInfo({ km: (route.distance/1000).toFixed(1), mins: Math.round(route.duration/60) });
       }
@@ -243,139 +248,137 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
     .sort((a,b) => sortBy === 'distance' ? a.distance - b.distance : a.name.localeCompare(b.name));
 
   return (
-    <div style={{ minHeight:'100vh', background: theme.pageBg, color: theme.textPrimary, fontFamily:'Arial,sans-serif', padding:'30px 20px' }}>
-      {/* Header */}
-      <div style={{ display:'flex', alignItems:'center', gap:'16px', maxWidth:'1000px', margin:'0 auto 24px' }}>
-        <button onClick={onBack} style={{ background:'transparent', color: theme.textMuted, border: `1px solid ${theme.border}`, padding:'8px 18px', borderRadius:'20px', cursor:'pointer', fontSize:'13px' }}>← Back</button>
-        <h1 style={{ color: theme.accent, fontSize:'22px', fontWeight:'bold', margin:0 }}>⚡ PathForge</h1>
+    <div style={{ minHeight:'100vh', background: 'transparent', color: 'var(--text-body)', fontFamily:'var(--font-main)', padding:'60px 20px' }}>
+      <div style={{ display:'flex', alignItems:'center', gap:'25px', maxWidth:'1100px', margin:'0 auto 40px' }}>
+        <button onClick={onBack} className="pf-glass" style={{ border:'none', padding:'12px 30px', cursor:'pointer', fontSize:'13px', fontWeight:'900', letterSpacing:'1.5px', borderRadius:'18px' }}>BACK</button>
+        <h1 className="pf-shimmer-text" style={{ fontSize:'32px', fontWeight:'900', margin:0, fontFamily:'var(--font-display)', letterSpacing:'-1.5px' }}>Neural Geo-Pulse</h1>
       </div>
 
-      <div style={{ maxWidth:'1000px', margin:'0 auto' }}>
-
-        {/* Location Detection Banner (Swiggy-style) */}
-        <div style={{ background: theme.inputBg, border: `1px solid ${theme.accentLight}`, borderRadius:'16px', padding:'16px 24px', marginBottom:'24px', display:'flex', alignItems:'center', gap:'16px' }}>
-          <div style={{ fontSize:'28px' }}>{locLoading ? '🔄' : locError ? '⚠️' : '📍'}</div>
+      <div style={{ maxWidth:'1100px', margin:'0 auto' }}>
+        <div className="pf-glass" style={{ padding:'30px 40px', marginBottom:'40px', display:'flex', alignItems:'center', gap:'30px', background:'rgba(255,255,255,0.7)', borderRadius:'35px', border:'none', boxShadow:'0 20px 50px rgba(0,0,0,0.03)' }}>
+          <div style={{ fontSize:'42px', animation:'pulse 2s infinite' }}>{locLoading ? '🔄' : locError ? '⚠️' : '📍'}</div>
           <div style={{ flex:1 }}>
-            <div style={{ fontWeight:'bold', fontSize:'16px' }}>
-              {locLoading ? 'Detecting your location...' : locError ? 'Using fallback location' : `📍 ${userCity}`}
+            <div style={{ fontWeight:'900', fontSize:'24px', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-0.5px' }}>
+              {locLoading ? 'SYNCHRONIZING COORDINATES...' : locError ? 'ESTABLISHING FALLBACK RELAY' : `ORBITAL SYNC: ${userCity.toUpperCase()}`}
             </div>
-            <div style={{ fontSize:'13px', color: theme.textMuted, marginTop:'3px' }}>
-              {locLoading ? 'Getting GPS coordinates...'
-                : userLoc ? `GPS: ${userLoc.lat.toFixed(4)}°N, ${userLoc.lng.toFixed(4)}°E — Distances calculated in real-time`
-                : 'Location unavailable'}
+            <div style={{ fontSize:'14px', color: 'var(--text-body)', marginTop:'8px', fontWeight: '800', opacity:0.6, letterSpacing:'0.5px' }}>
+              {locLoading ? 'Accessing global positioning satellites...'
+                : userLoc ? `SIGNAL ACQUIRED: ${userLoc.lat.toFixed(6)}°N, ${userLoc.lng.toFixed(6)}°E — LATENCY CALIBRATED`
+                : 'TRANSMISSION INTERRUPTED'}
             </div>
           </div>
           {!locLoading && (
-            <button onClick={() => { setShowMap(!showMap); }} style={{ background: theme.inputBg, color: theme.accent, border: `1px solid ${theme.accent}`, padding:'8px 18px', borderRadius:'20px', cursor:'pointer', fontWeight:'bold', fontSize:'13px' }}>
-              {showMap ? '🗺️ Hide Map' : '🗺️ Show Map'}
+            <button onClick={() => { setShowMap(!showMap); }} className="pf-glass" style={{ border:'none', background:'white', color: 'var(--brand-teal)', padding:'14px 30px', cursor:'pointer', fontWeight:'900', fontSize:'13px', borderRadius:'20px', letterSpacing:'1.5px', boxShadow:'0 10px 25px rgba(0,0,0,0.05)' }}>
+              {showMap ? 'HIDE MAP' : 'VIEW RADAR'}
             </button>
           )}
         </div>
 
-        {/* Leaflet Map */}
         {showMap && (
-          <div style={{ background: theme.cardBg, border: `1px solid ${theme.border}`, borderRadius:'16px', overflow:'hidden', marginBottom:'24px' }}>
-            <div ref={mapRef} style={{ height:'420px', width:'100%' }} />
+          <div className="pf-glass" style={{ overflow:'hidden', marginBottom:'40px', padding: '15px', background:'rgba(255,255,255,0.5)', borderRadius:'40px', border:'none', animation:'fadeIn 0.5s ease' }}>
+            <div ref={mapRef} style={{ height:'450px', width:'100%', borderRadius: '30px', border:'1px solid rgba(0,0,0,0.05)' }} />
             {routeInfo && !routeInfo.error && (
-              <div style={{ padding:'14px 20px', background: theme.inputBg, borderTop: `1px solid ${theme.accent}`, display:'flex', alignItems:'center', gap:'24px', flexWrap:'wrap' }}>
-                <span style={{ fontWeight:'bold', color: theme.accent }}>🚗 Route to {selected?.name}</span>
-                <span>📍 {routeInfo.km} km</span>
-                <span>⏱ ~{routeInfo.mins} mins driving</span>
-                <a href={`https://www.google.com/maps/dir/${userLoc?.lat},${userLoc?.lng}/${selected?.lat},${selected?.lng}`} target="_blank" rel="noopener noreferrer" style={{ background: theme.accent, color:'#FFFFFF', padding:'6px 16px', borderRadius:'20px', textDecoration:'none', fontSize:'13px', fontWeight:'bold' }}>Open in Google Maps ↗</a>
+              <div style={{ padding:'25px 35px', background: 'white', marginTop: '15px', borderRadius: '25px', display:'flex', alignItems:'center', gap:'40px', flexWrap:'wrap', boxShadow:'0 15px 40px rgba(0,0,0,0.05)' }}>
+                <span style={{ fontWeight:'900', color: 'var(--brand-teal)', fontFamily: 'var(--font-display)', fontSize:'18px' }}>🚗 NEURAL PATHWAY TO {selected?.name}</span>
+                <div style={{ display:'flex', gap:'25px' }}>
+                  <span style={{ fontWeight: '800', fontSize:'15px' }}>📍 {routeInfo.km} KM</span>
+                  <span style={{ fontWeight: '800', fontSize:'15px' }}>⏱ ~{routeInfo.mins} MINS</span>
+                </div>
+                <a href={`https://www.google.com/maps/dir/${userLoc?.lat},${userLoc?.lng}/${selected?.lat},${selected?.lng}`} target="_blank" rel="noopener noreferrer" className="pf-glow-btn" style={{ padding:'12px 30px', textDecoration:'none', fontSize:'12px', fontWeight:'900', letterSpacing:'1px', borderRadius:'15px' }}>NAVIGATE ↗</a>
               </div>
             )}
             {routeLoading && (
-              <div style={{ padding:'14px 20px', textAlign:'center', color: theme.textMuted, fontSize:'13px' }}>⏳ Calculating route...</div>
+              <div style={{ padding:'20px', textAlign:'center', color: 'var(--brand-teal)', fontSize:'14px', fontWeight: '900', letterSpacing:'1px' }}>SYNTHESIZING OPTIMAL TRAJECTORY...</div>
             )}
           </div>
         )}
 
-        {/* Stats */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'14px', marginBottom:'24px' }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'25px', marginBottom:'50px' }}>
           {[
-            {emoji:'🏢', label:'In-Person', value:companies.filter(c=>c.mode==='In-Person').length, color:'#057642'},
-            {emoji:'🔀', label:'Hybrid', value:companies.filter(c=>c.mode==='Hybrid').length, color:'#F5C518'},
-            {emoji:'💻', label:'Online / Remote', value:companies.filter(c=>c.mode==='Online').length, color:'#3498DB'},
+            {emoji:'🏢', label:'Physical Hubs', value:companies.filter(c=>c.mode==='In-Person').length, color:'var(--brand-coral)'},
+            {emoji:'🔀', label:'Adaptive Hybrid', value:companies.filter(c=>c.mode==='Hybrid').length, color:'var(--brand-yellow)'},
+            {emoji:'💻', label:'Cloud Native', value:companies.filter(c=>c.mode==='Online').length, color:'var(--brand-teal)'},
           ].map((s,i) => (
-            <div key={i} style={{ background: theme.cardBg, border:`1px solid ${s.color}44`, borderRadius:'14px', padding:'16px', textAlign:'center' }}>
-              <div style={{ fontSize:'22px' }}>{s.emoji}</div>
-              <div style={{ fontSize:'26px', fontWeight:'bold', color:s.color, marginTop:'4px' }}>{s.value}</div>
-              <div style={{ fontSize:'12px', color: theme.textMuted, marginTop:'2px' }}>{s.label}</div>
+            <div key={i} className="pf-glass" style={{ padding:'35px', textAlign:'center', borderRadius:'35px', background:'rgba(255,255,255,0.75)', border:'none', boxShadow:'0 20px 45px rgba(0,0,0,0.03)' }}>
+              <div style={{ fontSize:'32px', marginBottom:'15px' }}>{s.emoji}</div>
+              <div style={{ fontSize:'42px', fontWeight:'900', color:'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-2px' }}>{s.value}</div>
+              <div style={{ fontSize:'12px', color: 'var(--text-body)', marginTop:'5px', fontWeight: '900', textTransform: 'uppercase', letterSpacing:'1.5px', opacity:0.6 }}>{s.label}</div>
+              <div style={{ height:'4px', width:'40px', background:s.color, margin:'15px auto 0', borderRadius:'2px', opacity:0.5 }} />
             </div>
           ))}
         </div>
 
-        {/* Title */}
-        <div style={{ textAlign:'center', marginBottom:'20px' }}>
-          <h2 style={{ fontSize:'22px', fontWeight:'bold' }}>Companies Hiring Near {userCity}</h2>
-          <p style={{ color: theme.textMuted, marginTop:'4px', fontSize:'13px' }}>{userData?.skill?.icon} {skillName} · {filtered.length} companies found · Sorted by real distance from your GPS</p>
+        <div style={{ textAlign:'center', marginBottom:'40px' }}>
+          <h2 style={{ fontSize:'42px', fontWeight:'900', letterSpacing: '-1.5px', fontFamily: 'var(--font-display)', color:'var(--text-heading)' }}>
+            LOCAL HIRING <span className="pf-shimmer-text">ECOSYSTEM</span>
+          </h2>
+          <p style={{ color: 'var(--text-body)', marginTop:'12px', fontSize:'16px', fontWeight: '700', opacity:0.7 }}>
+            {userData?.skill?.icon} {skillName.toUpperCase()} · {filtered.length} NODES DETECTED · REAL-TIME GPS CALIBRATION
+          </p>
         </div>
 
-        {/* Filters */}
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'16px', flexWrap:'wrap', gap:'12px' }}>
-          <div style={{ display:'flex', gap:'8px', flexWrap:'wrap' }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'35px', flexWrap:'wrap', gap:'20px' }}>
+          <div style={{ display:'flex', gap:'12px', flexWrap:'wrap' }}>
             {['All','In-Person','Hybrid','Online'].map(f => (
-              <button key={f} onClick={() => setFilter(f)} style={{ padding:'7px 16px', borderRadius:'20px', cursor:'pointer', fontSize:'13px', fontWeight: filter===f ? 'bold' : 'normal', background: filter===f ? theme.accent : theme.inputBg, color: filter===f ? '#FFFFFF' : theme.textPrimary, border: filter===f ? 'none' : `1px solid ${theme.border}` }}>{f}</button>
+              <button key={f} onClick={() => setFilter(f)} className={filter===f ? "pf-glow-btn" : "pf-glass"} style={{ border:'none', padding:'12px 28px', cursor:'pointer', fontSize:'13px', fontWeight:'900', borderRadius:'18px', letterSpacing:'1px', textTransform:'uppercase' }}>{f}</button>
             ))}
           </div>
-          <div style={{ display:'flex', gap:'8px', alignItems:'center' }}>
-            <span style={{ fontSize:'12px', color: theme.textMuted }}>Sort:</span>
+          <div style={{ display:'flex', gap:'15px', alignItems:'center' }}>
+            <span style={{ fontSize:'12px', color: 'var(--text-body)', fontWeight: '900', textTransform: 'uppercase', opacity:0.5, letterSpacing:'1px' }}>SORT ENGINE:</span>
             {['distance','name'].map(s => (
-              <button key={s} onClick={() => setSortBy(s)} style={{ padding:'6px 14px', borderRadius:'16px', cursor:'pointer', fontSize:'12px', background: sortBy===s ? theme.cardBg : theme.inputBg, color: sortBy===s ? theme.accent : theme.textPrimary, border: sortBy===s ? `1px solid ${theme.accent}` : `1px solid ${theme.border}` }}>{s === 'distance' ? '📍 Distance' : '🔤 Name'}</button>
+              <button key={s} onClick={() => setSortBy(s)} className="pf-glass" style={{ border:'none', background: sortBy===s ? 'white' : 'rgba(255,255,255,0.4)', padding:'10px 22px', cursor:'pointer', fontSize:'12px', color: sortBy===s ? 'var(--brand-teal)' : 'var(--text-body)', fontWeight: '900', borderRadius:'15px', letterSpacing:'0.5px' }}>{s === 'distance' ? '📍 DISTANCE' : '🔤 ALPHA'}</button>
             ))}
           </div>
         </div>
 
-        {/* Company Table */}
-        <div style={{ background: theme.cardBg, border: `1px solid ${theme.border}`, borderRadius:'16px', overflow:'hidden', marginBottom:'24px' }}>
-          {/* Table header */}
-          <div style={{ display:'grid', gridTemplateColumns:'40px 1fr 100px 90px 110px 100px minmax(200px,1fr)', gap:'0', padding:'12px 20px', background: theme.inputBg, borderBottom: `1px solid ${theme.border}`, fontSize:'11px', color: theme.textMuted, fontWeight:'bold', textTransform:'uppercase', letterSpacing:'0.5px' }}>
-            <span>#</span><span>Company & Job Brief</span><span>Seats</span><span>Applied</span><span>Mode</span><span>Type</span><span style={{ textAlign:'right' }}>Actions</span>
+        <div className="pf-glass" style={{ overflow:'hidden', marginBottom:'50px', padding: '0', borderRadius:'45px', background:'rgba(255,255,255,0.7)', border:'none', boxShadow:'0 30px 70px rgba(0,0,0,0.05)' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'60px 1fr 100px 90px 110px 100px minmax(200px,1fr)', gap:'0', padding:'25px 40px', background: 'rgba(255,255,255,0.5)', borderBottom: '1px solid rgba(0,0,0,0.05)', fontSize:'11px', color: 'var(--text-body)', fontWeight:'900', textTransform:'uppercase', letterSpacing:'2px', opacity:0.6 }}>
+            <span>#</span><span>Entity & Intel</span><span>Openings</span><span>Flow</span><span>Interface</span><span>Domain</span><span style={{ textAlign:'right' }}>Command</span>
           </div>
           {locLoading ? (
-            <div style={{ padding:'40px', textAlign:'center', color: theme.textMuted }}>🔄 Calculating distances from your location...</div>
+            <div style={{ padding:'80px', textAlign:'center', color: 'var(--brand-teal)', fontWeight: '900', fontSize:'18px', letterSpacing:'1px' }}>SYNCHRONIZING WITH GEO-RELAY...</div>
           ) : filtered.map((c, i) => (
-            <div key={i} style={{ display:'grid', gridTemplateColumns:'40px 1fr 100px 90px 110px 100px minmax(200px,1fr)', gap:'0', padding:'18px 20px', borderBottom: i < filtered.length-1 ? `1px solid ${theme.border}` : 'none', background: applied[c.name] === 'approved' ? theme.inputBg : selected?.name === c.name ? theme.cardBg : 'transparent', alignItems:'start', transition:'background 0.2s' }}>
-              <span style={{ color: i===0 ? 'gold' : theme.textMuted, fontWeight:'bold', fontSize:'13px', paddingTop:'2px' }}>{i===0 ? '⭐' : i+1}</span>
+            <div key={i} style={{ display:'grid', gridTemplateColumns:'60px 1fr 100px 90px 110px 100px minmax(200px,1fr)', gap:'0', padding:'35px 40px', borderBottom: i < filtered.length-1 ? '1px solid rgba(0,0,0,0.05)' : 'none', background: applied[c.name] === 'approved' ? 'rgba(0, 212, 170, 0.04)' : selected?.name === c.name ? 'rgba(245, 166, 35, 0.04)' : 'transparent', alignItems:'start', transition:'all 0.3s' }}>
+              <span style={{ color: i===0 ? 'var(--brand-yellow)' : 'var(--text-muted)', fontWeight:'900', fontSize:'16px', paddingTop:'2px' }}>{i===0 ? '⭐' : i+1}</span>
               <div>
-                <div style={{ fontWeight:'bold', fontSize:'15px', marginBottom:'4px' }}>{c.name}</div>
-                <div style={{ fontSize:'12px', color: theme.textMuted, marginBottom:'8px' }}>📍 {c.location} · 💼 {c.hiring} · 🚗 {c.distance} km</div>
+                <div style={{ fontWeight:'900', fontSize:'22px', color: 'var(--text-heading)', marginBottom:'6px', fontFamily: 'var(--font-display)', letterSpacing:'-0.5px' }}>{c.name}</div>
+                <div style={{ fontSize:'14px', color: 'var(--brand-teal)', marginBottom:'15px', fontWeight: '800', letterSpacing:'0.2px' }}>📍 {c.location.toUpperCase()} · 💼 {c.hiring.toUpperCase()} · 🚗 {c.distance} KM</div>
                 
-                <p style={{ fontSize:'12px', color: theme.textMuted, lineHeight:'1.5', marginBottom:'10px', maxWidth:'90%' }}>{c.detailedDescription}</p>
+                <p style={{ fontSize:'15px', color: 'var(--text-body)', lineHeight:'1.7', marginBottom:'18px', maxWidth:'95%', fontWeight: '600', opacity:0.8 }}>{c.detailedDescription}</p>
 
-                <div style={{ fontSize:'11px', color: theme.accent, background: theme.inputBg, padding:'4px 10px', borderRadius:'6px', display:'inline-block' }}>
-                  ✨ Why Match? {getFitReason(c)}
+                <div style={{ fontSize:'12px', color: 'var(--text-heading)', background: 'white', padding:'10px 18px', borderRadius:'15px', display:'inline-block', border: '1px solid rgba(0,0,0,0.03)', fontWeight: '700', boxShadow:'0 5px 15px rgba(0,0,0,0.02)' }}>
+                  ✨ <span style={{color:'var(--brand-teal)', fontWeight:'900'}}>NEURAL MATCH:</span> {getFitReason(c)}
                 </div>
               </div>
               
               <div style={{ textAlign:'center' }}>
-                <div style={{ fontSize:'14px', fontWeight:'bold', color: c.seats < 5 ? theme.error : theme.success }}>{c.seats}</div>
-                <div style={{ fontSize:'10px', color: theme.textMuted, marginTop:'2px' }}>Openings</div>
+                <div style={{ fontSize:'24px', fontWeight:'900', color: c.seats < 5 ? 'var(--brand-coral)' : 'var(--brand-teal)', fontFamily: 'var(--font-display)' }}>{c.seats}</div>
+                <div style={{ fontSize:'10px', color: 'var(--text-body)', marginTop:'4px', fontWeight: '900', textTransform: 'uppercase', opacity:0.5 }}>UNITS</div>
               </div>
 
               <div style={{ textAlign:'center' }}>
-                <div style={{ fontSize:'14px', fontWeight:'bold', color: theme.accentLight }}>{c.applicants + (applied[c.name] ? 1 : 0)}</div>
-                <div style={{ fontSize:'10px', color: theme.textMuted, marginTop:'2px' }}>Applied</div>
+                <div style={{ fontSize:'24px', fontWeight:'900', color: 'var(--text-heading)', fontFamily: 'var(--font-display)' }}>{c.applicants + (applied[c.name] ? 1 : 0)}</div>
+                <div style={{ fontSize:'10px', color: 'var(--text-body)', marginTop:'4px', fontWeight: '900', textTransform: 'uppercase', opacity:0.5 }}>SIGNALS</div>
               </div>
 
-              <span style={{ fontSize:'11px', padding:'3px 10px', borderRadius:'20px', background:`${modeColor[c.mode]}22`, color:modeColor[c.mode], border:`1px solid ${modeColor[c.mode]}44`, fontWeight:'bold', width:'fit-content', justifySelf:'center' }}>{c.mode}</span>
-              <span style={{ fontSize:'11px', padding:'3px 10px', borderRadius:'20px', background:`${typeColor[c.type] || '#999'}22`, color:typeColor[c.type] || '#999', border:`1px solid ${typeColor[c.type] || '#999'}44`, fontWeight:'bold', width:'fit-content', justifySelf:'center' }}>{c.type}</span>
+              <span style={{ fontSize:'11px', padding:'6px 14px', borderRadius:'20px', background:`${modeColor[c.mode]}15`, color:modeColor[c.mode], border:`1px solid ${modeColor[c.mode]}30`, fontWeight:'900', width:'fit-content', justifySelf:'center', textTransform: 'uppercase', letterSpacing:'1px' }}>{c.mode}</span>
+              <span style={{ fontSize:'11px', padding:'6px 14px', borderRadius:'20px', background:`${typeColor[c.type] || '#999'}15`, color:typeColor[c.type] || '#999', border:`1px solid ${typeColor[c.type] || '#999'}30`, fontWeight:'900', width:'fit-content', justifySelf:'center', textTransform: 'uppercase', letterSpacing:'1px' }}>{c.type}</span>
               
-              <div style={{ display:'flex', gap:'6px', justifyContent:'flex-end', flexWrap:'wrap', alignItems:'center' }}>
-                <button type="button" onClick={() => { setShowMap(true); setTimeout(() => getRoute(c), 300); }} style={{ padding:'6px 12px', borderRadius:'14px', cursor:'pointer', fontSize:'11px', background: theme.inputBg, color: theme.accentLight, border: `1px solid ${theme.accentLight}`, fontWeight:'bold' }}>🗺 Route</button>
+              <div style={{ display:'flex', gap:'10px', justifyContent:'flex-end', flexWrap:'wrap', alignItems:'center' }}>
+                <button type="button" onClick={() => { setShowMap(true); setTimeout(() => getRoute(c), 300); }} className="pf-glass" style={{ border:'none', background:'white', padding:'10px 20px', cursor:'pointer', fontSize:'11px', color: 'var(--brand-teal)', fontWeight:'900', textTransform: 'uppercase', borderRadius:'12px', letterSpacing:'1px', boxShadow:'0 5px 15px rgba(0,0,0,0.03)' }}>ROUTE</button>
 
                 {applied[c.name] === 'approved' ? (
                   <>
-                    <span style={{ padding:'6px 12px', borderRadius:'14px', fontSize:'11px', background: theme.success, color:'#FFFFFF', fontWeight:'bold' }}>✅ APPROVED</span>
-                    <button type="button" onClick={() => handleUnapply(c.name)} style={{ padding:'6px 10px', borderRadius:'14px', cursor:'pointer', fontSize:'10px', background: theme.inputBg, color: theme.error, border: `1px solid ${theme.error}`, fontWeight:'bold' }} title="Withdraw this application">Unapply</button>
+                    <span style={{ padding:'10px 22px', borderRadius:'15px', fontSize:'11px', background: 'var(--brand-teal)', color:'#FFFFFF', fontWeight:'900', letterSpacing:'1px' }}>SYNCED</span>
+                    <button type="button" onClick={() => handleUnapply(c.name)} className="pf-glass" style={{ border:'none', padding:'10px 20px', cursor:'pointer', fontSize:'11px', color: 'var(--brand-coral)', fontWeight:'900', textTransform:'uppercase', background:'rgba(255,107,107,0.05)', borderRadius:'12px' }}>DROP</button>
                   </>
                 ) : applied[c.name] === 'pending' ? (
                   <>
-                    <span style={{ padding:'6px 12px', borderRadius:'14px', fontSize:'10px', background: theme.inputBg, color:'#F5C518', border:'1px solid #F5C518', fontWeight:'bold' }}>⏳ PENDING</span>
-                    <button type="button" onClick={() => handleUnapply(c.name)} style={{ padding:'6px 10px', borderRadius:'14px', cursor:'pointer', fontSize:'10px', background: theme.inputBg, color: theme.error, border: `1px solid ${theme.error}`, fontWeight:'bold' }} title="Cancel this application">Unapply</button>
+                    <span style={{ padding:'10px 22px', borderRadius:'15px', fontSize:'11px', background: 'var(--brand-yellow)', color:'#FFFFFF', fontWeight:'900', letterSpacing:'1px' }}>QUEUED</span>
+                    <button type="button" onClick={() => handleUnapply(c.name)} className="pf-glass" style={{ border:'none', padding:'10px 20px', cursor:'pointer', fontSize:'11px', color: 'var(--brand-coral)', fontWeight:'900', textTransform:'uppercase', background:'rgba(255,107,107,0.05)', borderRadius:'12px' }}>ABORT</button>
                   </>
                 ) : (
-                  <button type="button" onClick={() => handleApply(c.name)} style={{ padding:'6px 20px', borderRadius:'14px', cursor:'pointer', fontSize:'11px', background: theme.accent, color:'#FFFFFF', border:'none', fontWeight:'bold' }}>Apply</button>
+                  <button type="button" onClick={() => handleApply(c.name)} className="pf-glow-btn" style={{ border:'none', padding:'12px 30px', fontSize:'12px', fontWeight:'900', borderRadius:'15px', letterSpacing:'1.5px' }}>APPLY</button>
                 )}
               </div>
             </div>
@@ -383,15 +386,24 @@ export default function GeoCompany({ userData, onBack, onNext, onProgressUpdate,
         </div>
 
         {Object.values(applied).filter(v => v === 'approved').length > 0 && (
-          <div style={{ background: theme.inputBg, border:`1px solid ${theme.success}`, borderRadius:'14px', padding:'14px 24px', marginBottom:'24px', textAlign:'center' }}>
-            <span style={{ color: theme.success, fontWeight:'bold' }}>🎉 You have {Object.values(applied).filter(v => v === 'approved').length} industry-approved application{Object.values(applied).filter(v => v === 'approved').length > 1 ? 's' : ''}!</span>
+          <div className="pf-glass" style={{ border:'none', background: 'rgba(0, 212, 170, 0.1)', padding:'25px 40px', marginBottom:'40px', textAlign:'center', borderRadius:'30px', animation:'msgIn 0.5s ease' }}>
+            <span style={{ color: 'var(--brand-teal)', fontWeight:'900', fontSize: '18px', fontFamily:'var(--font-display)', letterSpacing:'-0.5px' }}>🚀 SIGNAL CLEAR: YOU HAVE {Object.values(applied).filter(v => v === 'approved').length} INDUSTRY-APPROVED APPLICATIONS READY FOR TRANSMISSION!</span>
           </div>
         )}
 
-        <div style={{ textAlign:'center' }}>
-          <button onClick={onNext} style={{ background: theme.accent, color:'#FFFFFF', border:'none', padding:'16px 48px', borderRadius:'30px', fontSize:'17px', fontWeight:'bold', cursor:'pointer' }}>View My Skill DNA Map →</button>
+        <div style={{ textAlign:'center', marginBottom: '80px' }}>
+          <button onClick={onNext} className="pf-glow-btn" style={{ padding:'22px 60px', fontSize:'18px', fontWeight:'900', cursor:'pointer', borderRadius:'25px', letterSpacing:'2px' }}>VISUALIZE SKILL DNA MAP →</button>
         </div>
       </div>
+
+      <style>{`
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes msgIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+        .leaflet-container { background: #fdfcf8 !important; }
+        .leaflet-popup-content-wrapper { background: rgba(255,255,255,0.9) !important; backdrop-filter: blur(10px); border-radius: 15px !important; box-shadow: 0 10px 30px rgba(0,0,0,0.1) !important; color: var(--text-heading) !important; }
+        .leaflet-popup-tip { background: rgba(255,255,255,0.9) !important; }
+      `}</style>
     </div>
   );
 }

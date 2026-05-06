@@ -57,24 +57,38 @@ const tasksBySkill = {
 };
 
 const getCategoryColors = (theme) => ({
-  Learning: theme.accentLight,
-  Project: theme.accentHover,
-  Course: theme.accent,
-  Action: theme.success,
+  Learning: 'var(--brand-teal)',
+  Project: 'var(--brand-yellow)',
+  Course: 'var(--brand-teal)',
+  Action: '#057642',
 });
 
-function getScoreLabel(score, theme) {
-  if (score === 0) return { label: 'Not Started', color: theme.textMuted, emoji: '😴' };
-  if (score < 20) return { label: 'Just Beginning', color: theme.error, emoji: '🌱' };
-  if (score < 40) return { label: 'Building Up', color: theme.warning, emoji: '📚' };
-  if (score < 60) return { label: 'Getting There', color: theme.warning, emoji: '🔥' };
-  if (score < 80) return { label: 'Almost Ready', color: theme.success, emoji: '💪' };
-  return { label: 'Job Ready!', color: theme.success, emoji: '🚀' };
+function getScoreLabel(score) {
+  if (score === 0) return { label: 'Not Started', color: 'var(--text-body)', emoji: '😴' };
+  if (score < 20) return { label: 'Just Beginning', color: 'var(--brand-coral)', emoji: '🌱' };
+  if (score < 40) return { label: 'Building Up', color: 'var(--brand-yellow)', emoji: '📚' };
+  if (score < 60) return { label: 'Getting There', color: 'var(--brand-yellow)', emoji: '🔥' };
+  if (score < 80) return { label: 'Almost Ready', color: '#057642', emoji: '💪' };
+  return { label: 'Job Ready!', color: '#057642', emoji: '🚀' };
 }
 
-const defaultTheme = { pageBg:'#1D2226', cardBg:'#1B1F23', inputBg:'#283039', border:'#38434F', textPrimary:'#E7E9EA', textMuted:'#B0B7BF', accent:'#0A66C2', accentHover:'#004182', accentLight:'#70B5F9', success:'#057642', warning:'#F5C518', error:'#CC1016' };
+const defaultTheme = {
+  pageBg: 'var(--bg-base)',
+  cardBg: 'var(--glass-bg)',
+  inputBg: 'rgba(255, 255, 255, 0.6)',
+  border: 'var(--glass-border)',
+  textPrimary: 'var(--text-heading)',
+  textMuted: 'var(--text-body)',
+  accent: 'var(--brand-teal)',
+  accentHover: 'var(--brand-yellow)',
+  accentLight: 'rgba(0, 212, 170, 0.2)',
+  success: 'var(--brand-teal)',
+  warning: 'var(--brand-yellow)',
+  error: 'var(--brand-coral)',
+};
 
 export default function EmployabilityScore({ userData, onBack, onNext, onProgressUpdate, theme = defaultTheme }) {
+  const currentTheme = theme || defaultTheme;
   const skillName = userData?.skill?.title || 'default';
   const tasks = tasksBySkill[skillName] || tasksBySkill['default'];
   const totalPoints = tasks.reduce((sum, t) => sum + t.points, 0);
@@ -171,112 +185,125 @@ export default function EmployabilityScore({ userData, onBack, onNext, onProgres
     }, 4000);
   };
 
-  const { label, color, emoji } = getScoreLabel(animatedScore, theme);
+  const { label, color, emoji } = getScoreLabel(animatedScore);
   const circumference = 2 * Math.PI * 54;
-  const strokeDash = circumference - (animatedScore / 100) * circumference;
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.pageBg, color: theme.textPrimary, fontFamily: 'Arial, sans-serif', padding: '30px 20px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-body)', fontFamily: 'var(--font-main)', padding: '80px 20px' }}>
       
       {/* EVIDENCE MODAL */}
       {evidenceModal && (
-        <div style={{ position:'fixed', top:0, left:0, right:0, bottom:0, background: theme.pageBg, zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px' }}>
-          <div style={{ background: theme.cardBg, border:`1px solid ${theme.accent}`, borderRadius:'24px', padding:'40px', maxWidth:'500px', width:'100%', textAlign:'center' }}>
-            <div style={{ fontSize:'40px' }}>📁</div>
-            <h3 style={{ fontSize:'22px', fontWeight:'bold', margin:'20px 0 10px' }}>Verify Action</h3>
-            <p style={{ color: theme.textMuted, fontSize:'14px', marginBottom:'24px' }}>Provide evidence for: <b>{evidenceModal.task}</b></p>
+        <div style={{ position:'fixed', top:0, left:0, right:0, bottom:0, background: 'rgba(253, 252, 248, 0.4)', backdropFilter: 'blur(40px)', zIndex:2000, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px' }}>
+          <div className="pf-glass modal-content" style={{ padding:'80px', maxWidth:'750px', width:'100%', textAlign:'center', background:'white !important', borderRadius:'60px', border:'none', boxShadow:'0 50px 150px rgba(0,0,0,0.12)', animation: 'modalFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+            <div style={{ fontSize:'100px', marginBottom: '40px', animation: 'pf-pulse 2s infinite' }}>📁</div>
+            <h3 style={{ fontSize:'48px', fontWeight:'900', margin:'0 0 25px', fontFamily: 'var(--font-display)', color: 'var(--text-heading)', letterSpacing:'-2.5px' }}>Verify Action</h3>
+            <p style={{ color: 'var(--text-muted)', fontSize:'20px', marginBottom:'50px', fontWeight: '800' }}>Provide evidence for: <b style={{ color: 'var(--brand-teal)' }}>{evidenceModal.task}</b></p>
             <input 
               type="text" 
               placeholder="Enter GitHub URL or Link to Proof..." 
               value={evidenceValue} 
               onChange={e => setEvidenceValue(e.target.value)}
-              style={{ width:'100%', padding:'14px', borderRadius:'12px', background: theme.inputBg, border:`1px solid ${theme.border}`, color: theme.textPrimary, marginBottom:'24px' }}
+              className="pf-glass"
+              style={{ width:'100%', padding:'30px', borderRadius:'25px', background: 'rgba(0,0,0,0.02) !important', border:'none !important', color: 'var(--text-heading)', marginBottom:'50px', fontWeight: '700', fontSize:'18px', outline:'none', boxShadow:'inset 0 2px 15px rgba(0,0,0,0.03) !important' }}
             />
-            <div style={{ display:'flex', gap:'12px' }}>
-              <button onClick={() => setEvidenceModal(null)} style={{ flex:1, padding:'14px', borderRadius:'12px', background: theme.inputBg, border:'none', color: theme.textPrimary, cursor:'pointer' }}>Cancel</button>
-              <button onClick={handleSubmitEvidence} style={{ flex:1, padding:'14px', borderRadius:'12px', background: theme.accent, border:'none', color: '#FFFFFF', fontWeight:'bold', cursor:'pointer' }}>Submit Proof</button>
+            <div style={{ display:'flex', gap:'25px' }}>
+              <button onClick={() => setEvidenceModal(null)} className="pf-glass" style={{ flex:1, padding:'25px', cursor:'pointer', fontWeight: '900', border:'none', background:'rgba(0,0,0,0.05) !important', letterSpacing:'2px', borderRadius:'25px', textTransform:'uppercase', fontSize:'14px' }}>CANCEL</button>
+              <button onClick={handleSubmitEvidence} className="pf-glow-btn" style={{ flex:1, padding:'25px', fontWeight:'900', cursor:'pointer', border:'none', textTransform:'uppercase', letterSpacing:'2px', borderRadius:'25px', fontSize:'14px' }}>SUBMIT PROOF</button>
             </div>
           </div>
         </div>
       )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', maxWidth: '900px', margin: '0 auto 30px' }}>
-        <button onClick={onBack} style={{ background: 'transparent', color: theme.textMuted, border: `1px solid ${theme.border}`, padding: '8px 18px', borderRadius: '20px', cursor: 'pointer', fontSize: '13px' }}>← Back</button>
-        <h1 style={{ color: theme.accent, fontSize: '22px', fontWeight: 'bold' }}>⚡ PathForge</h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent:'space-between', maxWidth: '1300px', margin: '0 auto 80px' }}>
+        <button onClick={onBack} className="pf-glass" style={{ border:'none', padding: '16px 35px', cursor: 'pointer', fontSize: '13px', fontWeight: '900', borderRadius:'25px', letterSpacing:'1.5px', textTransform:'uppercase' }}>BACK</button>
+        <h1 className="pf-shimmer-text" style={{ fontSize: '42px', fontWeight: '900', fontFamily:'var(--font-display)', margin:0, letterSpacing:'-1px' }}>⚡ PathForge Dashboard</h1>
       </div>
 
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <h2 style={{ fontSize: '28px', fontWeight: '900', textTransform: 'uppercase', letterSpacing: '1px' }}>{userData?.name || 'Your'}'s Employability Dashboard</h2>
-          <div style={{ color: theme.textMuted, marginTop: '8px' }}>🚀 {skillName} • 📍 Industry Ready</div>
+      <div style={{ maxWidth: '1300px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+          <h2 style={{ fontSize: '72px', fontWeight: '900', letterSpacing: '-3.5px', fontFamily: 'var(--font-display)', color:'var(--text-heading)', lineHeight:1.1, margin:0 }}>
+            <span className="pf-shimmer-text">{userData?.name || 'Your'}'s Proof of Work</span>
+          </h2>
+          <div style={{ color: 'var(--text-muted)', marginTop: '25px', fontWeight: '900', fontSize:'26px', letterSpacing:'2px', opacity:0.6 }}>🚀 {skillName.toUpperCase()} • 📍 INDUSTRY READY STATUS</div>
         </div>
 
-        {/* Score Card */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '40px' }}>
-          <div style={{ background: theme.cardBg, borderRadius: '24px', padding: '40px', border: `1px solid ${theme.border}`, display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center', gap: '30px' }}>
-            <div style={{ position: 'relative', width: '120px', height: '120px' }}>
-              <svg style={{ transform: 'rotate(-90deg)', width: '120px', height: '120px' }}>
-                <circle cx="60" cy="60" r="54" fill="none" stroke={theme.border} strokeWidth="8" />
-                <circle cx="60" cy="60" r="54" fill="none" stroke={color} strokeWidth="8" strokeDasharray={circumference} strokeDashoffset={strokeDash} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 0.5s ease' }} />
+        {/* Score Card Section */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '50px', marginBottom: '80px' }}>
+          <div className="pf-glass" style={{ padding: '80px', display: 'flex', flexDirection:'column', alignItems: 'center', justifyContent: 'center', gap: '50px', background:'white !important', borderRadius:'60px', border:'none', boxShadow:'0 40px 100px rgba(0,0,0,0.05)' }}>
+            <div style={{ position: 'relative', width: '280px', height: '280px' }}>
+              <svg style={{ transform: 'rotate(-90deg)', width: '280px', height: '280px' }}>
+                <circle cx="140" cy="140" r="130" fill="none" stroke="rgba(0,0,0,0.02)" strokeWidth="24" />
+                <circle cx="140" cy="140" r="130" fill="none" stroke={color} strokeWidth="24" strokeDasharray={2 * Math.PI * 130} strokeDashoffset={2 * Math.PI * 130 - (animatedScore / 100) * (2 * Math.PI * 130)} strokeLinecap="round" style={{ transition: 'stroke-dashoffset 2s cubic-bezier(0.16, 1, 0.3, 1)', filter:`drop-shadow(0 0 25px ${color}66)` }} />
               </svg>
               <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', textAlign: 'center' }}>
-                <div style={{ fontSize: '32px', fontWeight: '900', color: theme.textPrimary }}>{animatedScore}%</div>
-                <div style={{ fontSize: '18px' }}>{emoji}</div>
+                <div style={{ fontSize: '84px', fontWeight: '900', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-3px', lineHeight:1 }}>{animatedScore}%</div>
+                <div style={{ fontSize: '56px', marginTop:'10px' }}>{emoji}</div>
               </div>
             </div>
             <div style={{ textAlign: 'center' }}>
-              <div style={{ fontSize: '20px', fontWeight: '900', color: color, textTransform: 'uppercase' }}>{label}</div>
-              <div style={{ fontSize: '12px', color: theme.textMuted, marginTop: '4px' }}>Employability Score</div>
+              <div style={{ fontSize: '48px', fontWeight: '900', color: color, textTransform: 'uppercase', letterSpacing: '4px', fontFamily: 'var(--font-display)', lineHeight:1 }}>{label}</div>
+              <div style={{ fontSize: '18px', color: 'var(--text-muted)', marginTop: '15px', fontWeight: '900', letterSpacing:'2px' }}>EMPLOYABILITY SCORE</div>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '25px' }}>
             {[
-              { label: 'Tasks Completed', value: `${tasks.filter(t => effectiveCompleted[t.id]).length} / ${tasks.length}`, color: theme.success },
-              { label: 'Skill Track', value: skillName, color: theme.accentHover },
-              { label: 'Learning Pct', value: `${learningPct}%`, color: theme.accentLight },
-              { label: 'Target Goal', value: 'Industry Ready', color: theme.accent },
+              { label: 'Tasks Completed', value: `${tasks.filter(t => effectiveCompleted[t.id]).length} / ${tasks.length}`, color: 'var(--brand-teal)', icon:'🎯' },
+              { label: 'Current Skill Track', value: skillName, color: 'var(--brand-teal)', icon:'🛠️' },
+              { label: 'Learning Velocity', value: `${learningPct}%`, color: 'var(--brand-yellow)', icon:'⚡' },
+              { label: 'Target Destination', value: 'Industry Verified', color: 'var(--brand-teal)', icon:'🏁' },
             ].map((stat, i) => (
-              <div key={i} style={{ background: theme.cardBg, borderRadius: '14px', padding: '14px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: `1px solid ${theme.border}` }}>
-                <span style={{ fontSize: '13px', color: theme.textMuted }}>{stat.label}</span>
-                <span style={{ fontSize: '13px', fontWeight: 'bold', color: stat.color }}>{stat.value}</span>
+              <div key={stat.label} className="pf-glass" style={{ padding: '30px 45px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background:'white !important', borderRadius:'35px', border:'none', boxShadow:'0 15px 40px rgba(0,0,0,0.03)' }}>
+                <div style={{ display:'flex', alignItems:'center', gap:'25px' }}>
+                  <span style={{ fontSize:'36px', filter:'drop-shadow(0 5px 15px rgba(0,0,0,0.05))' }}>{stat.icon}</span>
+                  <span style={{ fontSize: '15px', color: 'var(--text-muted)', fontWeight: '900', textTransform: 'uppercase', letterSpacing:'2px' }}>{stat.label}</span>
+                </div>
+                <span style={{ fontSize: '26px', fontWeight: '900', color: stat.color, fontFamily: 'var(--font-display)', letterSpacing:'-0.5px' }}>{stat.value}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Checklist */}
-        <div style={{ background: theme.cardBg, borderRadius: '24px', padding: '30px', border: `1px solid ${theme.border}` }}>
-          <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            ✅ Your Action Checklist — earned through verification
+        <div className="pf-glass" style={{ padding: '70px', background:'white !important', borderRadius:'60px', border:'none', boxShadow:'0 50px 150px rgba(0,0,0,0.05)' }}>
+          <h3 style={{ fontSize: '42px', fontWeight: '900', marginBottom: '60px', display: 'flex', alignItems: 'center', gap: '25px', fontFamily: 'var(--font-display)', color: 'var(--text-heading)', letterSpacing:'-2px' }}>
+            ✅ Performance Roadmap <span style={{ fontSize: '18px', fontWeight: '900', color: 'var(--text-muted)', opacity: 0.4, letterSpacing:'2px', marginLeft:'auto' }}>VERIFY SKILLS TO ASCEND</span>
           </h3>
-          <div style={{ display: 'grid', gap: '12px' }}>
+          <div style={{ display: 'grid', gap: '30px' }}>
             {tasks.map((t) => {
               const isAuto = courseTaskIds.includes(t.id);
               const isDone = effectiveCompleted[t.id];
               const isVerifying = verifying === t.id;
+              const catColor = getCategoryColors(currentTheme)[t.category] || 'var(--brand-teal)';
 
               return (
-                <div key={t.id} onClick={() => toggleTask(t)} style={{ 
-                  background: isDone ? theme.inputBg : theme.cardBg, 
-                  borderRadius: '16px', padding: '16px 20px', display: 'flex', alignItems: 'center', gap: '16px', border: isDone ? `1px solid ${theme.success}` : `1px solid ${theme.border}`, 
-                  cursor: isDone || isAuto || isVerifying ? 'default' : 'pointer', transition: 'all 0.2s', opacity: isVerifying ? 0.7 : 1
+                <div key={t.id} onClick={() => toggleTask(t)} className="pf-glass task-item" style={{ 
+                  padding: '45px 55px', display: 'flex', alignItems: 'center', gap: '45px', 
+                  borderLeft: isDone ? `15px solid var(--brand-teal) !important` : `15px solid ${catColor} !important`,
+                  cursor: isDone || isAuto || isVerifying ? 'default' : 'pointer', 
+                  transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)', 
+                  opacity: isVerifying ? 0.7 : 1,
+                  background: isDone ? 'rgba(0, 212, 170, 0.04) !important' : 'rgba(0,0,0,0.01) !important',
+                  borderRadius:'40px',
+                  border:'none',
+                  position:'relative',
+                  overflow:'hidden'
                 }}>
-                  <div style={{ 
-                    width: '24px', height: '24px', borderRadius: '6px', border: `2px solid ${isDone ? theme.success : theme.border}`, 
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', background: isDone ? theme.success : 'transparent', color: '#FFFFFF', fontSize: '14px' 
+                  <div className="pf-glass" style={{ 
+                    width: '56px', height: '56px', borderRadius: '18px', border: 'none', 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', background: isDone ? 'var(--brand-teal)' : 'white !important', color: isDone ? '#FFFFFF' : 'var(--text-muted)', fontSize: '28px', fontWeight:'900', boxShadow: isDone ? '0 10px 25px rgba(0, 212, 170, 0.3)' : '0 5px 15px rgba(0,0,0,0.03)' 
                   }}>
                     {isDone ? '✓' : ''}
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: '14px', fontWeight: isDone ? 'bold' : 'normal', color: theme.textPrimary }}>{t.task}</div>
-                    <div style={{ fontSize: '11px', color: theme.textMuted, marginTop: '2px' }}>
+                    <div style={{ fontSize: '26px', fontWeight: '900', color: isDone ? 'var(--brand-teal)' : 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-1px' }}>{t.task}</div>
+                    <div style={{ fontSize: '17px', color: 'var(--text-muted)', marginTop: '12px', fontWeight: '700', opacity:0.8 }}>
                       {isVerifying
-                        ? (t.category === 'Learning' ? '⏳ Engagement timer (~45s) — stay on this page…' : '🔍 AI Verifying your submission…')
-                        : isAuto ? 'Auto-updated from module tests' : t.category === 'Learning' ? 'Click to start; completes after focused wait (anti-instant-check)' : 'Requires verification proof'}
+                        ? (t.category === 'Learning' ? '⏳ Engagement timer active (~45s) — stay focused…' : '🔍 AI Verifying your submission…')
+                        : isAuto ? 'Auto-updated via PathForge Learning Engine' : t.category === 'Learning' ? 'Click to start; completes after focused engagement session' : 'Requires Proof of Work verification'}
                     </div>
                   </div>
-                  <div style={{ fontSize: '12px', fontWeight: 'bold', color: getCategoryColors(theme)[t.category] }}>+{t.points}pts</div>
+                  <div className="pf-glass" style={{ padding:'12px 30px', borderRadius:'20px', fontSize: '18px', fontWeight: '900', color: catColor, fontFamily: 'var(--font-display)', background:'white !important', border:'none', letterSpacing:'1.5px', boxShadow:'0 10px 25px rgba(0,0,0,0.03) !important' }}>+{t.points} PTS</div>
                 </div>
               );
             })}
@@ -284,31 +311,30 @@ export default function EmployabilityScore({ userData, onBack, onNext, onProgres
         </div>
 
         {onNext && (
-          <div style={{ textAlign: 'center', marginTop: '24px' }}>
-            <button onClick={onNext} style={{
-              background: theme.accent, color: '#FFFFFF', border: 'none',
-              padding: '14px 38px', borderRadius: '30px', fontSize: '16px',
-              fontWeight: 'bold', cursor: 'pointer',
-            }}>
-              Go to AI Learning Path →
+          <div style={{ textAlign: 'center', marginTop: '100px', marginBottom: '120px' }}>
+            <button onClick={onNext} className="pf-glow-btn" style={{ padding: '28px 100px', fontSize: '22px', fontWeight: '900', cursor: 'pointer', borderRadius:'50px', textTransform:'uppercase', letterSpacing:'3px', border:'none' }}>
+              Explore AI Learning Path →
             </button>
           </div>
         )}
 
         {animatedScore >= 80 && (
-          <div style={{
-            marginTop: '20px', textAlign: 'center', padding: '20px',
-            background: theme.inputBg, border: `1px solid ${theme.success}`,
-            borderRadius: '16px'
+          <div className="pf-glass job-ready-banner" style={{
+            marginTop: '60px', textAlign: 'center', padding: '100px 50px',
+            border: 'none', background: 'white !important', borderRadius:'60px', animation:'pf-fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) both', boxShadow:'0 60px 150px rgba(0, 212, 170, 0.15)'
           }}>
-            <div style={{ fontSize: '28px', marginBottom: '8px' }}>🎉</div>
-            <div style={{ fontSize: '18px', fontWeight: 'bold', color: theme.success }}>You are Job Ready!</div>
-            <div style={{ color: theme.textMuted, marginTop: '6px' }}>
-              Your ATS resume is ready to download. Start applying now!
+            <div style={{ fontSize: '120px', marginBottom: '40px', animation:'pf-pulse 2s infinite' }}>🎉</div>
+            <div style={{ fontSize: '64px', fontWeight: '900', color: 'var(--brand-teal)', fontFamily: 'var(--font-display)', letterSpacing:'-3px', lineHeight:1 }}>OFFICIALLY JOB READY!</div>
+            <div style={{ color: 'var(--text-muted)', marginTop: '30px', fontWeight: '800', fontSize:'26px', lineHeight:1.6, maxWidth:'800px', margin:'30px auto 0' }}>
+              Your Proof of Work is verified. Your ATS-optimized profile is now live for hiring partners.
             </div>
           </div>
         )}
       </div>
+      <style>{`
+        .task-item:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 40px 100px rgba(0,0,0,0.06) !important; z-index: 10; }
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.9) translateY(60px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+      `}</style>
     </div>
   );
 }

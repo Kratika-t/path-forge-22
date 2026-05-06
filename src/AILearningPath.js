@@ -94,21 +94,22 @@ function getTaskResources(step) {
   }));
 }
 
+const defaultTheme = {
+  pageBg: 'var(--bg-base)',
+  cardBg: 'var(--glass-bg)',
+  inputBg: 'rgba(255, 255, 255, 0.6)',
+  border: 'var(--glass-border)',
+  textPrimary: 'var(--text-heading)',
+  textMuted: 'var(--text-body)',
+  accent: 'var(--brand-teal)',
+  accentHover: 'var(--brand-yellow)',
+  accentLight: 'rgba(0, 212, 170, 0.2)',
+  success: 'var(--brand-teal)',
+  warning: 'var(--brand-yellow)',
+  error: 'var(--brand-coral)',
+};
+
 export default function AILearningPath({ userData, onBack, onNext, onProgressUpdate, theme }) {
-  const defaultTheme = {
-    pageBg: '#1D2226',
-    cardBg: '#1B1F23',
-    inputBg: '#283039',
-    border: '#38434F',
-    textPrimary: '#E7E9EA',
-    textMuted: '#B0B7BF',
-    accent: '#0A66C2',
-    accentHover: '#004182',
-    accentLight: '#70B5F9',
-    success: '#057642',
-    warning: '#F5C518',
-    error: '#CC1016',
-  };
   const currentTheme = theme || defaultTheme;
   const skillName = userData?.skill?.title || 'Frontend Development';
   const name = userData?.name || 'Student';
@@ -191,7 +192,7 @@ export default function AILearningPath({ userData, onBack, onNext, onProgressUpd
       });
     };
     const id = setInterval(tick, 1000);
-    return () => clearInterval(id);
+    return () => setInterval(id);
   }, [activeStep, steps, studyTaskIdx]);
 
   useEffect(() => {
@@ -338,36 +339,46 @@ export default function AILearningPath({ userData, onBack, onNext, onProgressUpd
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: currentTheme.pageBg, color: currentTheme.textPrimary, padding: '30px 20px' }}>
-      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '30px' }}>
-          <button type="button" onClick={onBack} style={{ background: 'transparent', color: currentTheme.textMuted, border: `1px solid ${currentTheme.border}`, padding: '8px 18px', borderRadius: '20px', cursor: 'pointer' }}>← Back</button>
-          <h1 style={{ color: currentTheme.accent, fontSize: '22px', fontWeight: 'bold' }}>⚡ PathForge</h1>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-body)', fontFamily: 'var(--font-main)', padding: '80px 20px' }}>
+      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '30px', marginBottom: '60px' }}>
+          <button type="button" onClick={onBack} className="pf-glass" style={{ border:'none', padding: '16px 35px', cursor: 'pointer', fontSize: '13px', fontWeight: '900', borderRadius:'25px', letterSpacing:'1.5px', textTransform:'uppercase' }}>BACK</button>
+          <h1 className="pf-shimmer-text" style={{ fontSize: '42px', fontWeight: '900', fontFamily:'var(--font-display)', margin: 0, letterSpacing: '-2px' }}>⚡ PathForge Roadmap</h1>
         </div>
 
-        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <div style={{ display: 'inline-block', background: currentTheme.accent + '26', border: '1px solid ' + currentTheme.accent + '66', borderRadius: '20px', padding: '6px 18px', marginBottom: '16px', fontSize: '13px', color: currentTheme.accent }}>
-            🤖 AI-Driven Adaptive Roadmap · Time-verified study
+        <div style={{ textAlign: 'center', marginBottom: '100px' }}>
+          <div className="pf-glass" style={{ display: 'inline-block', borderRadius: '25px', padding: '12px 30px', marginBottom: '40px', fontSize: '14px', color: 'var(--brand-teal)', fontWeight: '900', border: 'none', background:'rgba(0, 212, 170, 0.08)', letterSpacing:'3px' }}>
+            🤖 ADAPTIVE LEARNING ENGINE · TIME-VERIFIED STUDY
           </div>
-          <h2 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px' }}>{name}&apos;s Learning Journey</h2>
-          <p style={{ color: currentTheme.textMuted }}>{skillIcon} {skillName} · 🎯 {goal.split(' ').slice(1).join(' ')}</p>
+          <h2 style={{ fontSize: '72px', fontWeight: '900', marginBottom: '25px', fontFamily: 'var(--font-display)', letterSpacing: '-3.5px', color:'var(--text-heading)', lineHeight: '1.1' }}>
+            {name}'s Path to Mastery
+          </h2>
+          <p style={{ color: 'var(--text-muted)', fontWeight: '900', fontSize:'26px', opacity:0.6, letterSpacing: '1px' }}>{skillIcon} {skillName.toUpperCase()} · 🎯 {goal.split(' ').slice(1).join(' ').toUpperCase()}</p>
         </div>
 
-        <div style={{ background: currentTheme.accent + '1A', border: '1px solid ' + currentTheme.accent + '40', borderRadius: '14px', padding: '14px 18px', marginBottom: '20px', fontSize: '13px', color: currentTheme.textMuted, lineHeight: 1.5 }}>
-          <strong style={{ color: currentTheme.accent }}>How completion works:</strong> for each task, click <strong>Open resource</strong> to visit its own link (3 tasks → 3 links). The timer for that task starts only after its link was opened; time accrues when you are back on <strong>this PathForge tab</strong> with the module expanded (other tabs pause the timer). Need <strong>{MIN_MS_PER_TASK / 60000} minutes</strong> per task, then quiz, AI viva, and <strong>Finalize module</strong>.
-        </div>
-
-        <div style={{ background: currentTheme.cardBg, border: '1px solid ' + currentTheme.border, borderRadius: '16px', padding: '20px 24px', marginBottom: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <span style={{ fontSize: '14px', color: currentTheme.textMuted }}>{doneCount} of {steps.length} modules mastered</span>
-            <span style={{ color: currentTheme.accent, fontWeight: 'bold' }}>{progress}%</span>
+        <div className="pf-glass" style={{ padding: '60px', marginBottom: '80px', background:'white !important', borderRadius:'50px', border:'none', borderLeft: '15px solid var(--brand-teal) !important', boxShadow: '0 40px 100px rgba(0,0,0,0.05)' }}>
+          <div style={{ display:'flex', gap:'35px', alignItems:'flex-start' }}>
+             <span style={{fontSize:'48px'}}>💡</span>
+             <div>
+                <strong style={{ color: 'var(--brand-teal)', fontWeight: '900', fontSize:'18px', letterSpacing:'2px', display:'block', marginBottom:'15px' }}>HOW TO PROGRESS:</strong>
+                <p style={{ margin:0, fontSize: '18px', color: 'var(--text-body)', lineHeight: 1.8, fontWeight: '700' }}>
+                   For each task, click <strong>Open Resource</strong> to initiate the study sequence. The timer triggers only when active on this tab. Requires <strong>{MIN_MS_PER_TASK / 60000} minutes</strong> per task, followed by verification quiz and AI viva audit.
+                </p>
+             </div>
           </div>
-          <div style={{ height: '8px', background: currentTheme.inputBg, borderRadius: '4px' }}>
-            <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, ' + currentTheme.accent + ', ' + currentTheme.accentLight + ')', borderRadius: '4px', transition: 'width 0.4s ease' }} />
+        </div>
+
+        <div className="pf-glass" style={{ padding: '60px', marginBottom: '80px', background:'white !important', borderRadius:'50px', boxShadow:'0 30px 80px rgba(0,0,0,0.04)', border:'none' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '35px', alignItems: 'flex-end' }}>
+            <span style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight: '900', textTransform: 'uppercase', letterSpacing:'2.5px', opacity:0.5 }}>{doneCount} / {steps.length} MODULES MASTERED</span>
+            <span className="pf-shimmer-text" style={{ fontWeight: '900', fontSize: '56px', fontFamily: 'var(--font-display)', letterSpacing:'-2.5px', lineHeight:1 }}>{progress}%</span>
+          </div>
+          <div style={{ height: '24px', background: 'rgba(0,0,0,0.02)', borderRadius: '12px', overflow: 'hidden', padding:'6px', boxShadow:'inset 0 2px 10px rgba(0,0,0,0.03)' }}>
+            <div style={{ height: '100%', width: `${progress}%`, background: 'linear-gradient(90deg, var(--brand-teal), var(--brand-yellow))', borderRadius: '8px', transition: 'width 2s cubic-bezier(0.16, 1, 0.3, 1)', boxShadow: '0 0 30px rgba(0, 212, 170, 0.3)' }} />
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
           {steps.map((step, i) => {
             const item = moduleProgress[i] || {};
             const isDone = Boolean(item.completed);
@@ -376,28 +387,41 @@ export default function AILearningPath({ userData, onBack, onNext, onProgressUpd
             const studyDone = studyRequirementsMet(item, step);
 
             return (
-              <div key={i} style={{ background: isDone ? currentTheme.success + '1A' : currentTheme.cardBg, border: `1px solid ${isDone ? currentTheme.success : currentTheme.border}`, borderRadius: '20px', overflow: 'hidden' }}>
-                <button type="button" onClick={() => setActiveStep(isOpen ? null : i)} style={{ width: '100%', padding: '20px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'transparent', border: 'none', color: 'inherit', textAlign: 'left' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: isDone ? currentTheme.success : currentTheme.inputBg, display: 'flex', alignItems: 'center', justifyContent: 'center', color: isDone ? '#FFFFFF' : currentTheme.textMuted, fontWeight: 'bold', fontSize: '14px' }}>{isDone ? '✓' : i + 1}</div>
+              <div key={i} className="pf-glass" style={{ 
+                overflow: 'hidden', 
+                borderRadius:'50px',
+                background: isDone ? 'rgba(0, 212, 170, 0.04) !important' : (isOpen ? 'white !important' : 'rgba(0,0,0,0.01) !important'),
+                transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: isOpen ? '0 50px 120px rgba(0,0,0,0.08)' : '0 10px 30px rgba(0,0,0,0.02)',
+                transform: isOpen ? 'scale(1.02)' : 'scale(1)',
+                border:'none'
+              }}>
+                <button type="button" onClick={() => setActiveStep(isOpen ? null : i)} style={{ width: '100%', padding: '45px 60px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'transparent', border: 'none', color: 'inherit', textAlign: 'left', outline:'none' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '40px' }}>
+                    <div className="pf-glass" style={{ 
+                      width: '80px', height: '80px', borderRadius: '28px', 
+                      background: isDone ? 'var(--brand-teal)' : 'white !important', 
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', 
+                      color: isDone ? '#FFFFFF' : 'var(--text-heading)', fontWeight: '900', fontSize: '32px',
+                      border: 'none',
+                      fontFamily:'var(--font-display)',
+                      boxShadow: isDone ? '0 15px 40px rgba(0,212,170,0.3)' : '0 5px 15px rgba(0,0,0,0.03)'
+                    }}>{isDone ? '✓' : i + 1}</div>
                     <div>
-                      <h3 style={{ fontSize: '16px', fontWeight: 'bold', color: isDone ? currentTheme.success : currentTheme.textPrimary, margin: 0 }}>{step.title}</h3>
-                      <p style={{ fontSize: '12px', color: currentTheme.textMuted, margin: '4px 0 0' }}>{step.week} · {step.duration} · Study {Math.round(frac * 100)}%</p>
+                      <h3 style={{ fontSize: '32px', fontWeight: '900', color: isDone ? 'var(--brand-teal)' : 'var(--text-heading)', margin: 0, fontFamily: 'var(--font-display)', letterSpacing:'-1.5px' }}>{step.title}</h3>
+                      <p style={{ fontSize: '14px', color: 'var(--text-muted)', margin: '12px 0 0', fontWeight: '900', letterSpacing:'2px' }}>{step.week.toUpperCase()} · {step.duration.toUpperCase()} · SYNC: {Math.round(frac * 100)}%</p>
                     </div>
                   </div>
-                  <div style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: '0.3s', color: currentTheme.textMuted }}>▼</div>
+                  <div style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: '0.6s cubic-bezier(0.16, 1, 0.3, 1)', color: 'var(--brand-teal)', fontSize: '32px', fontWeight:'900' }}>▼</div>
                 </button>
 
                 {isOpen && (
-                  <div style={{ padding: '0 20px 20px', borderTop: `1px solid ${currentTheme.border}` }}>
-                    <p style={{ fontSize: '14px', color: currentTheme.textMuted, margin: '20px 0', lineHeight: '1.6' }}>{step.description}</p>
+                  <div style={{ padding: '0 45px 45px', borderTop: '1px solid rgba(0,0,0,0.05)' }}>
+                    <p style={{ fontSize: '20px', color: 'var(--text-body)', margin: '50px 0', lineHeight: '1.8', fontWeight: '600' }}>{step.description}</p>
 
-                    <div style={{ background: currentTheme.inputBg, border: `1px solid ${currentTheme.accent}`, borderRadius: '14px', padding: '16px', marginBottom: '20px' }}>
-                      <h4 style={{ fontSize: '14px', fontWeight: 'bold', color: currentTheme.accent, margin: '0 0 12px' }}>⏱ Tasks &amp; resources (timer starts after each link)</h4>
-                      <p style={{ fontSize: '12px', color: currentTheme.textMuted, marginBottom: '12px' }}>
-                        Use <strong>Open resource</strong> to open the official reading for that task. The timer for that line unlocks only after you open its link. Come back to this tab and choose <strong>Use timer for this task</strong> so time counts while PathForge stays visible ({formatClock(MIN_MS_PER_TASK)} per task).
-                      </p>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    <div className="pf-glass" style={{ padding: '50px', marginBottom: '50px', background: 'rgba(0,0,0,0.01) !important', borderRadius:'40px', border:'none' }}>
+                      <h4 style={{ fontSize: '14px', fontWeight: '900', color: 'var(--brand-teal)', margin: '0 0 40px', fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '4px' }}>⏱ DEPTH OF STUDY & RESOURCES</h4>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
                         {step.tasks.map((t, ti) => {
                           const tr = getTaskResources(step)[ti];
                           const arr = normalizeTaskTimes(item, step.tasks.length);
@@ -406,24 +430,30 @@ export default function AILearningPath({ userData, onBack, onNext, onProgressUpd
                           const pct = Math.min(100, (ms / MIN_MS_PER_TASK) * 100);
                           const isActive = (studyTaskIdx[i] ?? 0) === ti;
                           return (
-                            <div key={ti} style={{ padding: '12px', borderRadius: '12px', border: `1px solid ${isActive ? currentTheme.accent : currentTheme.border}`, background: currentTheme.cardBg }}>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', alignItems: 'flex-start' }}>
-                                <div style={{ flex: '1 1 200px' }}>
-                                  <div style={{ fontWeight: 'bold', fontSize: '13px', marginBottom: 6 }}>Task {ti + 1}</div>
-                                  <div style={{ fontSize: '13px', color: currentTheme.textMuted, lineHeight: 1.45 }}>{t}</div>
-                                  <div style={{ marginTop: '8px', fontSize: '11px', color: currentTheme.accentLight }}>📎 {tr.name} · {tr.type}</div>
+                            <div key={ti} className="pf-glass" style={{ padding: '40px', background: isActive ? 'white !important' : 'rgba(255,255,255,0.4) !important', borderRadius:'35px', transition:'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)', border: 'none', boxShadow: isActive ? '0 20px 50px rgba(0,0,0,0.05)' : 'none' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '40px', alignItems: 'flex-start' }}>
+                                <div style={{ flex: '1 1 400px' }}>
+                                  <div style={{ fontWeight: '900', fontSize: '12px', marginBottom: 15, color: 'var(--text-muted)', fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing:'2px' }}>LEARNING UNIT {ti + 1}</div>
+                                  <div style={{ fontSize: '22px', color: 'var(--text-heading)', lineHeight: 1.6, fontWeight: '800', letterSpacing:'-0.5px' }}>{t}</div>
+                                  <div style={{ marginTop: '20px', fontSize: '14px', color: 'var(--brand-teal)', fontWeight: '900', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                    <span style={{ fontSize: '20px' }}>🔗</span> {tr.name.toUpperCase()} · {tr.type.toUpperCase()}
+                                  </div>
                                 </div>
-                                <button type="button" onClick={() => openTaskResource(i, ti)} style={{ padding: '8px 14px', borderRadius: '10px', border: 'none', background: opened[ti] ? currentTheme.success + '33' : currentTheme.accent, color: opened[ti] ? currentTheme.success : '#FFFFFF', fontWeight: 'bold', fontSize: '12px', cursor: 'pointer', whiteSpace: 'nowrap' }}>{opened[ti] ? '✓ Opened' : '🔗 Open resource'}</button>
+                                <button type="button" onClick={() => openTaskResource(i, ti)} className={opened[ti] ? "pf-glass" : "pf-glow-btn"} style={{ border:'none', padding: '18px 35px', borderRadius: '25px', fontWeight: '900', fontSize: '14px', cursor: 'pointer', whiteSpace: 'nowrap', textTransform:'uppercase', letterSpacing:'1px' }}>
+                                  {opened[ti] ? '✓ OPENED' : 'OPEN RESOURCE'}
+                                </button>
                               </div>
-                              <div style={{ height: '4px', background: currentTheme.pageBg, borderRadius: '2px', marginTop: '10px' }}>
-                                <div style={{ width: `${pct}%`, height: '100%', background: pct >= 99.5 ? currentTheme.success : currentTheme.accent, borderRadius: '2px' }} />
+                              <div style={{ height: '12px', background: 'rgba(0,0,0,0.03)', borderRadius: '6px', marginTop: '40px', overflow: 'hidden', padding:'4px', boxShadow:'inset 0 1px 5px rgba(0,0,0,0.02)' }}>
+                                <div style={{ width: `${pct}%`, height: '100%', background: 'var(--brand-teal)', borderRadius: '4px', transition: 'width 0.6s cubic-bezier(0.16, 1, 0.3, 1)', boxShadow:'0 0 15px rgba(0, 212, 170, 0.4)' }} />
                               </div>
-                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px', flexWrap: 'wrap', gap: 8 }}>
-                                <span style={{ fontSize: '11px', color: currentTheme.textMuted }}>{formatClock(ms)} / {formatClock(MIN_MS_PER_TASK)}</span>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '25px', flexWrap: 'wrap', gap: 20 }}>
+                                <span style={{ fontSize: '15px', color: 'var(--text-muted)', fontWeight: '800', letterSpacing:'0.5px' }}>{formatClock(ms)} / {formatClock(MIN_MS_PER_TASK)} SYNCHRONIZED</span>
                                 {opened[ti] ? (
-                                  <button type="button" onClick={() => setStudyTaskIdx((s) => ({ ...s, [i]: ti }))} style={{ padding: '4px 10px', borderRadius: '8px', fontSize: '11px', border: isActive ? '2px solid ' + currentTheme.accent : '1px solid ' + currentTheme.border, background: isActive ? currentTheme.accent + '26' : 'transparent', color: currentTheme.textPrimary, cursor: 'pointer' }}>{isActive ? '● Timer on this task' : 'Use timer for this task'}</button>
+                                  <button type="button" onClick={() => setStudyTaskIdx((s) => ({ ...s, [i]: ti }))} className="pf-glass" style={{ border:'none', padding: '12px 28px', borderRadius: '20px', fontSize: '13px', background: isActive ? 'var(--brand-teal) !important' : 'rgba(0,0,0,0.05) !important', color: isActive ? 'white' : 'var(--text-body)', fontWeight: '900', cursor: 'pointer', textTransform:'uppercase', letterSpacing:'1px' }}>
+                                    {isActive ? '● ACTIVE TRACKING' : 'ENGAGE TIMER'}
+                                  </button>
                                 ) : (
-                                  <span style={{ fontSize: '11px', color: currentTheme.textMuted }}>Open resource to unlock timer</span>
+                                  <span style={{ fontSize: '14px', color: 'var(--brand-coral)', fontWeight: '900', textTransform:'uppercase', letterSpacing:'1.5px', animation:'pf-pulse 1.5s infinite' }}>Unlock via link</span>
                                 )}
                               </div>
                             </div>
@@ -431,72 +461,75 @@ export default function AILearningPath({ userData, onBack, onNext, onProgressUpd
                         })}
                       </div>
                       {document.visibilityState !== 'visible' && isOpen && (
-                        <p style={{ fontSize: '12px', color: currentTheme.warning, marginTop: '12px', marginBottom: 0 }}>⏸ Timer paused — return to this PathForge tab for study time to count.</p>
+                        <p style={{ fontSize: '15px', color: 'var(--brand-coral)', marginTop: '40px', marginBottom: 0, fontWeight: '900', textAlign: 'center', textTransform:'uppercase', letterSpacing:'3px', animation: 'pf-pulse 2s infinite' }}>⏸ FOCUS REQUIRED — TAB SYNC PAUSED</p>
                       )}
                     </div>
 
-                    <div style={{ background: currentTheme.inputBg, padding: '20px', borderRadius: '16px', border: `1px solid ${currentTheme.border}`, marginBottom: '16px' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: '12px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ fontSize: '18px' }}>📝</span>
-                          <h4 style={{ fontSize: '15px', fontWeight: 'bold', margin: 0 }}>{pickQuizQuestions(i).label}</h4>
+                    <div className="pf-glass" style={{ padding: '45px', borderRadius: '40px', marginBottom: '40px', background: 'rgba(0,0,0,0.01) !important', border:'none' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '40px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '25px' }}>
+                          <span style={{ fontSize: '42px' }}>📝</span>
+                          <div>
+                            <h4 style={{ fontSize: '26px', fontWeight: '900', margin: 0, fontFamily: 'var(--font-display)', letterSpacing:'-0.5px', color:'var(--text-heading)' }}>Knowledge Calibration</h4>
+                            {(!item.moduleQuizPassed && !studyDone) && (
+                               <p style={{ fontSize: '14px', color: 'var(--brand-coral)', margin: '8px 0 0', fontWeight: '900', textTransform:'uppercase', letterSpacing:'1.5px' }}>LOCKED UNTIL STUDY SYNC COMPLETE</p>
+                            )}
+                          </div>
                         </div>
                         {!item.moduleQuizPassed && (
                           <button
                             type="button"
                             onClick={() => openModuleQuiz(i)}
                             disabled={!studyDone}
+                            className={studyDone ? "pf-glow-btn" : "pf-glass"}
                             style={{
-                              padding: '10px 18px',
-                              borderRadius: '12px',
-                              border: 'none',
-                              fontWeight: 'bold',
+                              border:'none',
+                              padding: '20px 45px',
+                              borderRadius: '30px',
+                              fontWeight: '900',
                               cursor: studyDone ? 'pointer' : 'not-allowed',
-                              background: studyDone ? currentTheme.accent : currentTheme.pageBg,
-                              color: studyDone ? '#FFFFFF' : currentTheme.textMuted,
+                              fontSize: '15px',
+                              textTransform:'uppercase',
+                              letterSpacing:'1.5px'
                             }}
                           >
-                            {studyDone ? 'Open verification quiz' : '🔒 Finish study time first'}
+                            {studyDone ? 'START CALIBRATION' : 'LOCK: STUDY REQ'}
                           </button>
                         )}
                         {item.moduleQuizPassed && (
-                          <span style={{ color: currentTheme.success, fontWeight: 'bold', fontSize: '13px' }}>✅ Quiz passed ({item.moduleQuizScore ?? 0}%)</span>
+                          <div className="pf-glass" style={{ border:'none', padding:'16px 35px', borderRadius:'25px', background:'white !important', boxShadow:'0 10px 25px rgba(0, 212, 170, 0.1)' }}>
+                             <span style={{ color: 'var(--brand-teal)', fontWeight: '900', fontSize: '17px', fontFamily: 'var(--font-display)', letterSpacing:'1.5px' }}>✅ SYNCED: {item.moduleQuizScore ?? 0}%</span>
+                          </div>
                         )}
                       </div>
-                      {!item.moduleQuizPassed && !studyDone && (
-                        <p style={{ fontSize: '12px', color: currentTheme.textMuted, margin: 0 }}>Quiz unlocks when every task line reaches 100% focused time.</p>
-                      )}
                     </div>
 
-                    <div style={{ background: currentTheme.inputBg, padding: '24px', borderRadius: '16px', border: `1px solid ${currentTheme.border}` }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-                        <span style={{ fontSize: '18px' }}>🧠</span>
-                        <h4 style={{ fontSize: '15px', fontWeight: 'bold', margin: 0 }}>AI Interactive Viva</h4>
+                    <div className="pf-glass" style={{ padding: '50px', borderRadius: '45px', background: 'rgba(0,0,0,0.01) !important', border:'none' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '25px', marginBottom: '40px' }}>
+                        <span style={{ fontSize: '42px' }}>🧠</span>
+                        <h4 style={{ fontSize: '26px', fontWeight: '900', margin: 0, fontFamily: 'var(--font-display)', letterSpacing:'-0.5px', color:'var(--text-heading)' }}>AI Technical Audit</h4>
                       </div>
                       {!item.moduleQuizPassed ? (
-                        <p style={{ fontSize: '13px', color: currentTheme.textMuted, margin: 0 }}>Pass the quiz above to unlock the viva.</p>
+                        <p style={{ fontSize: '18px', color: 'var(--text-muted)', margin: 0, fontWeight: '700', opacity:0.6 }}>Pass knowledge calibration to initiate AI interview sequence.</p>
                       ) : item.testPassed ? (
-                        <div style={{ color: currentTheme.success, fontWeight: 'bold', fontSize: '14px' }}>✅ Viva cleared: {item.testScore}% technical depth</div>
+                        <div className="pf-glass" style={{ color: 'var(--brand-teal)', fontWeight: '900', fontSize: '22px', fontFamily: 'var(--font-display)', padding: '40px', background: 'white !important', borderRadius: '30px', letterSpacing:'1px', textAlign: 'center', boxShadow:'0 20px 60px rgba(0, 212, 170, 0.1)' }}>
+                          ✅ AUDIT CLEARED: {item.testScore}% Technical Saturation
+                        </div>
                       ) : (
                         <div>
-                          <p style={{ fontSize: '13px', color: currentTheme.textMuted, marginBottom: '16px' }}>
-                            Challenge: <strong>Explain how you would apply {step.title} in a real project (architecture, tradeoffs, pitfalls).</strong>
+                          <p style={{ fontSize: '20px', color: 'var(--text-body)', marginBottom: '40px', fontWeight: '600', lineHeight: '1.8' }}>
+                            <strong style={{ color: 'var(--brand-teal)', letterSpacing:'2px' }}>PROMPT:</strong> Explain how you would architect {step.title.toUpperCase()} in a high-scale environment. Detail trade-offs, potential failure points, and optimization strategies.
                           </p>
                           <textarea
                             id={`viva-${i}`}
-                            placeholder={`Type your explanation (${VIVA_MIN_CHARS}+ chars). Paste is disabled.`}
-                            onPaste={(e) => {
-                              e.preventDefault();
-                              alert('Anti-cheat: paste is disabled. Type your own explanation.');
-                            }}
-                            onCopy={(e) => e.preventDefault()}
-                            onCut={(e) => e.preventDefault()}
-                            onContextMenu={(e) => e.preventDefault()}
-                            style={{ width: '100%', minHeight: '120px', background: currentTheme.pageBg, border: `1px solid ${currentTheme.border}`, borderRadius: '12px', padding: '12px', color: currentTheme.textPrimary, fontSize: '14px', marginBottom: '12px', resize: 'vertical' }}
+                            placeholder={`Type your expert-level explanation (${VIVA_MIN_CHARS}+ chars required)...`}
+                            onPaste={(e) => { e.preventDefault(); alert('Manual entry required to verify cognitive synthesis.'); }}
+                            className="pf-glass"
+                            style={{ width: '100%', minHeight: '250px', background: 'white !important', border: 'none !important', borderRadius: '40px', padding: '40px', color: 'var(--text-heading)', fontSize: '19px', marginBottom: '35px', resize: 'vertical', fontWeight: '600', fontFamily: 'var(--font-main)', outline:'none', boxShadow: 'inset 0 2px 20px rgba(0,0,0,0.03)' }}
                           />
-                          <button type="button" onClick={() => submitAIViva(i, document.getElementById(`viva-${i}`)?.value || '')} style={{ background: currentTheme.accent, color: '#FFFFFF', border: 'none', padding: '10px 20px', borderRadius: '10px', fontWeight: 'bold', cursor: 'pointer' }}>Submit for AI audit</button>
+                          <button type="button" onClick={() => submitAIViva(i, document.getElementById(`viva-${i}`)?.value || '')} className="pf-glow-btn" style={{ border:'none', padding: '22px 60px', borderRadius: '35px', fontWeight: '900', cursor: 'pointer', fontSize: '17px', textTransform:'uppercase', letterSpacing:'2px' }}>INITIATE AUDIT</button>
                           {testResult && activeStep === i && (
-                            <p style={{ marginTop: '12px', fontSize: '13px', color: testResult.includes('✅') ? currentTheme.success : currentTheme.error }}>{testResult}</p>
+                            <div className="pf-glass" style={{ marginTop: '35px', padding: '30px 40px', borderRadius: '25px', fontSize: '17px', fontWeight: '900', background: 'white !important', color: testResult.includes('✅') ? 'var(--brand-teal)' : 'var(--brand-coral)', letterSpacing:'1px', boxShadow:'0 15px 35px rgba(0,0,0,0.04)' }}>{testResult.toUpperCase()}</div>
                           )}
                         </div>
                       )}
@@ -506,19 +539,21 @@ export default function AILearningPath({ userData, onBack, onNext, onProgressUpd
                       type="button"
                       onClick={() => finalizeModule(i)}
                       disabled={isDone}
+                      className={isDone ? "" : (item.testPassed && item.moduleQuizPassed && studyDone ? "pf-glow-btn" : "pf-glass")}
                       style={{
-                        marginTop: '16px',
+                        marginTop: '50px',
                         width: '100%',
-                        padding: '14px',
-                        background: isDone ? 'rgba(46,204,113,0.12)' : item.testPassed && item.moduleQuizPassed && studyDone ? currentTheme.success : currentTheme.inputBg,
-                        color: isDone ? currentTheme.success : item.testPassed && item.moduleQuizPassed && studyDone ? '#FFFFFF' : currentTheme.textMuted,
-                        border: isDone ? `1px solid ${currentTheme.success}` : 'none',
-                        borderRadius: '12px',
-                        fontWeight: 'bold',
+                        padding: '28px',
+                        borderRadius: '40px',
+                        fontWeight: '900',
+                        fontSize: '20px',
                         cursor: isDone || (item.testPassed && item.moduleQuizPassed && studyDone) ? 'pointer' : 'not-allowed',
+                        textTransform: 'uppercase',
+                        letterSpacing: '4px',
+                        border:'none'
                       }}
                     >
-                      {isDone ? '🎓 Module fully verified' : '✅ Finalize module (100% — requires study + quiz + viva)'}
+                      {isDone ? '🎓 MASTERY ACHIEVED' : '✅ FINALIZE COMPETENCY'}
                     </button>
                   </div>
                 )}
@@ -529,48 +564,51 @@ export default function AILearningPath({ userData, onBack, onNext, onProgressUpd
       </div>
 
       {quizOpen !== null && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.85)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20 }}>
-          <div
-            role="dialog"
-            style={{ background: currentTheme.cardBg, border: `1px solid ${currentTheme.border}`, borderRadius: 20, padding: 28, maxWidth: 520, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}
-            onPaste={(e) => e.preventDefault()}
-          >
-            <h3 style={{ marginTop: 0, color: currentTheme.accent }}>{pickQuizQuestions(quizOpen).label}</h3>
-            <p style={{ fontSize: '12px', color: currentTheme.textMuted }}>Answer all. Submit is enabled after {QUIZ_MIN_READ_MS / 1000}s on this screen.</p>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(253,252,248,0.4)', backdropFilter: 'blur(50px)', zIndex: 3000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 25 }}>
+          <div className="pf-glass" role="dialog" style={{ padding: '80px', maxWidth: '850px', width: '100%', maxHeight: '92vh', overflowY: 'auto', background:'rgba(255,255,255,0.98) !important', borderRadius:'60px', boxShadow: '0 60px 150px rgba(0,0,0,0.2)', border:'none', animation:'modalFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+            <h3 className="pf-shimmer-text" style={{ marginTop: 0, fontFamily: 'var(--font-display)', fontWeight: '900', fontSize: '48px', letterSpacing:'-2.5px' }}>{pickQuizQuestions(quizOpen).label.toUpperCase()}</h3>
+            <p style={{ fontSize: '15px', color: 'var(--text-muted)', fontWeight: '900', marginBottom: '50px', letterSpacing:'3px', opacity:0.6 }}>VERIFY KNOWLEDGE INTEGRITY. SELECT THE MOST ACCURATE RESPONSE.</p>
             {pickQuizQuestions(quizOpen).questions.map((q, qi) => (
-              <div key={qi} style={{ marginBottom: 18 }}>
-                <div style={{ fontWeight: 'bold', marginBottom: 8, fontSize: 14 }}>{qi + 1}. {q.q}</div>
-                {q.options.map((opt, oi) => (
-                  <label key={oi} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, cursor: 'pointer', fontSize: 13 }}>
-                    <input
-                      type="radio"
-                      name={`mq-${quizOpen}-${qi}`}
-                      checked={quizChoices[qi] === oi}
-                      onChange={() => setQuizChoices((c) => ({ ...c, [qi]: oi }))}
-                    />
-                    {opt}
-                  </label>
-                ))}
+              <div key={qi} style={{ marginBottom: '50px', padding: '45px', background: 'rgba(0,0,0,0.01)', borderRadius: '40px', border: '1px solid rgba(0,0,0,0.03)', boxShadow: '0 15px 35px rgba(0,0,0,0.02)' }}>
+                <div style={{ fontWeight: '900', marginBottom: '35px', fontSize: '24px', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', lineHeight:1.4, letterSpacing:'-0.5px' }}>{qi + 1}. {q.q}</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                  {q.options.map((opt, oi) => (
+                    <label key={oi} style={{ display: 'flex', alignItems: 'center', gap: '25px', padding: '22px 35px', borderRadius: '25px', cursor: 'pointer', fontSize: '18px', fontWeight: '800', background: quizChoices[qi] === oi ? 'rgba(0, 212, 170, 0.1)' : 'white', border: quizChoices[qi] === oi ? '3px solid var(--brand-teal)' : '3px solid transparent', transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)', boxShadow: quizChoices[qi] === oi ? '0 10px 25px rgba(0, 212, 170, 0.2)' : '0 5px 15px rgba(0,0,0,0.02)' }}>
+                      <input
+                        type="radio"
+                        name={`mq-${quizOpen}-${qi}`}
+                        checked={quizChoices[qi] === oi}
+                        onChange={() => setQuizChoices((c) => ({ ...c, [qi]: oi }))}
+                        style={{ accentColor: 'var(--brand-teal)', width: '26px', height: '26px' }}
+                      />
+                      {opt}
+                    </label>
+                  ))}
+                </div>
               </div>
             ))}
-            {quizMessage && <p style={{ color: currentTheme.error, fontSize: 13 }}>{quizMessage}</p>}
-            <div style={{ display: 'flex', gap: 12, marginTop: 16 }}>
-              <button type="button" onClick={() => { setQuizOpen(null); setQuizMessage(''); }} style={{ padding: '12px 20px', borderRadius: 12, border: `1px solid ${currentTheme.border}`, background: 'transparent', color: currentTheme.textPrimary, cursor: 'pointer' }}>Cancel</button>
+            {quizMessage && <div style={{ color: 'var(--brand-coral)', fontSize: '17px', fontWeight: '900', marginBottom: '45px', textAlign: 'center', padding: '25px', background: 'rgba(255, 107, 107, 0.08)', borderRadius: '25px', letterSpacing:'1.5px', border:'1px solid rgba(255, 107, 107, 0.1)' }}>{quizMessage.toUpperCase()}</div>}
+            <div style={{ display: 'flex', gap: '30px', marginTop: '40px' }}>
+              <button type="button" onClick={() => { setQuizOpen(null); setQuizMessage(''); }} className="pf-glass" style={{ border:'none', flex: 1, padding: '24px', borderRadius: '30px', fontWeight: '900', cursor: 'pointer', textTransform: 'uppercase', fontSize:'15px', letterSpacing:'2px' }}>ABORT</button>
               <button
                 type="button"
                 onClick={() => submitModuleQuiz(quizOpen)}
-                style={{ padding: '12px 24px', borderRadius: 12, border: 'none', background: currentTheme.accent, color: '#FFFFFF', fontWeight: 'bold', cursor: 'pointer' }}
+                className="pf-glow-btn"
+                style={{ border:'none', flex: 1, padding: '24px', borderRadius: '30px', fontWeight: '900', cursor: 'pointer', textTransform: 'uppercase', fontSize:'15px', letterSpacing:'2px' }}
               >
-                Submit answers
+                SUBMIT CALIBRATION
               </button>
             </div>
           </div>
         </div>
       )}
 
-      <div style={{ textAlign: 'center', marginTop: '40px' }}>
-        <button type="button" onClick={onNext} style={{ background: currentTheme.accent, color: '#FFFFFF', border: 'none', padding: '16px 48px', borderRadius: '30px', fontSize: '17px', fontWeight: 'bold', cursor: 'pointer' }}>View Employability Score →</button>
+      <div style={{ textAlign: 'center', marginTop: '100px', marginBottom: '150px' }}>
+        <button type="button" onClick={onNext} className="pf-glow-btn" style={{ border:'none', padding: '30px 100px', borderRadius: '60px', fontSize: '24px', fontWeight: '900', cursor: 'pointer', textTransform:'uppercase', letterSpacing:'4px' }}>Analyze Employability Score →</button>
       </div>
+      <style>{`
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.95) translateY(40px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+      `}</style>
     </div>
   );
 }

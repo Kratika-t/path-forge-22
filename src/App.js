@@ -32,32 +32,32 @@ const VALID_APP_PAGES = new Set([
 
 const theme = {
   dark: {
-    pageBg: '#1D2226',
-    cardBg: '#1B1F23',
-    inputBg: '#283039',
-    border: '#38434F',
-    textPrimary: '#E7E9EA',
-    textMuted: '#B0B7BF',
-    accent: '#0A66C2',
-    accentHover: '#004182',
-    accentLight: '#70B5F9',
+    pageBg: 'var(--bg-base)',
+    cardBg: 'var(--glass-bg)',
+    inputBg: 'rgba(255, 255, 255, 0.6)',
+    border: 'var(--glass-border)',
+    textPrimary: 'var(--text-heading)',
+    textMuted: 'var(--text-body)',
+    accent: 'var(--brand-teal)',
+    accentHover: 'var(--brand-yellow)',
+    accentLight: 'rgba(0, 212, 170, 0.2)',
     success: '#057642',
-    warning: '#F5C518',
-    error: '#CC1016',
+    warning: 'var(--brand-yellow)',
+    error: 'var(--brand-coral)',
   },
   light: {
-    pageBg: '#F3F2EF',
-    cardBg: '#FFFFFF',
-    inputBg: '#F9F9F9',
-    border: '#D0D0D0',
-    textPrimary: '#000000',
-    textMuted: '#666666',
-    accent: '#0A66C2',
-    accentHover: '#004182',
-    accentLight: '#0A66C2',
+    pageBg: 'var(--bg-base)',
+    cardBg: 'var(--glass-bg)',
+    inputBg: 'rgba(255, 255, 255, 0.6)',
+    border: 'var(--glass-border)',
+    textPrimary: 'var(--text-heading)',
+    textMuted: 'var(--text-body)',
+    accent: 'var(--brand-teal)',
+    accentHover: 'var(--brand-yellow)',
+    accentLight: 'rgba(0, 212, 170, 0.2)',
     success: '#057642',
-    warning: '#B06B00',
-    error: '#CC1016',
+    warning: 'var(--brand-yellow)',
+    error: 'var(--brand-coral)',
   }
 };
 
@@ -170,15 +170,15 @@ function App() {
 
   if (authLoading) {
     return (
-      <div style={{ minHeight: '100vh', background: theme.pageBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '20px', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg-base)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '30px', position: 'relative', overflow: 'hidden' }}>
         <ParticleBackground />
         <CustomCursor />
-        <div style={{ zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
-          <div style={{ fontSize: '52px', animation: 'floatY 2s ease-in-out infinite' }}>⚡</div>
-          <div className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: '800' }}>PathForge</div>
-          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', letterSpacing: '2px', textTransform: 'uppercase' }}>Loading your journey...</div>
-          <div style={{ width: '160px', height: '3px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden', marginTop: '8px' }}>
-            <div style={{ height: '100%', background: 'linear-gradient(90deg, #0A66C2, #FF9A6C)', borderRadius: '2px', animation: 'shimmerText 1.5s linear infinite', backgroundSize: '200% auto' }} />
+        <div style={{ zIndex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '24px', textAlign: 'center' }}>
+          <div className="pf-float" style={{ fontSize: '64px', filter: 'drop-shadow(0 10px 20px rgba(245,166,35,0.3))' }}>⚡</div>
+          <div className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '36px', fontWeight: '900', letterSpacing: '-1px' }}>PathForge</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '14px', letterSpacing: '3px', textTransform: 'uppercase', fontWeight: '700' }}>Initializing your future</div>
+          <div style={{ width: '200px', height: '4px', background: 'rgba(0,0,0,0.05)', borderRadius: '10px', overflow: 'hidden', marginTop: '10px' }}>
+            <div style={{ height: '100%', background: 'linear-gradient(90deg, var(--brand-yellow), var(--brand-coral), var(--brand-teal))', borderRadius: '10px', animation: 'shimmerText 2s linear infinite', backgroundSize: '200% auto' }} />
           </div>
         </div>
       </div>
@@ -207,7 +207,7 @@ function App() {
 
 
   const SubPageWrapper = ({ children }) => (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', minHeight: '100vh', background: 'var(--bg-base)' }}>
       <CustomCursor />
       <ParticleBackground />
       <div className="pf-page-enter" style={{ position: 'relative', zIndex: 1 }}>{children}</div>
@@ -283,17 +283,17 @@ function App() {
     const lpct = auditScore > 0 ? auditScore : Math.round((ldone / ltotal) * 100);
 
     return (
-      <div style={{ minHeight: '100vh', background: '#0a0a0c', color: 'white', fontFamily: 'var(--font-main)', display: 'flex', overflow: 'hidden' }}>
+      <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-body)', fontFamily: 'var(--font-main)', display: 'flex', overflow: 'hidden' }}>
         <CustomCursor />
         <ParticleBackground />
 
         {/* Sidebar */}
-        <aside style={{ width: '280px', background: 'rgba(255,255,255,0.02)', borderRight: '1px solid rgba(255,255,255,0.08)', padding: '30px 20px', display: 'flex', flexDirection: 'column', gap: '40px', position: 'relative', zIndex: 10 }}>
-          <div style={{ paddingLeft: '10px' }}>
-            <h1 className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '24px', fontWeight: '900', margin: 0 }}>⚡ PathForge</h1>
+        <aside className="pf-glass" style={{ width: '280px', margin: '20px', padding: '35px 20px', display: 'flex', flexDirection: 'column', gap: '40px', position: 'relative', zIndex: 10, borderRadius: '30px' }}>
+          <div style={{ paddingLeft: '15px' }}>
+            <h1 className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '26px', fontWeight: '900', margin: 0, letterSpacing: '-1px' }}>⚡ PathForge</h1>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {[
               { id: 'dashboard', label: 'Overview', icon: '📊' },
               { id: 'learning', label: 'AI Roadmap', icon: '🚀' },
@@ -307,12 +307,19 @@ function App() {
               { id: 'rewards', label: 'Reward Hub', icon: '🏆' },
               { id: 'profile', label: 'Settings', icon: '⚙️' },
             ].map(item => (
-              <button key={item.id} onClick={() => navigateTo(item.id)} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 18px', borderRadius: '14px', border: 'none', background: page === item.id ? 'rgba(255,107,53,0.15)' : 'transparent', color: page === item.id ? '#0A66C2' : 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '14px', fontWeight: '700', transition: 'all 0.2s', textAlign: 'left', width: '100%' }}
-                onMouseEnter={e => { if (page !== item.id) e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; }}
-                onMouseLeave={e => { if (page !== item.id) e.currentTarget.style.background = 'transparent'; }}>
-                <span>{item.icon}</span> {item.label}
+              <button key={item.id} onClick={() => navigateTo(item.id)} style={{ display: 'flex', alignItems: 'center', gap: '14px', padding: '14px 20px', borderRadius: '18px', border: 'none', background: page === item.id ? 'var(--brand-yellow)' : 'transparent', color: page === item.id ? 'white' : 'var(--text-body)', cursor: 'pointer', fontSize: '14px', fontWeight: '700', transition: 'all 0.3s var(--transition-smooth)', textAlign: 'left', width: '100%' }}
+                onMouseEnter={e => { if (page !== item.id) e.currentTarget.style.background = 'rgba(255,255,255,0.6)'; e.currentTarget.style.transform = 'translateX(4px)'; }}
+                onMouseLeave={e => { if (page !== item.id) e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'translateX(0)'; }}>
+                <span style={{ fontSize: '18px', opacity: page === item.id ? 1 : 0.8 }}>{item.icon}</span> {item.label}
               </button>
             ))}
+          </div>
+
+          <div style={{ marginTop: 'auto', padding: '10px' }}>
+            <button onClick={handleLogout} style={{ width: '100%', padding: '12px', borderRadius: '15px', border: '1px solid var(--brand-coral)', background: 'transparent', color: 'var(--brand-coral)', fontWeight: '700', cursor: 'pointer', transition: 'all 0.2s' }}
+              onMouseEnter={e => { e.currentTarget.style.background = 'var(--brand-coral)'; e.currentTarget.style.color = 'white'; }}>
+              🚪 Sign Out
+            </button>
           </div>
         </aside>
 
@@ -320,62 +327,70 @@ function App() {
         <main tabIndex={0} style={{ flex: 1, padding: '40px 60px', position: 'relative', zIndex: 1, overflowY: 'auto', outline: 'none' }}>
           <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '50px' }}>
             <div>
-              <h2 style={{ fontSize: '28px', fontWeight: '900', margin: 0, letterSpacing: '-0.5px' }}>Candidate Dashboard</h2>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '15px', marginTop: '6px' }}>Welcome back, {displayName}. Your career pulse is active.</p>
+              <h2 style={{ fontSize: '32px', fontWeight: '900', margin: 0, letterSpacing: '-1px', color: 'var(--text-heading)' }}>Candidate Dashboard</h2>
+              <p style={{ color: 'var(--text-muted)', fontSize: '16px', marginTop: '8px', fontWeight: '500' }}>Welcome back, {displayName}. Your career pulse is active.</p>
             </div>
-            <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-              <button onClick={() => navigateTo('home')} style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', padding: '12px 24px', borderRadius: '14px', cursor: 'pointer', fontSize: '14px', fontWeight: '700' }}>Exit to Landing</button>
-              <div style={{ width: '48px', height: '48px', borderRadius: '14px', background: 'rgba(255,107,53,0.2)', border: '1px solid rgba(255,107,53,0.4)', overflow: 'hidden', boxShadow: '0 10px 20px rgba(0,0,0,0.2)' }}>
-                {userData?.profilePhoto ? <img src={userData.profilePhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px' }}>👤</div>}
+            <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+              <button onClick={() => navigateTo('home')} className="pf-glass" style={{ color: 'var(--text-body)', padding: '12px 28px', cursor: 'pointer', fontSize: '14px', fontWeight: '700', borderRadius: '20px' }}>Exit to Landing</button>
+              <div 
+                onClick={() => navigateTo('profile')}
+                style={{ width: '54px', height: '54px', borderRadius: '18px', background: 'var(--brand-coral)', border: '2px solid white', overflow: 'hidden', boxShadow: '0 10px 25px rgba(255,107,107,0.2)', cursor: 'pointer', transition: 'transform 0.3s' }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1) rotate(5deg)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'scale(1) rotate(0)'}
+              >
+                {userData?.profilePhoto ? <img src={userData.profilePhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '24px' }}>👤</div>}
               </div>
             </div>
           </header>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '50px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '40px' }}>
             {/* Employability Score Widget */}
             <div 
               onClick={() => navigateTo('learning')}
-              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(15px)', cursor: 'pointer', transition: 'transform 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+              className="pf-glass"
+              style={{ padding: '35px', cursor: 'pointer' }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>Employability Index</span>
-                <span style={{ fontSize: '24px' }}>📈</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Employability Index</span>
+                <span style={{ fontSize: '28px', background: 'rgba(0, 212, 170, 0.1)', padding: '10px', borderRadius: '15px' }}>📈</span>
               </div>
-              <div style={{ fontSize: '36px', fontWeight: '900', color: 'white', marginBottom: '8px' }}>{lpct}%</div>
-              <div style={{ fontSize: '13px', color: '#0A66C2', fontWeight: '700' }}>{ldone}/{ltotal} modules verified</div>
+              <div className="pf-shimmer-text" style={{ fontSize: '42px', fontWeight: '900', marginBottom: '10px' }}>{lpct}%</div>
+              <div style={{ fontSize: '14px', color: 'var(--brand-teal)', fontWeight: '700', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--brand-teal)' }}></span>
+                {ldone}/{ltotal} modules verified
+              </div>
             </div>
 
             {/* AI Auditor Widget */}
-            <div style={{ background: 'linear-gradient(135deg, rgba(255,107,53,0.1) 0%, rgba(255,255,255,0.03) 100%)', border: '1px solid rgba(255,107,53,0.4)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(15px)', position: 'relative' }}>
-              <div style={{ fontSize: '11px', fontWeight: '800', color: '#0A66C2', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px' }}>AI Industry Audit</div>
-              <div style={{ fontSize: '20px', fontWeight: '800', marginBottom: '12px', color: 'white' }}>Industry Readiness <br/>Status</div>
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', marginBottom: '20px', lineHeight: '1.5' }}>Scan your progress against live market trends.</p>
+            <div className="pf-glass" style={{ padding: '35px', position: 'relative', background: 'linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,107,107,0.05)) !important' }}>
+              <div style={{ fontSize: '12px', fontWeight: '800', color: 'var(--brand-coral)', textTransform: 'uppercase', letterSpacing: '1.5px', marginBottom: '16px' }}>AI Industry Audit</div>
+              <div style={{ fontSize: '22px', fontWeight: '900', marginBottom: '12px', color: 'var(--text-heading)', lineHeight: '1.3' }}>Industry Readiness <br/>Status</div>
+              <p style={{ color: 'var(--text-muted)', fontSize: '14px', marginBottom: '24px', lineHeight: '1.6' }}>Scan your progress against live market trends.</p>
               <button 
                 onClick={() => navigateTo('audit')}
-                style={{ width: '100%', padding: '12px', borderRadius: '14px', background: '#0A66C2', color: 'white', border: 'none', fontSize: '14px', fontWeight: '800', cursor: 'pointer', boxShadow: '0 8px 20px rgba(255,107,53,0.2)' }}
+                className="pf-glow-btn"
+                style={{ width: '100%', padding: '14px', fontSize: '14px' }}
               >
                 Start AI Audit ⚡
               </button>
             </div>
 
             {/* Maturity Widget */}
-            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '32px', backdropFilter: 'blur(15px)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' }}>Skill Maturity</span>
-                <span style={{ fontSize: '24px' }}>🧬</span>
+            <div className="pf-glass" style={{ padding: '35px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
+                <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1.5px' }}>Skill Maturity</span>
+                <span style={{ fontSize: '28px', background: 'rgba(245, 166, 35, 0.1)', padding: '10px', borderRadius: '15px' }}>🧬</span>
               </div>
-              <div style={{ fontSize: '22px', fontWeight: '900', color: 'white', marginBottom: '8px' }}>{userData?.auditReport?.readinessLevel || 'Assessment Pending'}</div>
-              <div style={{ fontSize: '13px', color: '#9B59B6', fontWeight: '700' }}>AI-Verified Talent</div>
+              <div style={{ fontSize: '24px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '10px' }}>{userData?.auditReport?.readinessLevel || 'Assessment Pending'}</div>
+              <div style={{ fontSize: '14px', color: 'var(--brand-yellow)', fontWeight: '700' }}>AI-Verified Talent Profile</div>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1.2fr', gap: '30px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.8fr 1.2fr', gap: '30px' }}>
             {/* Pipeline Section */}
-            <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '28px', padding: '32px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: '800', margin: 0 }}>Career Pipeline</h3>
+            <div className="pf-glass" style={{ padding: '35px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px' }}>
+                <h3 style={{ fontSize: '22px', fontWeight: '900', margin: 0, color: 'var(--text-heading)' }}>Career Pipeline</h3>
                 <button 
                   onClick={async () => {
                     setAuditLoading(true);
@@ -383,24 +398,25 @@ function App() {
                     setAuditLoading(false);
                     if (result) setAuditResult(result);
                   }}
-                  style={{ background: 'rgba(255,107,53,0.1)', border: '1px solid rgba(255,107,53,0.3)', color: '#0A66C2', padding: '10px 20px', borderRadius: '14px', fontSize: '13px', fontWeight: '800', cursor: 'pointer' }}>
+                  className="pf-glow-btn"
+                  style={{ padding: '10px 22px', fontSize: '13px' }}>
                   {auditLoading ? 'Auditing...' : 'Run New Audit ⚡'}
                 </button>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                 {[
-                  { icon: '🧬', name: 'Skill DNA Assessment', status: userData?.learningProgress?.percent > 0 ? 'Verified' : 'Pending', color: userData?.learningProgress?.percent > 0 ? '#057642' : '#0A66C2', action: () => navigateTo('skillmap') },
-                  { icon: '🚀', name: 'Learning Path Execution', status: lpct > 50 ? 'Advanced' : 'In Progress', color: '#3498DB', action: () => navigateTo('learning') },
-                  { icon: '🎥', name: 'AI Mock Interview', status: 'Available', color: '#E67E22', action: () => navigateTo('interview') },
+                  { icon: '🧬', name: 'Skill DNA Assessment', status: userData?.learningProgress?.percent > 0 ? 'Verified' : 'Pending', color: userData?.learningProgress?.percent > 0 ? '#057642' : 'var(--brand-teal)', action: () => navigateTo('skillmap') },
+                  { icon: '🚀', name: 'Learning Path Execution', status: lpct > 50 ? 'Advanced' : 'In Progress', color: 'var(--brand-yellow)', action: () => navigateTo('learning') },
+                  { icon: '🎥', name: 'AI Mock Interview', status: 'Available', color: 'var(--brand-coral)', action: () => navigateTo('interview') },
                   { icon: '🎯', name: 'Industry Mentoring', status: 'Active', color: '#9B59B6', action: () => navigateTo('mentoring') },
                 ].map((row, i) => (
-                  <div key={i} onClick={row.action} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px', background: 'rgba(255,255,255,0.03)', borderRadius: '20px', cursor: 'pointer', transition: 'all 0.2s' }}
-                    onMouseEnter={e => e.currentTarget.style.transform = 'translateX(8px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateX(0)'}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
-                      <span style={{ fontSize: '24px' }}>{row.icon}</span>
-                      <span style={{ fontWeight: '700', fontSize: '15px' }}>{row.name}</span>
+                  <div key={i} onClick={row.action} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '22px', background: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.8)', borderRadius: '24px', cursor: 'pointer', transition: 'all 0.3s' }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = 'translateX(10px)'; e.currentTarget.style.borderColor = 'var(--brand-teal)'; }} onMouseLeave={e => { e.currentTarget.style.transform = 'translateX(0)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.8)'; }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                      <span style={{ fontSize: '26px', background: 'rgba(255,255,255,0.8)', padding: '12px', borderRadius: '16px', boxShadow: '0 4px 10px rgba(0,0,0,0.03)' }}>{row.icon}</span>
+                      <span style={{ fontWeight: '800', fontSize: '16px', color: 'var(--text-heading)' }}>{row.name}</span>
                     </div>
-                    <span style={{ fontSize: '12px', color: row.color, fontWeight: '800', textTransform: 'uppercase' }}>● {row.status}</span>
+                    <span style={{ fontSize: '12px', color: row.color, fontWeight: '900', textTransform: 'uppercase', letterSpacing: '0.5px' }}>● {row.status}</span>
                   </div>
                 ))}
               </div>
@@ -408,40 +424,59 @@ function App() {
 
             {/* AI Insights Sidebar */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-              <div style={{ background: 'linear-gradient(135deg, rgba(255,107,53,0.15), rgba(155,89,182,0.15))', border: '1px solid rgba(255,107,53,0.3)', borderRadius: '28px', padding: '32px' }}>
-                <h4 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '12px' }}>AI Career Coach</h4>
-                <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)', lineHeight: '1.6', marginBottom: '24px' }}>
+              <div className="pf-glass" style={{ padding: '35px', background: 'linear-gradient(135deg, var(--brand-teal), var(--brand-yellow)) !important', color: 'white !important' }}>
+                <h4 style={{ fontSize: '20px', fontWeight: '900', marginBottom: '16px', color: 'white' }}>AI Career Coach</h4>
+                <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.9)', lineHeight: '1.7', marginBottom: '28px' }}>
                   "Based on your current progress, you are outperforming 85% of candidates in the {userData?.skill?.title || 'domain'}. Focus on Video Introduction to seal the deal."
                 </p>
-                <button onClick={() => navigateTo('interview')} style={{ width: '100%', background: '#0A66C2', border: 'none', padding: '16px', borderRadius: '16px', color: 'white', fontWeight: '800', cursor: 'pointer', boxShadow: '0 10px 25px rgba(255,107,53,0.3)' }}>Start Video Intro</button>
+                <button onClick={() => navigateTo('interview')} style={{ width: '100%', padding: '18px', fontWeight: '900', cursor: 'pointer', background: 'white', color: 'var(--text-heading)', border: 'none', borderRadius: '20px', fontSize: '15px', transition: 'transform 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
+                  onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+                  Start Video Intro
+                </button>
+              </div>
+
+              <div className="pf-glass" style={{ padding: '30px' }}>
+                <h4 style={{ fontSize: '16px', fontWeight: '900', marginBottom: '16px', color: 'var(--text-heading)' }}>Network Activity</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {[1,2,3].map(i => (
+                    <div key={i} style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+                      <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: 'rgba(0,0,0,0.05)' }}></div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ width: '60%', height: '8px', background: 'rgba(0,0,0,0.05)', borderRadius: '4px', marginBottom: '4px' }}></div>
+                        <div style={{ width: '40%', height: '6px', background: 'rgba(0,0,0,0.03)', borderRadius: '4px' }}></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
           {/* AI AUDIT MODAL (DASHBOARD) */}
           {auditResult && (
-            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(20px)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-              <div style={{ background: 'linear-gradient(145deg, #1a1a1c, #121214)', border: '1px solid rgba(255,107,53,0.4)', borderRadius: '32px', padding: '50px', maxWidth: '650px', width: '100%', textAlign: 'center', boxShadow: '0 40px 100px rgba(0,0,0,0.8)', animation: 'modalSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1)' }}>
-                <div style={{ fontSize: '60px', marginBottom: '24px' }}>🤖</div>
-                <h3 style={{ fontSize: '28px', fontWeight: '900', marginBottom: '12px', color: '#0A66C2', letterSpacing: '-0.5px' }}>AI Industry Verdict</h3>
-                <div style={{ fontSize: '20px', fontWeight: '900', color: 'white', marginBottom: '30px', textTransform: 'uppercase', letterSpacing: '2px' }}>{auditResult.verdict}</div>
+            <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(253,252,248,0.4)', backdropFilter: 'blur(30px)', zIndex: 2000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+              <div className="pf-glass" style={{ padding: '50px', maxWidth: '680px', width: '100%', textAlign: 'center', border: '1px solid var(--brand-teal) !important', animation: 'cardEntrance 0.5s var(--transition-bounce)' }}>
+                <div style={{ fontSize: '70px', marginBottom: '24px' }}>🤖</div>
+                <h3 className="pf-shimmer-text" style={{ fontSize: '32px', fontWeight: '900', marginBottom: '12px', letterSpacing: '-1px' }}>AI Industry Verdict</h3>
+                <div style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '30px', textTransform: 'uppercase', letterSpacing: '3px' }}>{auditResult.verdict}</div>
                 
-                <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '30px', marginBottom: '32px', textAlign: 'left' }}>
-                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,0.8)', lineHeight: '1.8', margin: 0 }}>{auditResult.analysis}</p>
+                <div style={{ background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.9)', borderRadius: '30px', padding: '35px', marginBottom: '40px', textAlign: 'left', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.02)' }}>
+                  <p style={{ fontSize: '16px', color: 'var(--text-body)', lineHeight: '1.8', margin: 0, fontWeight: '500' }}>{auditResult.analysis}</p>
                   
-                  <div style={{ marginTop: '25px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
-                    <div style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '15px' }}>
-                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', display: 'block', marginBottom: '4px' }}>Hiring Likelihood</span>
-                      <span style={{ fontSize: '22px', fontWeight: '900', color: '#057642' }}>{auditResult.hiringLikelihood}%</span>
+                  <div style={{ marginTop: '30px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+                    <div style={{ background: 'white', padding: '20px', borderRadius: '20px', border: '1px solid rgba(0,0,0,0.05)' }}>
+                      <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', marginBottom: '6px', fontWeight: '800', textTransform: 'uppercase' }}>Hiring Likelihood</span>
+                      <span style={{ fontSize: '26px', fontWeight: '900', color: '#057642' }}>{auditResult.hiringLikelihood}%</span>
                     </div>
-                    <div style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '15px' }}>
-                      <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', display: 'block', marginBottom: '4px' }}>Actionable Gap</span>
-                      <span style={{ fontSize: '14px', fontWeight: '800', color: '#0A66C2' }}>{auditResult.criticalMissingSkill}</span>
+                    <div style={{ background: 'white', padding: '20px', borderRadius: '20px', border: '1px solid rgba(0,0,0,0.05)' }}>
+                      <span style={{ fontSize: '11px', color: 'var(--text-muted)', display: 'block', marginBottom: '6px', fontWeight: '800', textTransform: 'uppercase' }}>Actionable Gap</span>
+                      <span style={{ fontSize: '15px', fontWeight: '900', color: 'var(--brand-teal)' }}>{auditResult.criticalMissingSkill}</span>
                     </div>
                   </div>
                 </div>
 
-                <button onClick={() => setAuditResult(null)} style={{ background: '#0A66C2', color: 'white', border: 'none', padding: '16px 50px', borderRadius: '40px', fontSize: '16px', fontWeight: '800', cursor: 'pointer', boxShadow: '0 10px 30px rgba(255,107,53,0.3)' }}>
+                <button onClick={() => setAuditResult(null)} className="pf-glow-btn" style={{ padding: '18px 60px', fontSize: '16px' }}>
                   Acknowledge Verdict
                 </button>
               </div>
@@ -453,157 +488,139 @@ function App() {
   }
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.pageBg, color: theme.textPrimary, fontFamily: 'var(--font-main)', position: 'relative', overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-body)', fontFamily: 'var(--font-main)', position: 'relative', overflowX: 'hidden' }}>
       <CustomCursor />
       <ParticleBackground />
+      
       {/* Glassmorphism sticky nav */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 60px', borderBottom: '1px solid rgba(255,255,255,0.08)', flexWrap: 'wrap', gap: '12px', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', background: 'rgba(15,12,41,0.7)', animation: 'navSlideDown 0.6s ease both' }}>
-        <h1 className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: '900', letterSpacing: '-0.5px' }}>⚡ PathForge</h1>
-        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-          <a href="#features" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontSize: '14px', fontWeight: '500', transition: 'color 0.2s' }}
-            onMouseEnter={e => e.target.style.color = '#0A66C2'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.8)'}>Features</a>
-          <a href="#howitworks" style={{ color: 'rgba(255,255,255,0.8)', textDecoration: 'none', fontSize: '14px', fontWeight: '500', transition: 'color 0.2s' }}
-            onMouseEnter={e => e.target.style.color = '#0A66C2'} onMouseLeave={e => e.target.style.color = 'rgba(255,255,255,0.8)'}>How it Works</a>
-          <button onClick={() => navigateTo('dashboard')} style={{ background: 'linear-gradient(135deg, rgba(255,107,53,0.2), rgba(255,107,53,0.1))', color: '#0A66C2', border: '1px solid rgba(255,107,53,0.5)', padding: '8px 20px', borderRadius: '25px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold', backdropFilter: 'blur(8px)', transition: 'all 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,107,53,0.3)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(255,107,53,0.2), rgba(255,107,53,0.1))'; e.currentTarget.style.transform = 'translateY(0)'; }}
-          >📋 Dashboard</button>
+      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 60px', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'var(--glass-blur)', background: 'rgba(255, 255, 255, 0.7)', borderBottom: '1px solid var(--glass-border)', animation: 'navSlideDown 0.8s var(--transition-smooth) both' }}>
+        <h1 className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '30px', fontWeight: '900', letterSpacing: '-1.5px', margin: 0 }}>⚡ PathForge</h1>
+        <div style={{ display: 'flex', gap: '25px', alignItems: 'center' }}>
+          <a href="#features" style={{ color: 'var(--text-heading)', textDecoration: 'none', fontSize: '15px', fontWeight: '700', transition: 'color 0.2s' }}
+            onMouseEnter={e => e.target.style.color = 'var(--brand-yellow)'} onMouseLeave={e => e.target.style.color = 'var(--text-heading)'}>Features</a>
+          <a href="#howitworks" style={{ color: 'var(--text-heading)', textDecoration: 'none', fontSize: '15px', fontWeight: '700', transition: 'color 0.2s' }}
+            onMouseEnter={e => e.target.style.color = 'var(--brand-yellow)'} onMouseLeave={e => e.target.style.color = 'var(--text-heading)'}>How it Works</a>
+          <button onClick={() => navigateTo('dashboard')} className="pf-glow-btn" style={{ padding: '10px 24px', fontSize: '14px' }}>📋 Dashboard</button>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button onClick={() => setDarkMode(!darkMode)} style={{ background: 'transparent', border: 'none', fontSize: '20px', cursor: 'pointer', padding: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+          <button onClick={() => setDarkMode(!darkMode)} style={{ background: 'rgba(0,0,0,0.05)', border: 'none', fontSize: '20px', cursor: 'pointer', padding: '10px', borderRadius: '12px' }}>
             {darkMode ? '☀️' : '🌙'}
           </button>
-          <button onClick={() => navigateTo('profile')} style={{ background: 'rgba(255,107,53,0.15)', border: '1px solid rgba(255,107,53,0.35)', borderRadius: '20px', padding: '8px 16px', fontSize: '14px', color: '#0A66C2', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', backdropFilter: 'blur(8px)', transition: 'all 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,107,53,0.25)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,107,53,0.15)'; e.currentTarget.style.transform = 'translateY(0)'; }}
-          >
-            <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px' }}>{userData?.profilePhoto ? <img src={userData.profilePhoto} alt="" style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }} /> : '👤'}</span>
-            {displayName}
+          <button onClick={() => navigateTo('profile')} className="pf-glass" style={{ padding: '8px 20px', fontSize: '14px', color: 'var(--text-heading)', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '12px', border: '1px solid var(--glass-border) !important', background: 'rgba(255,255,255,0.5) !important' }}>
+            <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'var(--brand-yellow)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: '12px', overflow: 'hidden', border: '2px solid white' }}>
+              {userData?.profilePhoto ? <img src={userData.profilePhoto} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : '👤'}
+            </div>
+            <span style={{ fontWeight: '800' }}>{displayName}</span>
           </button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <div style={{ textAlign: 'center', padding: '90px 20px 70px', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'inline-block', background: 'linear-gradient(135deg, rgba(255,107,53,0.2), rgba(155,89,182,0.15))', border: '1px solid rgba(255,107,53,0.4)', borderRadius: '30px', padding: '8px 22px', marginBottom: '28px', fontSize: '13px', color: '#FF9A6C', fontWeight: '600', backdropFilter: 'blur(8px)', animation: 'badgePop 0.7s ease both 0.2s' }}>
+      <div style={{ textAlign: 'center', padding: '110px 20px 80px', position: 'relative', zIndex: 1 }}>
+        <div className="pf-page-enter" style={{ display: 'inline-block', padding: '10px 26px', marginBottom: '35px', fontSize: '14px', color: 'var(--brand-teal)', fontWeight: '800', background: 'rgba(0, 212, 170, 0.1)', border: '1px solid rgba(0, 212, 170, 0.3)', borderRadius: '30px', animation: 'badgePop 0.8s var(--transition-bounce) both' }}>
           🚀 Smart Mentoring System for Skill Mapping & Employability
         </div>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(40px, 6vw, 70px)', fontWeight: '900', lineHeight: '1.1', marginBottom: '24px', animation: 'heroTextReveal 0.8s ease both 0.3s', letterSpacing: '-1px' }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(44px, 7vw, 76px)', fontWeight: '900', lineHeight: '1', marginBottom: '28px', animation: 'heroTextReveal 0.9s var(--transition-smooth) both 0.2s', letterSpacing: '-2px', color: 'var(--text-heading)' }}>
           Welcome back,<br />
           <span className="pf-shimmer-text">{displayName}!</span>
         </h1>
-        <p style={{ fontSize: '18px', color: 'rgba(255,255,255,0.7)', maxWidth: '600px', margin: '0 auto 40px', lineHeight: '1.6', animation: 'heroTextReveal 0.8s ease both 0.4s' }}>
+        <p style={{ fontSize: '20px', color: 'var(--text-body)', maxWidth: '650px', margin: '0 auto 48px', lineHeight: '1.7', animation: 'heroTextReveal 0.9s var(--transition-smooth) both 0.4s', fontWeight: '500' }}>
           {userData?.skill ? `Continue your ${userData.skill.title} transformation where you left off.` : 'Begin your career transformation with our AI-powered skill assessment.'}
         </p>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', animation: 'heroTextReveal 0.8s ease both 0.5s' }}>
-          <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button onClick={() => {
-              if (!userData?.skill) {
-                navigateTo('onboarding');
-              } else {
-                navigateTo('dashboard');
-              }
-            }} className="pf-glow-btn" style={{ background: 'linear-gradient(135deg, #0A66C2, #FF9A6C)', color: 'white', border: 'none', padding: '18px 44px', borderRadius: '30px', fontSize: '17px', fontWeight: '700', cursor: 'pointer', boxShadow: '0 8px 30px rgba(255,107,53,0.4)' }}>
-              {userData?.skill ? '📋 Open Dashboard' : '🚀 Start Your Journey →'}
-            </button>
-          </div>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', animation: 'heroTextReveal 0.9s var(--transition-smooth) both 0.5s' }}>
+          <button onClick={() => {
+            if (!userData?.skill) {
+              navigateTo('onboarding');
+            } else {
+              navigateTo('dashboard');
+            }
+          }} className="pf-glow-btn" style={{ padding: '22px 55px', fontSize: '19px' }}>
+            {userData?.skill ? '📋 Open Dashboard' : '🚀 Start Your Journey →'}
+          </button>
         </div>
       </div>
 
       {/* Stats section */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '60px', padding: '44px 20px', borderTop: '1px solid rgba(255,255,255,0.07)', borderBottom: '1px solid rgba(255,255,255,0.07)', flexWrap: 'wrap', background: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(10px)', position: 'relative', zIndex: 1 }}>
+      <div className="pf-glass" style={{ display: 'flex', justifyContent: 'center', gap: '80px', padding: '60px 20px', flexWrap: 'wrap', position: 'relative', zIndex: 1, borderRadius: '0 !important', borderLeft: 'none !important', borderRight: 'none !important', background: 'rgba(255,255,255,0.4) !important' }}>
         {[
           { num: 'AI-DRIVEN', label: 'Skills Assessment', desc: 'Deep technical stack evaluation' },
           { num: 'PERSONALIZED', label: 'Learning Paths', desc: 'Custom roadmaps for your goals' },
           { num: 'EXPERT-LED', label: 'Industry Mentorship', desc: 'Guidance from working professionals' },
           { num: 'HIRING-READY', label: 'Career Deployment', desc: 'Verified profiles for hiring partners' },
         ].map((s, i) => (
-          <div key={i} style={{ textAlign: 'center', animation: `countUp 0.6s ease both ${0.1 * i}s` }}>
-            <div className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '40px', fontWeight: '900' }}>{s.num}</div>
-            <div style={{ color: 'white', marginTop: '6px', fontSize: '14px', fontWeight: '700' }}>{s.label}</div>
-            <div style={{ color: 'rgba(255,255,255,0.4)', marginTop: '4px', fontSize: '11px', maxWidth: '140px', margin: '4px auto 0' }}>{s.desc}</div>
+          <div key={i} style={{ textAlign: 'center', animation: `cardEntrance 0.8s var(--transition-smooth) both ${0.1 * i}s` }}>
+            <div className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '48px', fontWeight: '900', letterSpacing: '-1px' }}>{s.num}</div>
+            <div style={{ color: 'var(--text-heading)', marginTop: '10px', fontSize: '15px', fontWeight: '800' }}>{s.label}</div>
+            <div style={{ color: 'var(--text-body)', marginTop: '6px', fontSize: '13px', maxWidth: '160px', margin: '6px auto 0', fontWeight: '500' }}>{s.desc}</div>
           </div>
         ))}
       </div>
 
       {/* How it Works section */}
-      <div id="howitworks" style={{ padding: '100px 40px 60px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px,4vw,42px)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.5px' }}>
+      <div id="howitworks" style={{ padding: '120px 40px 80px', textAlign: 'center', position: 'relative', zIndex: 1, background: 'var(--bg-alt)' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,5vw,52px)', fontWeight: '900', marginBottom: '20px', letterSpacing: '-1.5px', color: 'var(--text-heading)' }}>
           Your <span className="pf-shimmer-text">Career Roadmap</span>
         </h2>
-        <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '15px', marginBottom: '60px', maxWidth: '600px', margin: '0 auto 60px' }}>Follow these key steps to maximize your employability and secure your dream role.</p>
+        <p style={{ color: 'var(--text-body)', fontSize: '17px', marginBottom: '70px', maxWidth: '650px', margin: '0 auto 70px', fontWeight: '500' }}>Follow these key steps to maximize your employability and secure your dream role.</p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px', maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '30px', maxWidth: '1200px', margin: '0 auto' }}>
           {[
             { step: '01', title: 'Skills Assessment', desc: 'Comprehensive analysis of your current technical abilities and identifies key areas for improvement.', icon: '🎯' },
             { step: '02', title: 'Learning Path', desc: 'A structured, step-by-step guide to mastering the skills needed for your target role.', icon: '🚀' },
             { step: '03', title: 'Expert Mentorship', desc: 'Direct access to industry professionals for career guidance and technical feedback.', icon: '🧬' },
             { step: '04', title: 'Job Placement', desc: 'Direct connection with hiring managers at companies looking for pre-vetted talent.', icon: '💼' }
           ].map((s, i) => (
-            <div key={i} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '40px 30px', textAlign: 'left', position: 'relative', animation: `cardEntrance 0.6s ease both ${i * 0.1}s`, backdropFilter: 'blur(10px)' }}>
-              <div style={{ position: 'absolute', top: '20px', right: '30px', fontSize: '40px', fontWeight: '900', color: 'rgba(255,107,53,0.1)', fontFamily: 'var(--font-display)' }}>{s.step}</div>
-              <div style={{ fontSize: '32px', marginBottom: '20px' }}>{s.icon}</div>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: '700', marginBottom: '12px', color: 'white' }}>{s.title}</h3>
-              <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '14px', lineHeight: '1.6' }}>{s.desc}</p>
+            <div key={i} className="pf-glass" style={{ padding: '50px 35px', textAlign: 'left', position: 'relative', animation: `cardEntrance 0.7s var(--transition-smooth) both ${i * 0.1}s` }}>
+              <div style={{ position: 'absolute', top: '15px', right: '25px', fontSize: '100px', fontWeight: '900', color: 'rgba(245,166,35,0.06)', fontFamily: 'var(--font-display)', lineHeight: '1', zIndex: 0 }}>{s.step}</div>
+              <div style={{ fontSize: '38px', marginBottom: '24px', position: 'relative', zIndex: 1, background: 'rgba(245,166,35,0.1)', display: 'inline-flex', padding: '14px', borderRadius: '18px' }}>{s.icon}</div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: '800', marginBottom: '14px', color: 'var(--text-heading)', position: 'relative', zIndex: 1 }}>{s.title}</h3>
+              <p style={{ color: 'var(--text-body)', fontSize: '15px', lineHeight: '1.7', position: 'relative', zIndex: 1, fontWeight: '500' }}>{s.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Features Grid with 3D tilt cards */}
-      <div id="features" style={{ padding: '90px 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px,4vw,42px)', fontWeight: '800', marginBottom: '12px', letterSpacing: '-0.5px' }}>
+      {/* Features Grid */}
+      <div id="features" style={{ padding: '120px 40px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,5vw,52px)', fontWeight: '900', marginBottom: '16px', letterSpacing: '-1.5px', color: 'var(--text-heading)' }}>
           Everything you need to <span className="pf-shimmer-text">get hired</span>
         </h2>
-        <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '15px', marginBottom: '52px' }}>Click any card to explore the feature</p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '24px', maxWidth: '1100px', margin: '0 auto' }}>
+        <p style={{ color: 'var(--text-body)', fontSize: '17px', marginBottom: '60px', fontWeight: '500' }}>Click any card to explore the feature</p>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: '30px', maxWidth: '1200px', margin: '0 auto' }}>
           {[
-            { icon: '🧬', title: 'Skills Assessment', desc: 'Identify your technical strengths and critical skill gaps through a comprehensive evaluation mapped to current industry standards.', action: () => navigateTo('skillmap'), color: '#9B59B6' },
-            { icon: '📍', title: 'Company Search', desc: 'Discover local and remote career opportunities from our network of partner companies hiring for your specific expertise.', action: () => navigateTo('geo'), color: '#057642' },
-            { icon: '🤖', title: 'Personalized Roadmap', desc: 'Follow a structured, week-by-week curriculum tailored to your career goals, featuring curated projects and certification milestones.', action: () => navigateTo('learning'), color: '#3498DB' },
-            { icon: '🎯', title: 'Industry Mentoring', desc: 'Connect with experienced professionals for direct feedback, mock interviews, and career guidance tailored to your growth areas.', action: () => navigateTo('mentoring'), color: '#CC1016' },
-            { icon: '📊', title: 'Job Readiness Score', desc: 'Track your employability in real-time with a dynamic score that updates as you complete modules, projects, and assessments.', action: () => navigateTo('score'), color: '#F5C518' },
-            { icon: '📄', title: 'Resume Builder', desc: 'Generate a high-impact, ATS-optimized resume that automatically highlights your verified skills and platform-validated projects.', action: () => navigateTo('resume'), color: '#1ABC9C' },
-            { icon: '🌐', title: 'Community Feed', desc: 'Collaborate with a network of driven learners, share daily milestones, and gain inspiration from peer-led technical projects.', action: () => navigateTo('community'), color: '#0A66C2' },
+            { icon: '🧬', title: 'Skills Assessment', desc: 'Identify your technical strengths and critical skill gaps through a comprehensive evaluation mapped to current industry standards.', action: () => navigateTo('skillmap'), color: 'rgba(155,89,182,0.1)' },
+            { icon: '📍', title: 'Company Search', desc: 'Discover local and remote career opportunities from our network of partner companies hiring for your specific expertise.', action: () => navigateTo('geo'), color: 'rgba(5,118,66,0.1)' },
+            { icon: '🤖', title: 'Personalized Roadmap', desc: 'Follow a structured, week-by-week curriculum tailored to your career goals, featuring curated projects and certification milestones.', action: () => navigateTo('learning'), color: 'rgba(52,152,219,0.1)' },
+            { icon: '🎯', title: 'Industry Mentoring', desc: 'Connect with experienced professionals for direct feedback, mock interviews, and career guidance tailored to your growth areas.', action: () => navigateTo('mentoring'), color: 'rgba(204,16,22,0.1)' },
+            { icon: '📊', title: 'Job Readiness Score', desc: 'Track your employability in real-time with a dynamic score that updates as you complete modules, projects, and assessments.', action: () => navigateTo('score'), color: 'rgba(245,197,24,0.1)' },
+            { icon: '📄', title: 'Resume Builder', desc: 'Generate a high-impact, ATS-optimized resume that automatically highlights your verified skills and platform-validated projects.', action: () => navigateTo('resume'), color: 'rgba(26,188,156,0.1)' },
+            { icon: '🌐', title: 'Community Feed', desc: 'Collaborate with a network of driven learners, share daily milestones, and gain inspiration from peer-led technical projects.', action: () => navigateTo('community'), color: 'rgba(10,102,194,0.1)' },
           ].map((f, i) => (
-            <div key={i} onClick={f.action} tabIndex={0} role="button"
+            <div key={i} onClick={f.action} tabIndex={0} role="button" className="pf-glass"
               onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') f.action(); }}
-              style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%)', border: `1px solid rgba(255,255,255,0.08)`, borderRadius: '20px', padding: '30px', textAlign: 'left', cursor: 'pointer', transition: 'border-color 0.3s, box-shadow 0.3s', animation: `cardEntrance 0.6s ease both ${i * 0.08}s`, backdropFilter: 'blur(10px)', perspective: '800px', transformStyle: 'preserve-3d', outline: 'none' }}
-              onMouseMove={e => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-                e.currentTarget.style.transform = `perspective(800px) rotateX(${-y / 18}deg) rotateY(${x / 18}deg) translateZ(8px) scale(1.02)`;
-                e.currentTarget.style.borderColor = `${f.color}70`;
-                e.currentTarget.style.boxShadow = `0 20px 50px ${f.color}25, 0 0 0 1px ${f.color}30`;
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg) translateZ(0) scale(1)';
-                e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
+              style={{ padding: '40px', textAlign: 'left', cursor: 'pointer', animation: `cardEntrance 0.7s var(--transition-smooth) both ${i * 0.08}s`, outline: 'none' }}
             >
-              <div style={{ fontSize: '36px', marginBottom: '16px', filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }}>{f.icon}</div>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: '700', marginBottom: '10px', color: 'rgba(255,255,255,0.95)' }}>{f.title}</h3>
-              <p style={{ color: 'rgba(255,255,255,0.5)', lineHeight: '1.65', fontSize: '14px' }}>{f.desc}</p>
-              <div style={{ marginTop: '18px', display: 'flex', alignItems: 'center', gap: '6px', color: f.color, fontSize: '13px', fontWeight: '700' }}>Open <span style={{ fontSize: '16px' }}>→</span></div>
+              <div style={{ fontSize: '40px', marginBottom: '24px', display: 'inline-flex', padding: '16px', borderRadius: '20px', background: f.color }}>{f.icon}</div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: '800', marginBottom: '14px', color: 'var(--text-heading)' }}>{f.title}</h3>
+              <p style={{ color: 'var(--text-body)', lineHeight: '1.7', fontSize: '15px', fontWeight: '500' }}>{f.desc}</p>
+              <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--brand-yellow)', fontSize: '14px', fontWeight: '900' }}>Open Feature <span style={{ fontSize: '18px' }}>→</span></div>
             </div>
           ))}
         </div>
 
         {/* Footer */}
-        <div style={{ textAlign: 'center', padding: '48px 40px', borderTop: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)', backdropFilter: 'blur(12px)', position: 'relative', zIndex: 1 }}>
-          <div className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '20px', fontWeight: '800', marginBottom: '8px' }}>⚡ PathForge</div>
-          <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '13px', letterSpacing: '0.3px' }}>Built by Team Neural Nexus · NIET Greater Noida · Innovate-X-NIET 1.0</div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '16px' }}>
+        <footer style={{ textAlign: 'center', padding: '80px 40px', marginTop: '100px', borderTop: '1px solid var(--glass-border)', background: 'rgba(255,255,255,0.3)', position: 'relative', zIndex: 1, borderRadius: '40px 40px 0 0' }}>
+          <div className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '26px', fontWeight: '900', marginBottom: '12px' }}>⚡ PathForge</div>
+          <div style={{ color: 'var(--text-muted)', fontSize: '15px', fontWeight: '600', letterSpacing: '0.3px' }}>Built by Team Neural Nexus · NIET Greater Noida · Innovate-X-NIET 1.0</div>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '24px' }}>
             {['🧬', '📍', '🤖', '🎯', '📊', '📄', '🌐'].map((e, i) => (
-              <span key={i} style={{ fontSize: '16px', opacity: 0.4, transition: 'opacity 0.2s, transform 0.2s' }}
-                onMouseEnter={ev => { ev.target.style.opacity = '1'; ev.target.style.transform = 'translateY(-4px) scale(1.3)'; }}
-                onMouseLeave={ev => { ev.target.style.opacity = '0.4'; ev.target.style.transform = 'translateY(0) scale(1)'; }}
+              <span key={i} style={{ fontSize: '20px', opacity: 0.6, transition: 'all 0.3s' }}
+                onMouseEnter={ev => { ev.target.style.opacity = '1'; ev.target.style.transform = 'translateY(-6px) scale(1.4)'; }}
+                onMouseLeave={ev => { ev.target.style.opacity = '0.6'; ev.target.style.transform = 'translateY(0) scale(1)'; }}
               >{e}</span>
             ))}
           </div>
-        </div>
+        </footer>
       </div>
     </div>
   );
@@ -868,13 +885,13 @@ function ProfilePage({ user, userData, onBack, persistUserData, handleLogout }) 
   const fileInputRef = useRef(null);
   const coverInputRef = useRef(null);
   const [editMode, setEditMode] = useState(false);
-  const [theme, setTheme] = useState('dark');
-  const [primaryColor, setPrimaryColor] = useState('#0A66C2');
+  const [themePref, setThemePref] = useState('dark');
+  const [primaryColor, setPrimaryColor] = useState('var(--brand-yellow)');
   const [fontSize, setFontSize] = useState('medium');
   const [animationsEnabled, setAnimationsEnabled] = useState(true);
 
   const updateTheme = (newTheme) => {
-    setTheme(newTheme);
+    setThemePref(newTheme);
     localStorage.setItem('pathforge_theme', newTheme);
   };
 
@@ -971,20 +988,22 @@ function ProfilePage({ user, userData, onBack, persistUserData, handleLogout }) 
 
   const inputStyle = {
     width: '100%',
-    padding: '12px 16px',
-    borderRadius: '12px',
-    border: '1px solid rgba(255,255,255,0.2)',
-    background: 'rgba(255,255,255,0.06)',
-    color: 'white',
-    fontSize: '14px',
+    padding: '14px 18px',
+    borderRadius: '16px',
+    border: '1px solid rgba(0,0,0,0.08)',
+    background: 'rgba(255,255,255,0.7)',
+    color: 'var(--text-heading)',
+    fontSize: '15px',
+    fontWeight: '500',
     outline: 'none',
     boxSizing: 'border-box',
+    transition: 'all 0.2s',
   };
 
-  const labelStyle = { fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '6px', display: 'block', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px' };
+  const labelStyle = { fontSize: '12px', color: 'var(--text-muted)', marginBottom: '8px', display: 'block', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '1px' };
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.pageBg, color: theme.textPrimary, fontFamily: 'Arial, sans-serif', padding: '30px 20px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-body)', fontFamily: 'var(--font-main)', padding: '40px 20px' }}>
 
       {/* Image Cropper Modal */}
       {cropperImage && (
@@ -997,86 +1016,94 @@ function ProfilePage({ user, userData, onBack, persistUserData, handleLogout }) 
         />
       )}
 
-      <div style={{ maxWidth: '600px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '650px', margin: '0 auto' }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '30px' }}>
-          <button onClick={onBack} style={{ background: 'transparent', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.2)', padding: '8px 18px', borderRadius: '20px', cursor: 'pointer', fontSize: '13px' }}>← Back</button>
-          <h1 style={{ color: '#0A66C2', fontSize: '22px', fontWeight: 'bold' }}>⚡ My Profile</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <button onClick={onBack} className="pf-glass" style={{ padding: '10px 24px', cursor: 'pointer', fontSize: '14px', fontWeight: '700', borderRadius: '20px' }}>← Back</button>
+            <h1 className="pf-shimmer-text" style={{ fontSize: '28px', fontWeight: '900', margin: 0, letterSpacing: '-1px' }}>My Profile</h1>
+          </div>
+          <button onClick={handleLogout} style={{ padding: '10px 20px', borderRadius: '20px', border: '1px solid var(--brand-coral)', background: 'transparent', color: 'var(--brand-coral)', fontWeight: '700', cursor: 'pointer' }}>Sign Out</button>
         </div>
 
         {/* Profile Card */}
-        <div style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden' }}>
+        <div className="pf-glass" style={{ overflow: 'hidden', border: '1px solid var(--glass-border) !important', background: 'rgba(255,255,255,0.4) !important' }}>
 
           {/* Cover Photo */}
           <div
             onClick={() => coverInputRef.current?.click()}
             style={{
-              height: '120px',
-              background: coverPhoto ? `url(${coverPhoto}) center/cover no-repeat` : 'linear-gradient(135deg, #0A66C2, #FF9A6C, #302b63)',
+              height: '160px',
+              background: coverPhoto ? `url(${coverPhoto}) center/cover no-repeat` : 'linear-gradient(135deg, var(--brand-yellow), var(--brand-coral), var(--brand-teal))',
               position: 'relative', cursor: 'pointer',
+              transition: 'opacity 0.3s'
             }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '0.9'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '1'}
           >
             <div style={{
-              position: 'absolute', bottom: '8px', right: '10px',
-              background: 'rgba(0,0,0,0.55)', borderRadius: '16px', padding: '4px 12px',
-              fontSize: '11px', color: 'white', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px',
+              position: 'absolute', bottom: '15px', right: '15px',
+              background: 'rgba(255,255,255,0.8)', backdropFilter: 'blur(10px)', borderRadius: '20px', padding: '6px 16px',
+              fontSize: '12px', color: 'var(--text-heading)', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '6px',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.1)'
             }}>📷 {coverPhoto ? 'Change Cover' : 'Add Cover'}</div>
           </div>
           <input ref={coverInputRef} type="file" accept="image/*" onChange={handleCoverUpload} style={{ display: 'none' }} />
 
-          {/* Avatar */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '-50px', padding: '0 24px 24px' }}>
+          {/* Avatar & Info */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginTop: '-60px', padding: '0 30px 40px' }}>
             <div
               onClick={() => fileInputRef.current?.click()}
               style={{
-                width: '100px', height: '100px', borderRadius: '50%',
-                border: '4px solid #1a1a3e',
-                background: profilePhoto ? `url(${profilePhoto}) center/cover no-repeat` : 'rgba(255,255,255,0.1)',
+                width: '120px', height: '120px', borderRadius: '50%',
+                border: '6px solid var(--bg-base)',
+                background: profilePhoto ? `url(${profilePhoto}) center/cover no-repeat` : 'rgba(255,255,255,0.9)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 cursor: 'pointer', position: 'relative', overflow: 'hidden',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
               }}
             >
-              {!profilePhoto && <span style={{ fontSize: '36px', color: 'rgba(255,255,255,0.4)' }}>👤</span>}
+              {!profilePhoto && <span style={{ fontSize: '48px', color: 'var(--text-muted)' }}>👤</span>}
               <div style={{
                 position: 'absolute', bottom: 0, left: 0, right: 0,
-                background: 'rgba(0,0,0,0.6)', padding: '4px', textAlign: 'center',
-                fontSize: '10px', color: 'white', fontWeight: 'bold',
-              }}>📷 Edit</div>
+                background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)', padding: '6px', textAlign: 'center',
+                fontSize: '11px', color: 'white', fontWeight: '800', textTransform: 'uppercase'
+              }}>Edit</div>
             </div>
             <input ref={fileInputRef} type="file" accept="image/*" onChange={handlePhotoUpload} style={{ display: 'none' }} />
 
-            <h2 style={{ marginTop: '14px', fontSize: '22px', fontWeight: 'bold' }}>{form.name}</h2>
-            {form.bio && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '14px', marginTop: '4px', textAlign: 'center' }}>{form.bio}</p>}
+            <h2 style={{ marginTop: '20px', fontSize: '28px', fontWeight: '900', color: 'var(--text-heading)', letterSpacing: '-0.5px' }}>{form.name}</h2>
+            {form.bio && <p style={{ color: 'var(--text-body)', fontSize: '16px', marginTop: '8px', textAlign: 'center', maxWidth: '450px', lineHeight: '1.6', fontWeight: '500' }}>{form.bio}</p>}
 
-            <div style={{ display: 'flex', gap: '16px', marginTop: '12px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', gap: '20px', marginTop: '20px', flexWrap: 'wrap', justifyContent: 'center' }}>
               {form.city && (
-                <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '4px' }}>📍 {form.city}</span>
+                <span className="pf-glass" style={{ fontSize: '13px', fontWeight: '700', padding: '6px 16px', borderRadius: '15px' }}>📍 {form.city}</span>
               )}
               {form.college && (
-                <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', display: 'flex', alignItems: 'center', gap: '4px' }}>🎓 {form.college}</span>
+                <span className="pf-glass" style={{ fontSize: '13px', fontWeight: '700', padding: '6px 16px', borderRadius: '15px' }}>🎓 {form.college}</span>
               )}
             </div>
 
             {userData?.skill && (
-              <div style={{ marginTop: '12px', background: 'rgba(255,107,53,0.1)', border: '1px solid rgba(255,107,53,0.3)', borderRadius: '20px', padding: '6px 16px', fontSize: '13px', color: '#0A66C2' }}>
-                {userData.skill.icon} {userData.skill.title}
+              <div className="pf-glow-btn" style={{ marginTop: '24px', padding: '10px 24px', fontSize: '14px', textTransform: 'none' }}>
+                {userData.skill.icon} Mastered: {userData.skill.title}
               </div>
             )}
           </div>
         </div>
 
         {/* Edit Profile Section */}
-        <div style={{ marginTop: '20px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '16px', padding: '24px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <h3 style={{ fontSize: '16px', fontWeight: 'bold' }}>Profile Details</h3>
+        <div className="pf-glass" style={{ marginTop: '24px', padding: '35px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '900', color: 'var(--text-heading)', margin: 0 }}>Profile Details</h3>
             {!editMode && (
-              <button onClick={() => setEditMode(true)} style={{ background: 'rgba(255,107,53,0.15)', color: '#0A66C2', border: '1px solid rgba(255,107,53,0.4)', padding: '6px 16px', borderRadius: '20px', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}>✏️ Edit</button>
+              <button onClick={() => setEditMode(true)} className="pf-glass" style={{ padding: '8px 20px', cursor: 'pointer', fontSize: '13px', fontWeight: '800', color: 'var(--brand-teal)', border: '1px solid var(--brand-teal) !important' }}>✏️ Edit Profile</button>
             )}
           </div>
 
           {editMode ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="pf-page-enter" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
               <div>
                 <label style={labelStyle}>Full Name</label>
                 <input style={inputStyle} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your full name" />
@@ -1091,21 +1118,21 @@ function ProfilePage({ user, userData, onBack, persistUserData, handleLogout }) 
               </div>
               <div>
                 <label style={labelStyle}>Bio / Headline</label>
-                <textarea style={{ ...inputStyle, minHeight: '70px', resize: 'vertical' }} value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} placeholder="Aspiring Frontend Developer..." />
+                <textarea style={{ ...inputStyle, minHeight: '100px', resize: 'vertical' }} value={form.bio} onChange={(e) => setForm({ ...form, bio: e.target.value })} placeholder="Aspiring Frontend Developer..." />
               </div>
-              <div style={{ display: 'flex', gap: '10px' }}>
-                <button onClick={handleSave} disabled={saving} style={{ flex: 1, background: '#0A66C2', color: 'white', border: 'none', padding: '12px', borderRadius: '12px', fontWeight: 'bold', cursor: saving ? 'not-allowed' : 'pointer', opacity: saving ? 0.6 : 1 }}>
+              <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+                <button onClick={handleSave} disabled={saving} className="pf-glow-btn" style={{ flex: 1, padding: '16px' }}>
                   {saving ? 'Saving...' : '💾 Save Changes'}
                 </button>
-                <button onClick={() => setEditMode(false)} style={{ background: 'transparent', color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.2)', padding: '12px 20px', borderRadius: '12px', cursor: 'pointer' }}>Cancel</button>
+                <button onClick={() => setEditMode(false)} className="pf-glass" style={{ padding: '16px 30px', fontWeight: '800' }}>Cancel</button>
               </div>
             </div>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {[{ label: 'Name', value: form.name }, { label: 'College', value: form.college || '—' }, { label: 'City', value: form.city || '—' }, { label: 'Bio', value: form.bio || '—' }, { label: 'Email', value: user.email || '—' }].map((row, i) => (
-                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-                  <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px' }}>{row.label}</span>
-                  <span style={{ fontSize: '14px' }}>{row.value}</span>
+                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '16px 0', borderBottom: '1px solid rgba(0,0,0,0.04)' }}>
+                  <span style={{ color: 'var(--text-muted)', fontSize: '14px', fontWeight: '700' }}>{row.label}</span>
+                  <span style={{ fontSize: '15px', fontWeight: '600', color: 'var(--text-heading)', textAlign: 'right', maxWidth: '70%' }}>{row.value}</span>
                 </div>
               ))}
             </div>
@@ -1336,132 +1363,129 @@ function ProfilePage({ user, userData, onBack, persistUserData, handleLogout }) 
 /* ─── Landing Page Component ─── */
 function LandingPage({ onAuth }) {
   return (
-    <div style={{ minHeight: '100vh', background: theme.pageBg, color: theme.textPrimary, fontFamily: 'var(--font-main)', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-body)', fontFamily: 'var(--font-main)', position: 'relative', overflow: 'hidden' }}>
       <CustomCursor />
       <ParticleBackground />
 
       {/* Header */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 60px', borderBottom: '1px solid rgba(255,255,255,0.08)', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'blur(24px)', background: 'rgba(15,12,41,0.7)', animation: 'navSlideDown 0.6s ease both' }}>
-        <h1 className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '28px', fontWeight: '900', letterSpacing: '-0.5px' }}>⚡ PathForge</h1>
-        <div style={{ display: 'flex', gap: '16px' }}>
-          <button onClick={onAuth} style={{ background: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.2)', padding: '10px 24px', borderRadius: '25px', cursor: 'pointer', fontSize: '14px', fontWeight: '600', transition: 'all 0.2s' }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,107,53,0.5)'; e.currentTarget.style.color = '#0A66C2'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'white'; }}>
+      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 60px', position: 'sticky', top: 0, zIndex: 100, backdropFilter: 'var(--glass-blur)', background: 'rgba(255, 255, 255, 0.7)', borderBottom: '1px solid var(--glass-border)', animation: 'navSlideDown 0.8s var(--transition-smooth) both' }}>
+        <h1 className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '30px', fontWeight: '900', letterSpacing: '-1.5px', margin: 0 }}>⚡ PathForge</h1>
+        <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          <button onClick={onAuth} style={{ background: 'transparent', color: 'var(--text-heading)', border: '1px solid var(--text-muted)', padding: '12px 30px', borderRadius: '30px', cursor: 'pointer', fontSize: '15px', fontWeight: '700', transition: 'all 0.3s' }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--brand-yellow)'; e.currentTarget.style.color = 'var(--brand-yellow)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--text-muted)'; e.currentTarget.style.color = 'var(--text-heading)'; }}>
             Login
           </button>
-          <button onClick={onAuth} className="pf-glow-btn" style={{ background: 'linear-gradient(135deg, #0A66C2, #FF9A6C)', color: 'white', border: 'none', padding: '10px 24px', borderRadius: '25px', cursor: 'pointer', fontSize: '14px', fontWeight: '700', boxShadow: '0 4px 15px rgba(255,107,53,0.3)' }}>
+          <button onClick={onAuth} className="pf-glow-btn" style={{ padding: '12px 30px', fontSize: '15px' }}>
             Sign Up
           </button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <div style={{ textAlign: 'center', padding: '100px 20px 80px', position: 'relative', zIndex: 1 }}>
-        <div className="pf-page-enter" style={{ display: 'inline-block', background: 'linear-gradient(135deg, rgba(255,107,53,0.15), rgba(155,89,182,0.1))', border: '1px solid rgba(255,107,53,0.3)', borderRadius: '30px', padding: '8px 24px', marginBottom: '32px', fontSize: '14px', color: '#FF9A6C', fontWeight: '600', animation: 'badgePop 0.8s ease both' }}>
+      <div style={{ textAlign: 'center', padding: '120px 20px 100px', position: 'relative', zIndex: 1 }}>
+        <div className="pf-page-enter" style={{ display: 'inline-block', background: 'rgba(245, 166, 35, 0.1)', border: '1px solid rgba(245, 166, 35, 0.3)', borderRadius: '30px', padding: '10px 28px', marginBottom: '40px', fontSize: '14px', color: 'var(--brand-yellow)', fontWeight: '800', animation: 'badgePop 0.8s var(--transition-bounce) both', textTransform: 'uppercase', letterSpacing: '1px' }}>
           🚀 The Future of AI-Powered Career Growth
         </div>
-        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(42px, 8vw, 84px)', fontWeight: '900', lineHeight: '1.05', marginBottom: '28px', animation: 'heroTextReveal 0.8s ease both 0.2s', letterSpacing: '-2px' }}>
+        <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(48px, 9vw, 92px)', fontWeight: '900', lineHeight: '1', marginBottom: '32px', animation: 'heroTextReveal 0.9s var(--transition-smooth) both 0.2s', letterSpacing: '-3px', color: 'var(--text-heading)' }}>
           Forge Your Path to<br />
           <span className="pf-shimmer-text">Career Excellence.</span>
         </h1>
-        <p style={{ fontSize: '20px', color: 'rgba(255,255,255,0.6)', maxWidth: '700px', margin: '0 auto 48px', lineHeight: '1.7', animation: 'heroTextReveal 0.8s ease both 0.4s' }}>
+        <p style={{ fontSize: '22px', color: 'var(--text-body)', maxWidth: '750px', margin: '0 auto 56px', lineHeight: '1.7', animation: 'heroTextReveal 0.9s var(--transition-smooth) both 0.4s', fontWeight: '500' }}>
           PathForge combines advanced AI mentoring, real-time skill mapping, and direct corporate connections to transform your professional journey.
         </p>
-        <div style={{ display: 'flex', gap: '20px', justifyContent: 'center', flexWrap: 'wrap', animation: 'heroTextReveal 0.8s ease both 0.6s' }}>
-          <button onClick={onAuth} className="pf-glow-btn" style={{ background: 'linear-gradient(135deg, #0A66C2, #FF9A6C)', color: 'white', border: 'none', padding: '20px 50px', borderRadius: '35px', fontSize: '18px', fontWeight: '800', cursor: 'pointer', boxShadow: '0 10px 30px rgba(255,107,53,0.4)' }}>
+        <div style={{ display: 'flex', gap: '24px', justifyContent: 'center', flexWrap: 'wrap', animation: 'heroTextReveal 0.9s var(--transition-smooth) both 0.6s' }}>
+          <button onClick={onAuth} className="pf-glow-btn" style={{ padding: '24px 60px', fontSize: '20px' }}>
             Get Started Now →
           </button>
-          <a href="#about" style={{ background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid rgba(255,255,255,0.15)', padding: '20px 40px', borderRadius: '35px', fontSize: '18px', fontWeight: '600', cursor: 'pointer', textDecoration: 'none', backdropFilter: 'blur(10px)', transition: 'all 0.3s' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; }}>
+          <a href="#about" className="pf-glass" style={{ padding: '22px 50px', fontSize: '19px', fontWeight: '800', cursor: 'pointer', textDecoration: 'none', color: 'var(--text-heading)', display: 'flex', alignItems: 'center' }}>
             Learn More
           </a>
         </div>
       </div>
 
       {/* Stats Section */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '80px', padding: '60px 20px', background: 'rgba(255,255,255,0.02)', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
+      <div className="pf-glass" style={{ display: 'flex', justifyContent: 'center', gap: '80px', padding: '80px 20px', borderRadius: '0 !important', borderLeft: 'none !important', borderRight: 'none !important', flexWrap: 'wrap', position: 'relative', zIndex: 1, background: 'rgba(255, 255, 255, 0.4) !important' }}>
         {[
           { num: 'AI-FIRST', label: 'Skills Assessment', desc: 'Precision gap identification' },
           { num: 'STRUCTURED', label: 'Career Roadmaps', desc: 'Weekly learning milestones' },
           { num: 'MERIT-BASED', label: 'Industry Mentorship', desc: 'Direct access to practitioners' },
           { num: 'OUTCOME-READY', label: 'Corporate Hiring', desc: 'Automated talent matching' },
         ].map((s, i) => (
-          <div key={i} style={{ textAlign: 'center', animation: `countUp 0.8s ease both ${0.1 * i}s` }}>
-            <div className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '48px', fontWeight: '900' }}>{s.num}</div>
-            <div style={{ color: 'white', marginTop: '8px', fontSize: '15px', fontWeight: '700' }}>{s.label}</div>
-            <div style={{ color: 'rgba(255,255,255,0.4)', marginTop: '6px', fontSize: '12px', maxWidth: '160px', margin: '6px auto 0' }}>{s.desc}</div>
+          <div key={i} style={{ textAlign: 'center', animation: `cardEntrance 0.8s var(--transition-smooth) both ${0.1 * i}s` }}>
+            <div className="pf-shimmer-text" style={{ fontFamily: 'var(--font-display)', fontSize: '56px', fontWeight: '900', letterSpacing: '-2px' }}>{s.num}</div>
+            <div style={{ color: 'var(--text-heading)', marginTop: '12px', fontSize: '17px', fontWeight: '800' }}>{s.label}</div>
+            <div style={{ color: 'var(--text-body)', marginTop: '8px', fontSize: '14px', maxWidth: '180px', margin: '8px auto 0', lineHeight: '1.5' }}>{s.desc}</div>
           </div>
         ))}
       </div>
 
       {/* How it Works Section */}
-      <div id="howitworks" style={{ padding: '100px 20px 60px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(28px,4vw,42px)', fontWeight: '800', marginBottom: '16px', letterSpacing: '-0.5px' }}>
+      <div id="howitworks" style={{ padding: '140px 20px 100px', textAlign: 'center', position: 'relative', zIndex: 1, background: 'var(--bg-alt)' }}>
+        <h2 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(32px,5vw,52px)', fontWeight: '900', marginBottom: '20px', letterSpacing: '-1.5px', color: 'var(--text-heading)' }}>
           The <span className="pf-shimmer-text">PathForge</span> Journey
         </h2>
-        <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '15px', marginBottom: '60px', maxWidth: '600px', margin: '0 auto 60px' }}>Our proven 4-step framework to bridge the gap between education and employment.</p>
+        <p style={{ color: 'var(--text-body)', fontSize: '18px', marginBottom: '80px', maxWidth: '700px', margin: '0 auto 80px', fontWeight: '500' }}>Our proven 4-step framework to bridge the gap between education and employment.</p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '20px', maxWidth: '1100px', margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '30px', maxWidth: '1200px', margin: '0 auto' }}>
           {[
             { step: '01', title: 'DNA Mapping', desc: 'Advanced AI analysis to pinpoint your unique skill proficiencies and growth potential.', icon: '🎯' },
             { step: '02', title: 'Adaptive Roadmaps', desc: 'Dynamic learning trajectories calibrated to current market demand.', icon: '🤖' },
             { step: '03', title: 'Expert Mentorship', desc: 'Direct access to practitioners for outcome-oriented technical guidance.', icon: '🧬' },
             { step: '04', title: 'Corporate Matching', desc: 'Automated alignment with hiring partners seeking your specific talent profile.', icon: '🤝' }
           ].map((s, i) => (
-            <div key={i} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', padding: '40px 30px', textAlign: 'left', position: 'relative', animation: `cardEntrance 0.6s ease both ${i * 0.1}s`, backdropFilter: 'blur(10px)' }}>
-              <div style={{ position: 'absolute', top: '20px', right: '30px', fontSize: '40px', fontWeight: '900', color: 'rgba(255,107,53,0.1)', fontFamily: 'var(--font-display)' }}>{s.step}</div>
-              <div style={{ fontSize: '32px', marginBottom: '20px' }}>{s.icon}</div>
-              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '18px', fontWeight: '700', marginBottom: '10px' }}>{s.title}</h3>
-              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px', lineHeight: '1.6' }}>{s.desc}</p>
+            <div key={i} className="pf-glass" style={{ padding: '50px 35px', textAlign: 'left', position: 'relative', animation: `cardEntrance 0.7s var(--transition-smooth) both ${i * 0.1}s` }}>
+              <div style={{ position: 'absolute', top: '20px', right: '35px', fontSize: '50px', fontWeight: '900', color: 'rgba(245, 166, 35, 0.08)', fontFamily: 'var(--font-display)' }}>{s.step}</div>
+              <div style={{ fontSize: '42px', marginBottom: '24px', background: 'white', display: 'inline-flex', padding: '15px', borderRadius: '20px', boxShadow: '0 10px 20px rgba(0,0,0,0.05)' }}>{s.icon}</div>
+              <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '22px', fontWeight: '800', marginBottom: '14px', color: 'var(--text-heading)' }}>{s.title}</h3>
+              <p style={{ color: 'var(--text-body)', fontSize: '15px', lineHeight: '1.7', fontWeight: '500' }}>{s.desc}</p>
             </div>
           ))}
         </div>
       </div>
 
       {/* Content Section */}
-      <div id="about" style={{ maxWidth: '1100px', margin: '100px auto', padding: '0 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
-        <div style={{ animation: 'fadeSlideIn 1s ease both' }}>
-          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '36px', fontWeight: '800', marginBottom: '24px' }}>Bridging the <span className="pf-shimmer-text">Employability Gap</span></h2>
-          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '17px', lineHeight: '1.8', marginBottom: '32px' }}>
+      <div id="about" style={{ maxWidth: '1200px', margin: '140px auto', padding: '0 40px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '100px', alignItems: 'center' }}>
+        <div style={{ animation: 'fadeSlideIn 1.2s var(--transition-smooth) both' }}>
+          <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '48px', fontWeight: '900', marginBottom: '32px', letterSpacing: '-1.5px', color: 'var(--text-heading)' }}>Bridging the <br /><span className="pf-shimmer-text">Employability Gap</span></h2>
+          <p style={{ color: 'var(--text-body)', fontSize: '19px', lineHeight: '1.8', marginBottom: '40px', fontWeight: '500' }}>
             Traditional education often focuses on theory, leaving graduates unprepared for the job market. PathForge helps you bridge this gap by identifying your technical strengths and connecting you directly with the right training and hiring partners.
           </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {[
               { t: 'Skills Assessment', d: 'Identify exactly where you stand and what you need to learn next.' },
               { t: 'Industry Mentoring', d: 'Connect with experienced professionals for one-on-one guidance.' },
               { t: 'Direct Hiring', d: 'Get discovered by companies looking for your specific technical profile.' }
             ].map((item, i) => (
-              <div key={i} style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-                <div style={{ color: '#0A66C2', fontSize: '18px', marginTop: '2px' }}>✅</div>
+              <div key={i} style={{ display: 'flex', gap: '20px', alignItems: 'flex-start' }}>
+                <div style={{ color: 'var(--brand-teal)', fontSize: '24px', marginTop: '2px' }}>✅</div>
                 <div>
-                  <div style={{ fontWeight: '700', fontSize: '15px' }}>{item.t}</div>
-                  <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '13px' }}>{item.d}</div>
+                  <div style={{ fontWeight: '900', fontSize: '18px', color: 'var(--text-heading)' }}>{item.t}</div>
+                  <div style={{ color: 'var(--text-body)', fontSize: '15px', marginTop: '4px', fontWeight: '500' }}>{item.d}</div>
                 </div>
               </div>
             ))}
           </div>
         </div>
-        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '30px', padding: '40px', position: 'relative', animation: 'fadeSlideIn 1s ease both 0.3s' }}>
-          <div style={{ position: 'absolute', top: '-20px', left: '-20px', width: '100px', height: '100px', background: 'radial-gradient(circle, rgba(255,107,53,0.2) 0%, transparent 70%)', filter: 'blur(20px)' }}></div>
+        <div className="pf-glass" style={{ padding: '60px', position: 'relative', animation: 'fadeSlideIn 1.2s var(--transition-smooth) both 0.3s', background: 'linear-gradient(135deg, rgba(255,255,255,0.8), rgba(0,212,170,0.05)) !important' }}>
+          <div style={{ position: 'absolute', top: '-30px', left: '-30px', width: '150px', height: '150px', background: 'radial-gradient(circle, rgba(245, 166, 35, 0.2) 0%, transparent 70%)', filter: 'blur(30px)' }}></div>
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <div style={{ fontSize: '11px', color: '#0A66C2', fontWeight: '800', marginBottom: '16px', letterSpacing: '2px', textTransform: 'uppercase' }}>Built for Revenue</div>
-            <h3 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '16px' }}>Revenue-Ready Ecosystem</h3>
-            <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '15px', lineHeight: '1.7' }}>
+            <div style={{ fontSize: '12px', color: 'var(--brand-teal)', fontWeight: '900', marginBottom: '20px', letterSpacing: '3px', textTransform: 'uppercase' }}>Built for Impact</div>
+            <h3 style={{ fontSize: '32px', fontWeight: '900', marginBottom: '24px', color: 'var(--text-heading)', letterSpacing: '-1px' }}>Revenue-Ready Ecosystem</h3>
+            <p style={{ color: 'var(--text-body)', fontSize: '17px', lineHeight: '1.8', fontWeight: '500' }}>
               Our dual-engine model partners with Fortune 500 giants to deliver high-potential, pre-vetted talent. By bridging the gap between student ambition and corporate necessity, we've built a sustainable, revenue-generating ecosystem for the future of work.
             </p>
-            <button onClick={onAuth} style={{ marginTop: '32px', background: 'white', color: '#0f0c29', border: 'none', padding: '14px 30px', borderRadius: '15px', fontWeight: '800', cursor: 'pointer', transition: 'transform 0.2s' }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.05)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+            <button onClick={onAuth} className="pf-glow-btn" style={{ marginTop: '40px', padding: '20px 50px', fontSize: '17px' }}>
               Join the Ecosystem
             </button>
           </div>
         </div>
       </div>
 
-      <div style={{ textAlign: 'center', padding: '60px 40px', borderTop: '1px solid rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.3)', fontSize: '14px' }}>
-        ⚡ PathForge — Built by Team Neural Nexus · NIET Greater Noida
-      </div>
+      <footer style={{ textAlign: 'center', padding: '80px 40px', borderTop: '1px solid var(--glass-border)', color: 'var(--text-muted)', fontSize: '15px', fontWeight: '600', position: 'relative', zIndex: 1, background: 'rgba(255,255,255,0.3)' }}>
+        <div className="pf-shimmer-text" style={{ fontSize: '24px', fontWeight: '900', marginBottom: '12px' }}>⚡ PathForge</div>
+        Built by Team Neural Nexus · NIET Greater Noida · Innovate-X-NIET 1.0
+      </footer>
     </div>
   );
 }

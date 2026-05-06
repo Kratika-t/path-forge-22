@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
 
-const defaultTheme = { pageBg:'#1D2226', cardBg:'#1B1F23', inputBg:'#283039', border:'#38434F', textPrimary:'#E7E9EA', textMuted:'#B0B7BF', accent:'#0A66C2', accentHover:'#004182', accentLight:'#70B5F9', success:'#057642', warning:'#F5C518', error:'#CC1016' };
+const defaultTheme = { 
+  pageBg:'var(--bg-base)', 
+  cardBg:'var(--glass-bg)', 
+  inputBg:'rgba(255, 255, 255, 0.6)', 
+  border:'var(--glass-border)', 
+  textPrimary:'var(--text-heading)', 
+  textMuted:'var(--text-body)', 
+  accent:'var(--brand-teal)', 
+  accentHover:'var(--brand-yellow)', 
+  accentLight:'rgba(0, 212, 170, 0.1)', 
+  success:'var(--brand-teal)', 
+  warning:'var(--brand-yellow)', 
+  error:'var(--brand-coral)' 
+};
 
 export default function IndustryDashboard({ onBack, theme = defaultTheme }) {
   const [search, setSearch] = useState('');
@@ -21,46 +34,51 @@ export default function IndustryDashboard({ onBack, theme = defaultTheme }) {
   );
 
   const cardStyle = {
-    background: theme.cardBg,
-    border: `1px solid ${theme.border}`,
-    borderRadius: '16px',
-    padding: '20px',
+    background: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: '20px',
+    padding: '24px',
     marginBottom: '16px',
     display: 'grid',
-    gridTemplateColumns: '1fr 1.5fr 1fr 1fr 1fr',
+    gridTemplateColumns: '1.2fr 1.5fr 1fr 1fr 1.2fr',
     alignItems: 'center',
-    transition: 'all 0.2s',
-    cursor: 'pointer'
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    cursor: 'pointer',
+    border: 'none',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.02)'
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: theme.pageBg, color: theme.textPrimary, padding: '40px', fontFamily: 'Arial, sans-serif' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '40px' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-body)', padding: '80px 20px', fontFamily: 'var(--font-main)' }}>
+      <div style={{ maxWidth: '1300px', margin: '0 auto' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '60px' }}>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: 'bold', marginBottom: '8px' }}>🏢 Industry Talent Dashboard</h1>
-            <p style={{ color: theme.textMuted, fontSize: '14px' }}>Hire pre-vetted candidates with verified "Proof of Work" scores.</p>
+            <h1 className="pf-shimmer-text" style={{ fontSize: '42px', fontWeight: '900', marginBottom: '15px', fontFamily:'var(--font-display)', letterSpacing:'-2px' }}>🏢 Industry Talent Dashboard</h1>
+            <p style={{ color: 'var(--text-muted)', fontSize: '18px', fontWeight:'700', opacity:0.8 }}>Hire pre-vetted candidates with verified "Proof of Work" scores.</p>
           </div>
-          <button onClick={onBack} style={{ background: 'transparent', border: `1px solid ${theme.border}`, color: theme.textMuted, padding: '10px 20px', borderRadius: '25px', cursor: 'pointer' }}>Exit Dashboard</button>
+          <button onClick={onBack} className="pf-glass" style={{ border: 'none', color: 'var(--text-body)', padding: '16px 35px', borderRadius: '25px', cursor: 'pointer', fontWeight:'900', letterSpacing:'1.5px', textTransform:'uppercase' }}>EXIT DASHBOARD</button>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr 1fr', gap: '20px', marginBottom: '40px' }}>
-          <input 
-            placeholder="Search by name, role, or skill (e.g. 'React', 'Fast Learner')..." 
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            style={{ padding: '16px 24px', borderRadius: '16px', border: `1px solid ${theme.border}`, background: theme.inputBg, color: theme.textPrimary, width: '100%', boxSizing: 'border-box' }}
-          />
-          <div style={{ background: theme.inputBg, border: `1px solid ${theme.accent}`, borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.accent, fontWeight: 'bold' }}>
-            {candidates.length} Verified Talents
+        <div style={{ display: 'grid', gridTemplateColumns: '3fr 1fr 1fr', gap: '25px', marginBottom: '50px' }}>
+          <div style={{ position:'relative' }}>
+            <input 
+              placeholder="Search by name, role, or skill (e.g. 'React', 'Fast Learner')..." 
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="pf-glass"
+              style={{ padding: '25px 35px', borderRadius: '30px', border: 'none', background: 'white !important', color: 'var(--text-heading)', width: '100%', boxSizing: 'border-box', fontSize:'18px', fontWeight:'700', outline:'none', fontFamily:'var(--font-main)', boxShadow:'0 10px 30px rgba(0,0,0,0.03)' }} 
+            />
+            <span style={{ position:'absolute', right:'30px', top:'50%', transform:'translateY(-50%)', fontSize:'24px', opacity:0.3 }}>🔍</span>
           </div>
-          <div style={{ background: theme.inputBg, border: `1px solid ${theme.success}`, borderRadius: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.success, fontWeight: 'bold' }}>
-            5 Hiring Partners
+          <div className="pf-glass" style={{ background: 'white !important', border: 'none', borderRadius: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--brand-teal)', fontWeight: '900', fontSize:'15px', letterSpacing:'1px', boxShadow:'0 10px 30px rgba(0, 212, 170, 0.08)' }}>
+            {candidates.length} VERIFIED TALENTS
+          </div>
+          <div className="pf-glass" style={{ background: 'white !important', border: 'none', borderRadius: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--brand-yellow)', fontWeight: '900', fontSize:'15px', letterSpacing:'1px', boxShadow:'0 10px 30px rgba(245, 166, 35, 0.08)' }}>
+            5 HIRING PARTNERS
           </div>
         </div>
 
-        <div style={{ background: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '20px', padding: '24px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.5fr 1fr 1fr 1fr', padding: '0 20px 16px', color: theme.textMuted, fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase' }}>
+        <div className="pf-glass" style={{ padding: '40px', background:'white !important', borderRadius:'50px', border:'none', boxShadow:'0 40px 100px rgba(0,0,0,0.04)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.5fr 1fr 1fr 1.2fr', padding: '0 30px 25px', color: 'var(--text-muted)', fontSize: '14px', fontWeight: '900', textTransform: 'uppercase', letterSpacing:'1.5px', opacity:0.5 }}>
             <span>Candidate</span>
             <span>Skills & Tech Stack</span>
             <span>Employability</span>
@@ -68,45 +86,51 @@ export default function IndustryDashboard({ onBack, theme = defaultTheme }) {
             <span>Status</span>
           </div>
 
-          {filtered.map((c) => (
-            <div key={c.id} style={cardStyle} onMouseEnter={e => e.currentTarget.style.background=theme.inputBg} onMouseLeave={e => e.currentTarget.style.background=theme.cardBg}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '10px', background: theme.inputBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>👤</div>
+          <div style={{ display:'flex', flexDirection:'column', gap:'15px' }}>
+            {filtered.map((c) => (
+              <div key={c.id} className="pf-glass talent-row" style={cardStyle}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                  <div className="pf-glass" style={{ width: '60px', height: '60px', borderRadius: '20px', background: 'rgba(0,0,0,0.02)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '28px', border:'none' }}>👤</div>
+                  <div>
+                    <div style={{ fontWeight: '900', fontSize: '18px', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-0.5px' }}>{c.name}</div>
+                    <div style={{ fontSize: '14px', color: 'var(--text-muted)', fontWeight:'800', marginTop:'4px' }}>{c.role}</div>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                  {c.skills.map(s => <span key={s} className="pf-glass" style={{ fontSize: '12px', background: 'rgba(0, 212, 170, 0.05) !important', padding: '8px 16px', borderRadius: '12px', border: 'none', fontWeight:'900', color:'var(--brand-teal)', letterSpacing:'0.5px' }}>{s}</span>)}
+                </div>
+
                 <div>
-                  <div style={{ fontWeight: 'bold', fontSize: '14px' }}>{c.name}</div>
-                  <div style={{ fontSize: '11px', color: theme.textMuted }}>{c.role}</div>
+                  <div style={{ fontSize: '18px', fontWeight: '900', color: 'var(--brand-teal)', fontFamily:'var(--font-display)', letterSpacing:'-0.5px' }}>{c.velocity}</div>
+                  <div style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight:'700', marginTop:'4px' }}>Learning Pace</div>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '28px', fontWeight: '900', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-1px' }}>{c.score}%</div>
+                  <div style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight:'700', marginTop:'4px' }}>{c.tokens} Tokens Earned</div>
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <span className="pf-glass" style={{ fontSize: '12px', background: 'var(--brand-teal)', color: 'white', padding: '10px 20px', borderRadius: '18px', border: 'none', fontWeight: '900', letterSpacing:'1px', textTransform:'uppercase', boxShadow:'0 8px 20px rgba(0, 212, 170, 0.2)' }}>
+                    {c.status}
+                  </span>
                 </div>
               </div>
-              
-              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                {c.skills.map(s => <span key={s} style={{ fontSize: '10px', background: theme.inputBg, padding: '4px 8px', borderRadius: '6px', border: `1px solid ${theme.border}` }}>{s}</span>)}
-              </div>
-
-              <div>
-                <div style={{ fontSize: '14px', fontWeight: 'bold', color: theme.accent }}>{c.velocity}</div>
-                <div style={{ fontSize: '11px', color: theme.textMuted }}>Learning Pace</div>
-              </div>
-
-              <div>
-                <div style={{ fontSize: '18px', fontWeight: 'bold' }}>{c.score}%</div>
-                <div style={{ fontSize: '11px', color: theme.textMuted }}>{c.tokens} Tokens Earned</div>
-              </div>
-
-              <div style={{ textAlign: 'right' }}>
-                <span style={{ fontSize: '11px', background: theme.inputBg, color: c.status.includes('Top') ? theme.accent : theme.success, padding: '6px 12px', borderRadius: '12px', border: `1px solid ${c.status.includes('Top') ? theme.accent : theme.success}`, fontWeight: 'bold' }}>
-                  {c.status}
-                </span>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
 
           {filtered.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '60px', color: theme.textMuted }}>
+            <div style={{ textAlign: 'center', padding: '120px', color: 'var(--text-muted)', fontWeight:'900', fontSize:'22px', opacity:0.3, fontFamily:'var(--font-display)', letterSpacing:'-0.5px' }}>
               No candidates found matching your criteria.
             </div>
           )}
         </div>
       </div>
+      <style>{`
+        .talent-row:hover { background: white !important; transform: scale(1.02) translateX(10px); box-shadow: 0 30px 70px rgba(0,0,0,0.06) !important; z-index: 10; }
+        .talent-row { position: relative; }
+      `}</style>
     </div>
   );
 }

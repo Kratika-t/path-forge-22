@@ -2,18 +2,18 @@ import React, { useState, useRef, useEffect } from 'react';
 
 const TEMPLATES = {
   modern: {
-    name: 'Modern',
-    colors: { primary: '#2c3e50', secondary: '#3498db', accent: '#e74c3c' },
+    name: 'Neural Modern',
+    colors: { primary: '#1a1a1a', secondary: '#00d4aa', accent: '#ff6b6b' },
     layout: 'two-column'
   },
   classic: {
-    name: 'Classic',
-    colors: { primary: '#2c3e50', secondary: '#7f8c8d', accent: '#34495e' },
+    name: 'Executive Classic',
+    colors: { primary: '#000000', secondary: '#444444', accent: '#333333' },
     layout: 'single-column'
   },
   creative: {
-    name: 'Creative',
-    colors: { primary: '#8e44ad', secondary: '#e67e22', accent: '#16a085' },
+    name: 'Digital Creative',
+    colors: { primary: '#1a1a1a', secondary: '#00d4aa', accent: '#f5a623' },
     layout: 'sidebar'
   }
 };
@@ -22,18 +22,18 @@ const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
 function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
   const defaultTheme = {
-    pageBg: '#F3F2EF',
-    cardBg: '#FFFFFF',
-    inputBg: '#F9F9F9',
-    border: '#D0D0D0',
-    textPrimary: '#000000',
-    textMuted: '#666666',
-    accent: '#0A66C2',
-    accentHover: '#004182',
-    accentLight: '#0A66C2',
-    success: '#057642',
-    warning: '#B06B00',
-    error: '#CC1016',
+    pageBg: 'var(--bg-base)',
+    cardBg: 'var(--glass-bg)',
+    inputBg: 'rgba(255, 255, 255, 0.6)',
+    border: 'var(--glass-border)',
+    textPrimary: 'var(--text-heading)',
+    textMuted: 'var(--text-body)',
+    accent: 'var(--brand-teal)',
+    accentHover: 'var(--brand-yellow)',
+    accentLight: 'rgba(0, 212, 170, 0.2)',
+    success: 'var(--brand-teal)',
+    warning: 'var(--brand-yellow)',
+    error: 'var(--brand-coral)',
   };
   const currentTheme = theme || defaultTheme;
   const [formData, setFormData] = useState({
@@ -55,11 +55,9 @@ function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
 
   const [selectedTemplate, setSelectedTemplate] = useState('modern');
   const [isEditing, setIsEditing] = useState(true);
-  const [isPreviewing, setIsPreviewing] = useState(false);
   const [autoSaveStatus, setAutoSaveStatus] = useState('');
   const [resumeScore, setResumeScore] = useState(0);
   const [validationErrors, setValidationErrors] = useState([]);
-  const fileInputRef = useRef(null);
 
   // Auto-save functionality
   useEffect(() => {
@@ -142,8 +140,7 @@ function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
         position: '', 
         duration: '', 
         location: '',
-        description: '',
-        achievements: []
+        description: ''
       }]
     }));
   };
@@ -171,9 +168,7 @@ function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
         institution: '', 
         degree: '', 
         field: '',
-        year: '',
-        gpa: '',
-        honors: ''
+        year: ''
       }]
     }));
   };
@@ -217,93 +212,12 @@ function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
     }));
   };
 
-  const addProject = () => {
-    setFormData(prev => ({
-      ...prev,
-      projects: [...prev.projects, { 
-        name: '', 
-        description: '', 
-        technologies: [],
-        link: '',
-        duration: ''
-      }]
-    }));
-  };
-
-  const updateProject = (index, field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      projects: prev.projects.map((project, i) => 
-        i === index ? { ...project, [field]: value } : project
-      )
-    }));
-  };
-
-  const removeProject = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      projects: prev.projects.filter((_, i) => i !== index)
-    }));
-  };
-
-  const addCertification = () => {
-    setFormData(prev => ({
-      ...prev,
-      certifications: [...prev.certifications, { 
-        name: '', 
-        issuer: '', 
-        date: '',
-        credentialId: '',
-        credentialUrl: ''
-      }]
-    }));
-  };
-
-  const updateCertification = (index, field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      certifications: prev.certifications.map((cert, i) => 
-        i === index ? { ...cert, [field]: value } : cert
-      )
-    }));
-  };
-
-  const removeCertification = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      certifications: prev.certifications.filter((_, i) => i !== index)
-    }));
-  };
-
-  const addLanguage = () => {
-    setFormData(prev => ({
-      ...prev,
-      languages: [...prev.languages, { name: '', proficiency: 'Intermediate' }]
-    }));
-  };
-
-  const updateLanguage = (index, field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      languages: prev.languages.map((lang, i) => 
-        i === index ? { ...lang, [field]: value } : lang
-      )
-    }));
-  };
-
-  const removeLanguage = (index) => {
-    setFormData(prev => ({
-      ...prev,
-      languages: prev.languages.filter((_, i) => i !== index)
-    }));
-  };
-
   const exportToPDF = () => {
     window.print();
   };
 
   const exportToWord = () => {
-    alert('Word export feature coming soon! For now, use browser print (Ctrl+P)');
+    alert('Word export feature coming soon!');
   };
 
   const renderTemplate = () => {
@@ -319,70 +233,47 @@ function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
   };
 
   const renderModernTemplate = () => (
-    <div style={{ background: 'white', color: 'black', padding: '40px', borderRadius: '12px', fontFamily: 'Arial, sans-serif' }}>
+    <div className="pf-resume-paper" style={{ background: 'white', color: 'black', padding: '60px', borderRadius: '15px', fontFamily: '"Inter", sans-serif', boxShadow: '0 30px 60px rgba(0,0,0,0.1)' }}>
       {/* Header */}
-      <div style={{ textAlign: 'center', marginBottom: '30px', borderBottom: '3px solid #3498db', paddingBottom: '20px' }}>
-        <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 10px 0' }}>
+      <div style={{ textAlign: 'center', marginBottom: '50px', borderBottom: '4px solid #1a1a1a', paddingBottom: '40px' }}>
+        <h1 style={{ fontSize: '42px', fontWeight: '900', color: '#1a1a1a', margin: '0 0 15px 0', letterSpacing: '-2px' }}>
           {formData.fullName || 'Your Name'}
         </h1>
-        <p style={{ color: '#7f8c8d', margin: '0 0 10px 0', fontSize: '14px' }}>
+        <p style={{ color: '#444', margin: '0 0 12px 0', fontSize: '16px', fontWeight: '800' }}>
           {formData.email} | {formData.phone} | {formData.location}
         </p>
-        <p style={{ color: '#7f8c8d', margin: '0', fontSize: '12px' }}>
-          {formData.website && `${formData.website} | `}{formData.linkedin && `LinkedIn: ${formData.linkedin}`}
+        <p style={{ color: '#666', margin: '0', fontSize: '14px', fontWeight: '800' }}>
+          {formData.website && `${formData.website} | `}{formData.linkedin && `LinkedIn: ${formData.linkedin}`} | {formData.github && `GitHub: ${formData.github}`}
         </p>
       </div>
 
-      <div style={{ display: 'flex', gap: '30px' }}>
+      <div style={{ display: 'flex', gap: '60px' }}>
         {/* Left Column */}
         <div style={{ flex: '2' }}>
           {formData.summary && (
-            <div style={{ marginBottom: '25px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#3498db', marginBottom: '10px' }}>
-                PROFESSIONAL SUMMARY
+            <div style={{ marginBottom: '50px' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '900', color: '#1a1a1a', marginBottom: '20px', textTransform: 'uppercase', borderBottom: '3px solid #f0f0f0', paddingBottom: '10px', letterSpacing:'1.5px' }}>
+                Profile
               </h2>
-              <p style={{ color: '#34495e', lineHeight: '1.5', fontSize: '13px' }}>{formData.summary}</p>
+              <p style={{ color: '#222', lineHeight: '1.8', fontSize: '15px', fontWeight: '500' }}>{formData.summary}</p>
             </div>
           )}
 
           {formData.experience.length > 0 && (
-            <div style={{ marginBottom: '25px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#3498db', marginBottom: '15px' }}>
-                PROFESSIONAL EXPERIENCE
+            <div style={{ marginBottom: '50px' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '900', color: '#1a1a1a', marginBottom: '25px', textTransform: 'uppercase', borderBottom: '3px solid #f0f0f0', paddingBottom: '10px', letterSpacing:'1.5px' }}>
+                Experience
               </h2>
               {formData.experience.map((exp, index) => (
-                <div key={index} style={{ marginBottom: '15px' }}>
-                  <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 5px 0' }}>
-                    {exp.position}
-                  </h3>
-                  <p style={{ color: '#7f8c8d', fontSize: '12px', margin: '0 0 5px 0', fontStyle: 'italic' }}>
-                    {exp.company} | {exp.location} | {exp.duration}
+                <div key={index} style={{ marginBottom: '35px' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                    <h3 style={{ fontSize: '18px', fontWeight: '900', color: '#1a1a1a', margin: 0 }}>{exp.position}</h3>
+                    <span style={{ fontSize: '14px', color: '#555', fontWeight: '800' }}>{exp.duration}</span>
+                  </div>
+                  <p style={{ color: 'var(--brand-teal)', fontSize: '15px', margin: '0 0 15px 0', fontWeight: '800' }}>
+                    {exp.company} | {exp.location}
                   </p>
-                  <p style={{ color: '#34495e', fontSize: '12px', lineHeight: '1.4' }}>{exp.description}</p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {formData.projects.length > 0 && (
-            <div style={{ marginBottom: '25px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#3498db', marginBottom: '15px' }}>
-                PROJECTS
-              </h2>
-              {formData.projects.map((project, index) => (
-                <div key={index} style={{ marginBottom: '15px' }}>
-                  <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 5px 0' }}>
-                    {project.name}
-                  </h3>
-                  <p style={{ color: '#7f8c8d', fontSize: '12px', margin: '0 0 5px 0' }}>
-                    {project.duration}
-                  </p>
-                  <p style={{ color: '#34495e', fontSize: '12px', lineHeight: '1.4' }}>{project.description}</p>
-                  {project.technologies.length > 0 && (
-                    <p style={{ color: '#7f8c8d', fontSize: '11px', margin: '5px 0' }}>
-                      <strong>Technologies:</strong> {project.technologies.join(', ')}
-                    </p>
-                  )}
+                  <p style={{ color: '#333', fontSize: '15px', lineHeight: '1.8', fontWeight: '500' }}>{exp.description}</p>
                 </div>
               ))}
             </div>
@@ -392,70 +283,32 @@ function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
         {/* Right Column */}
         <div style={{ flex: '1' }}>
           {formData.skills.length > 0 && (
-            <div style={{ marginBottom: '25px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#3498db', marginBottom: '10px' }}>
-                SKILLS
+            <div style={{ marginBottom: '50px' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '900', color: '#1a1a1a', marginBottom: '20px', textTransform: 'uppercase', borderBottom: '3px solid #f0f0f0', paddingBottom: '10px', letterSpacing:'1.5px' }}>
+                Expertise
               </h2>
-              {formData.skills.map((skill, index) => (
-                <div key={index} style={{ marginBottom: '8px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '12px', color: '#2c3e50' }}>{skill.name}</span>
-                    <span style={{ fontSize: '10px', color: '#7f8c8d' }}>{skill.level}</span>
-                  </div>
-                </div>
-              ))}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                {formData.skills.map((skill, index) => (
+                  <span key={index} style={{ fontSize: '13px', background: '#f5f5f5', color: '#1a1a1a', padding: '8px 18px', borderRadius: '10px', fontWeight: '800', border:'1px solid #eee' }}>
+                    {skill.name}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
 
           {formData.education.length > 0 && (
-            <div style={{ marginBottom: '25px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#3498db', marginBottom: '10px' }}>
-                EDUCATION
+            <div style={{ marginBottom: '50px' }}>
+              <h2 style={{ fontSize: '20px', fontWeight: '900', color: '#1a1a1a', marginBottom: '20px', textTransform: 'uppercase', borderBottom: '3px solid #f0f0f0', paddingBottom: '10px', letterSpacing:'1.5px' }}>
+                Education
               </h2>
               {formData.education.map((edu, index) => (
-                <div key={index} style={{ marginBottom: '15px' }}>
-                  <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 5px 0' }}>
-                    {edu.degree}
-                  </h3>
-                  <p style={{ color: '#7f8c8d', fontSize: '12px', margin: '0 0 5px 0' }}>
-                    {edu.institution}
+                <div key={index} style={{ marginBottom: '25px' }}>
+                  <h3 style={{ fontSize: '16px', fontWeight: '900', color: '#1a1a1a', margin: '0 0 6px 0' }}>{edu.degree}</h3>
+                  <p style={{ color: '#444', fontSize: '14px', margin: '0 0 6px 0', fontWeight: '700' }}>{edu.institution}</p>
+                  <p style={{ color: '#888', fontSize: '13px', margin: 0, fontWeight: '600' }}>
+                    {edu.year}
                   </p>
-                  <p style={{ color: '#7f8c8d', fontSize: '11px', margin: '0' }}>
-                    {edu.field && `${edu.field} | `}{edu.year}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {formData.certifications.length > 0 && (
-            <div style={{ marginBottom: '25px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#3498db', marginBottom: '10px' }}>
-                CERTIFICATIONS
-              </h2>
-              {formData.certifications.map((cert, index) => (
-                <div key={index} style={{ marginBottom: '10px' }}>
-                  <h3 style={{ fontSize: '12px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 3px 0' }}>
-                    {cert.name}
-                  </h3>
-                  <p style={{ color: '#7f8c8d', fontSize: '10px', margin: '0' }}>
-                    {cert.issuer} | {cert.date}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {formData.languages.length > 0 && (
-            <div style={{ marginBottom: '25px' }}>
-              <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#3498db', marginBottom: '10px' }}>
-                LANGUAGES
-              </h2>
-              {formData.languages.map((lang, index) => (
-                <div key={index} style={{ marginBottom: '5px' }}>
-                  <span style={{ fontSize: '12px', color: '#2c3e50' }}>
-                    {lang.name} - {lang.proficiency}
-                  </span>
                 </div>
               ))}
             </div>
@@ -466,165 +319,97 @@ function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
   );
 
   const renderClassicTemplate = () => (
-    <div style={{ background: 'white', color: 'black', padding: '40px', borderRadius: '12px', fontFamily: 'Times New Roman, serif' }}>
+    <div className="pf-resume-paper" style={{ background: 'white', color: 'black', padding: '80px', borderRadius: '15px', fontFamily: '"Playfair Display", serif', boxShadow: '0 30px 60px rgba(0,0,0,0.1)' }}>
       {/* Classic single-column layout */}
-      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <h1 style={{ fontSize: '32px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 10px 0' }}>
+      <div style={{ textAlign: 'center', marginBottom: '60px' }}>
+        <h1 style={{ fontSize: '48px', fontWeight: 'bold', color: 'black', margin: '0 0 15px 0', textTransform: 'uppercase', letterSpacing:'3px' }}>
           {formData.fullName || 'Your Name'}
         </h1>
-        <p style={{ color: '#7f8c8d', margin: '0 0 10px 0', fontSize: '14px' }}>
-          {formData.email} | {formData.phone} | {formData.location}
+        <p style={{ color: '#333', margin: '0', fontSize: '16px', fontWeight: 'bold' }}>
+          {formData.email} • {formData.phone} • {formData.location}
+        </p>
+        <p style={{ color: '#333', margin: '10px 0 0 0', fontSize: '15px' }}>
+          {formData.linkedin && `LinkedIn: ${formData.linkedin}`} • {formData.github && `GitHub: ${formData.github}`}
         </p>
       </div>
 
-      {formData.summary && (
-        <div style={{ marginBottom: '25px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#2c3e50', marginBottom: '10px', textTransform: 'uppercase' }}>
-            Professional Summary
-          </h2>
-          <p style={{ color: '#34495e', lineHeight: '1.5', fontSize: '13px' }}>{formData.summary}</p>
-        </div>
-      )}
+      <div style={{ marginBottom: '45px' }}>
+        <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: 'black', borderBottom: '3px solid black', marginBottom: '20px', textTransform: 'uppercase', letterSpacing:'2px' }}>Summary</h2>
+        <p style={{ color: 'black', lineHeight: '1.7', fontSize: '16px' }}>{formData.summary}</p>
+      </div>
 
       {formData.experience.length > 0 && (
-        <div style={{ marginBottom: '25px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#2c3e50', marginBottom: '15px', textTransform: 'uppercase' }}>
-            Experience
-          </h2>
+        <div style={{ marginBottom: '45px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 'bold', color: 'black', borderBottom: '3px solid black', marginBottom: '30px', textTransform: 'uppercase', letterSpacing:'2px' }}>Experience</h2>
           {formData.experience.map((exp, index) => (
-            <div key={index} style={{ marginBottom: '15px' }}>
-              <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 5px 0' }}>
-                {exp.position} - {exp.company}
-              </h3>
-              <p style={{ color: '#7f8c8d', fontSize: '12px', margin: '0 0 5px 0', fontStyle: 'italic' }}>
-                {exp.duration}
-              </p>
-              <p style={{ color: '#34495e', fontSize: '12px', lineHeight: '1.4' }}>{exp.description}</p>
+            <div key={index} style={{ marginBottom: '35px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: 'black', margin: 0 }}>{exp.position} | {exp.company}</h3>
+                <span style={{ fontSize: '16px', fontWeight: 'bold' }}>{exp.duration}</span>
+              </div>
+              <p style={{ color: '#444', fontSize: '15px', fontStyle: 'italic', margin: '0 0 15px 0' }}>{exp.location}</p>
+              <p style={{ color: 'black', fontSize: '16px', lineHeight: '1.7' }}>{exp.description}</p>
             </div>
           ))}
-        </div>
-      )}
-
-      {formData.education.length > 0 && (
-        <div style={{ marginBottom: '25px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#2c3e50', marginBottom: '15px', textTransform: 'uppercase' }}>
-            Education
-          </h2>
-          {formData.education.map((edu, index) => (
-            <div key={index} style={{ marginBottom: '10px' }}>
-              <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 5px 0' }}>
-                {edu.degree}
-              </h3>
-              <p style={{ color: '#7f8c8d', fontSize: '12px', margin: '0' }}>
-                {edu.institution} - {edu.year}
-              </p>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {formData.skills.length > 0 && (
-        <div style={{ marginBottom: '25px' }}>
-          <h2 style={{ fontSize: '16px', fontWeight: 'bold', color: '#2c3e50', marginBottom: '10px', textTransform: 'uppercase' }}>
-            Skills
-          </h2>
-          <p style={{ color: '#34495e', fontSize: '12px' }}>
-            {formData.skills.map(skill => skill.name).join(', ')}
-          </p>
         </div>
       )}
     </div>
   );
 
   const renderCreativeTemplate = () => (
-    <div style={{ background: 'white', color: 'black', borderRadius: '12px', fontFamily: 'Arial, sans-serif', display: 'flex' }}>
+    <div className="pf-resume-paper" style={{ background: 'white', color: 'black', borderRadius: '20px', fontFamily: '"Outfit", sans-serif', display: 'flex', minHeight: '1000px', overflow: 'hidden', boxShadow: '0 40px 100px rgba(0,0,0,0.15)' }}>
       {/* Sidebar */}
-      <div style={{ background: '#8e44ad', color: 'white', padding: '30px', width: '250px', borderRadius: '12px 0 0 12px' }}>
-        <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 20px 0' }}>
+      <div style={{ background: '#1a1a1a', color: 'white', padding: '60px 50px', width: '350px' }}>
+        <h1 style={{ fontSize: '38px', fontWeight: '900', margin: '0 0 50px 0', lineHeight: '1.1', letterSpacing:'-2px' }}>
           {formData.fullName || 'Your Name'}
         </h1>
         
-        <div style={{ marginBottom: '30px' }}>
-          <h3 style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '10px', textTransform: 'uppercase' }}>Contact</h3>
-          <p style={{ fontSize: '12px', margin: '5px 0' }}>{formData.email}</p>
-          <p style={{ fontSize: '12px', margin: '5px 0' }}>{formData.phone}</p>
-          <p style={{ fontSize: '12px', margin: '5px 0' }}>{formData.location}</p>
+        <div style={{ marginBottom: '60px' }}>
+          <h3 style={{ fontSize: '14px', fontWeight: '900', marginBottom: '25px', textTransform: 'uppercase', color: 'var(--brand-teal)', letterSpacing: '3px' }}>CONTACT</h3>
+          <p style={{ fontSize: '15px', margin: '12px 0', opacity: 0.9, fontWeight: '600' }}>{formData.email}</p>
+          <p style={{ fontSize: '15px', margin: '12px 0', opacity: 0.9, fontWeight: '600' }}>{formData.phone}</p>
+          <p style={{ fontSize: '15px', margin: '12px 0', opacity: 0.9, fontWeight: '600' }}>{formData.location}</p>
         </div>
 
         {formData.skills.length > 0 && (
-          <div style={{ marginBottom: '30px' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '10px', textTransform: 'uppercase' }}>Skills</h3>
+          <div style={{ marginBottom: '60px' }}>
+            <h3 style={{ fontSize: '14px', fontWeight: '900', marginBottom: '25px', textTransform: 'uppercase', color: 'var(--brand-teal)', letterSpacing: '3px' }}>EXPERTISE</h3>
             {formData.skills.map((skill, index) => (
-              <div key={index} style={{ marginBottom: '8px' }}>
-                <div style={{ fontSize: '12px', fontWeight: 'bold' }}>{skill.name}</div>
-                <div style={{ background: 'rgba(255,255,255,0.3)', height: '4px', borderRadius: '2px', marginTop: '3px' }}>
+              <div key={index} style={{ marginBottom: '20px' }}>
+                <div style={{ fontSize: '14px', fontWeight: '800', marginBottom: '10px' }}>{skill.name}</div>
+                <div style={{ background: 'rgba(255,255,255,0.1)', height: '8px', borderRadius: '10px' }}>
                   <div style={{ 
-                    background: '#16a085', 
+                    background: 'var(--brand-teal)', 
                     height: '100%', 
-                    borderRadius: '2px',
-                    width: `${(SKILL_LEVELS.indexOf(skill.level) + 1) * 25}%`
+                    borderRadius: '10px',
+                    width: `${(SKILL_LEVELS.indexOf(skill.level) + 1) * 25}%`,
+                    boxShadow: '0 0 15px var(--brand-teal)'
                   }} />
                 </div>
               </div>
             ))}
           </div>
         )}
-
-        {formData.languages.length > 0 && (
-          <div style={{ marginBottom: '30px' }}>
-            <h3 style={{ fontSize: '14px', fontWeight: 'bold', marginBottom: '10px', textTransform: 'uppercase' }}>Languages</h3>
-            {formData.languages.map((lang, index) => (
-              <p key={index} style={{ fontSize: '12px', margin: '5px 0' }}>
-                {lang.name} - {lang.proficiency}
-              </p>
-            ))}
-          </div>
-        )}
       </div>
 
       {/* Main Content */}
-      <div style={{ flex: '1', padding: '30px' }}>
+      <div style={{ flex: '1', padding: '80px' }}>
         {formData.summary && (
-          <div style={{ marginBottom: '25px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#8e44ad', marginBottom: '10px' }}>
-              About Me
-            </h2>
-            <p style={{ color: '#34495e', lineHeight: '1.5', fontSize: '13px' }}>{formData.summary}</p>
+          <div style={{ marginBottom: '60px' }}>
+            <h2 style={{ fontSize: '28px', fontWeight: '900', color: '#1a1a1a', marginBottom: '20px', fontFamily: 'var(--font-display)', letterSpacing:'-1.5px' }}>PROFILE</h2>
+            <p style={{ color: '#333', lineHeight: '1.8', fontSize: '17px', fontWeight: '600' }}>{formData.summary}</p>
           </div>
         )}
 
         {formData.experience.length > 0 && (
-          <div style={{ marginBottom: '25px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#8e44ad', marginBottom: '15px' }}>
-              Experience
-            </h2>
+          <div style={{ marginBottom: '60px' }}>
+            <h2 style={{ fontSize: '28px', fontWeight: '900', color: '#1a1a1a', marginBottom: '35px', fontFamily: 'var(--font-display)', letterSpacing:'-1.5px' }}>EXPERIENCE</h2>
             {formData.experience.map((exp, index) => (
-              <div key={index} style={{ marginBottom: '15px', borderLeft: '3px solid #e67e22', paddingLeft: '15px' }}>
-                <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 5px 0' }}>
-                  {exp.position}
-                </h3>
-                <p style={{ color: '#e67e22', fontSize: '12px', margin: '0 0 5px 0', fontWeight: 'bold' }}>
-                  {exp.company} | {exp.duration}
-                </p>
-                <p style={{ color: '#34495e', fontSize: '12px', lineHeight: '1.4' }}>{exp.description}</p>
-              </div>
-            ))}
-          </div>
-        )}
-
-        {formData.education.length > 0 && (
-          <div style={{ marginBottom: '25px' }}>
-            <h2 style={{ fontSize: '18px', fontWeight: 'bold', color: '#8e44ad', marginBottom: '15px' }}>
-              Education
-            </h2>
-            {formData.education.map((edu, index) => (
-              <div key={index} style={{ marginBottom: '10px' }}>
-                <h3 style={{ fontSize: '14px', fontWeight: 'bold', color: '#2c3e50', margin: '0 0 5px 0' }}>
-                  {edu.degree}
-                </h3>
-                <p style={{ color: '#7f8c8d', fontSize: '12px', margin: '0' }}>
-                  {edu.institution} | {edu.year}
-                </p>
+              <div key={index} style={{ marginBottom: '40px', position: 'relative', paddingLeft: '40px', borderLeft: '4px solid var(--brand-teal)' }}>
+                <div style={{ position: 'absolute', left: '-12px', top: '0', width: '20px', height: '20px', borderRadius: '50%', background: 'var(--brand-teal)', border:'5px solid white', boxShadow:'0 0 20px rgba(0, 212, 170, 0.4)' }} />
+                <h3 style={{ fontSize: '22px', fontWeight: '900', color: '#1a1a1a', margin: '0 0 8px 0' }}>{exp.position}</h3>
+                <p style={{ color: 'var(--brand-teal)', fontSize: '15px', margin: '0 0 18px 0', fontWeight: '800' }}>{exp.company} • {exp.duration}</p>
+                <p style={{ color: '#444', fontSize: '17px', lineHeight: '1.8', fontWeight: '600' }}>{exp.description}</p>
               </div>
             ))}
           </div>
@@ -635,120 +420,139 @@ function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
 
   const inputStyle = {
     width: '100%',
-    padding: '12px',
-    marginBottom: '8px',
-    border: '1px solid ' + currentTheme.border,
-    borderRadius: '8px',
-    background: currentTheme.inputBg,
-    color: currentTheme.textPrimary,
-    fontSize: '14px',
+    padding: '18px',
+    marginBottom: '12px',
+    border: '1px solid rgba(0,0,0,0.08)',
+    borderRadius: '20px',
+    background: 'white',
+    color: 'var(--text-heading)',
+    fontSize: '15px',
+    fontWeight: '600',
     outline: 'none',
     boxSizing: 'border-box',
+    transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+    boxShadow:'inset 0 2px 10px rgba(0,0,0,0.02)'
   };
 
   const sectionStyle = {
-    background: currentTheme.cardBg,
-    border: '1px solid ' + currentTheme.border,
-    borderRadius: '12px',
-    padding: '20px',
-    marginBottom: '20px'
+    background: 'white !important',
+    border: 'none',
+    borderRadius: '40px',
+    padding: '45px',
+    marginBottom: '40px',
+    boxShadow: '0 20px 50px rgba(0,0,0,0.04)'
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: currentTheme.pageBg, color: currentTheme.textPrimary, padding: '20px' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg-base)', color: 'var(--text-body)', fontFamily: 'var(--font-main)', padding: '60px 20px' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '60px', gap: '30px', flexWrap: 'wrap' }}>
           <div>
-            <h1 style={{ fontSize: '28px', fontWeight: 'bold', color: currentTheme.accent, margin: '0 0 5px 0' }}>
-              Advanced ATS Resume Builder
+            <h1 className="pf-shimmer-text" style={{ fontSize: '48px', fontWeight: '900', margin: '0 0 15px 0', letterSpacing: '-2px', fontFamily: 'var(--font-display)' }}>
+              Neural ATS Architect
             </h1>
-            <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '14px', color: currentTheme.textMuted }}>Resume Score:</span>
-                <span style={{ 
-                  fontSize: '16px', 
-                  fontWeight: 'bold', 
-                  color: resumeScore >= 80 ? currentTheme.success : resumeScore >= 60 ? currentTheme.warning : currentTheme.error 
+            <div style={{ display: 'flex', gap: '40px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', background:'white', padding:'10px 24px', borderRadius:'20px', boxShadow:'0 10px 30px rgba(0,0,0,0.04)' }}>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)', fontWeight: '900', textTransform: 'uppercase', letterSpacing:'1px' }}>ATS RANK:</span>
+                <span className="pf-shimmer-text" style={{ 
+                  fontSize: '28px', 
+                  fontWeight: '900', 
+                  fontFamily: 'var(--font-display)',
+                  letterSpacing:'-1px'
                 }}>
-                  {resumeScore}/100
+                  {resumeScore}%
                 </span>
               </div>
               {autoSaveStatus && (
-                <span style={{ fontSize: '12px', color: currentTheme.success }}>{autoSaveStatus}</span>
+                <div style={{ display:'flex', alignItems:'center', gap:'10px' }}>
+                  <div style={{ width:'8px', height:'8px', background:'var(--brand-teal)', borderRadius:'50%', animation:'pf-pulse 1.5s infinite' }} />
+                  <span style={{ fontSize: '14px', color: 'var(--brand-teal)', fontWeight: '900', textTransform:'uppercase', letterSpacing:'1.5px' }}>{autoSaveStatus}</span>
+                </div>
               )}
             </div>
           </div>
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ display: 'flex', gap: '20px' }}>
             <button
               onClick={() => setIsEditing(!isEditing)}
+              className={isEditing ? "pf-glow-btn" : "pf-glass"}
               style={{
-                background: isEditing ? currentTheme.success : currentTheme.accent,
-                color: 'white',
-                border: 'none',
-                padding: '10px 20px',
-                borderRadius: '8px',
+                border:'none',
+                padding: '20px 45px',
+                borderRadius: '25px',
                 cursor: 'pointer',
-                fontWeight: 'bold'
+                fontWeight: '900',
+                textTransform: 'uppercase',
+                fontSize: '14px',
+                letterSpacing:'2px'
               }}
             >
-              {isEditing ? 'Preview' : 'Edit'}
+              {isEditing ? '⚡ VISUALIZE RESUME' : '✏️ MODIFY DATA'}
             </button>
             <button
               onClick={onBack}
+              className="pf-glass"
               style={{
-                background: 'transparent',
-                color: currentTheme.textMuted,
-                border: `1px solid ${currentTheme.border}`,
-                padding: '10px 20px',
-                borderRadius: '8px',
-                cursor: 'pointer'
+                border:'none',
+                padding: '20px 45px',
+                borderRadius: '25px',
+                cursor: 'pointer',
+                fontWeight: '900',
+                textTransform: 'uppercase',
+                fontSize: '14px',
+                letterSpacing:'2px'
               }}
             >
-              Back
+              EXIT
             </button>
           </div>
         </div>
 
         {/* Validation Errors */}
-        {validationErrors.length > 0 && (
-          <div style={{
-            background: currentTheme.error + '20',
-            border: '1px solid ' + currentTheme.error + '4D',
-            borderRadius: '8px',
-            padding: '15px',
-            marginBottom: '20px'
+        {validationErrors.length > 0 && isEditing && (
+          <div className="pf-glass" style={{
+            border: 'none',
+            background: 'rgba(255, 107, 107, 0.05) !important',
+            padding: '40px 50px',
+            marginBottom: '50px',
+            borderRadius:'40px',
+            boxShadow: '0 20px 40px rgba(255, 107, 107, 0.1)'
           }}>
-            <h3 style={{ color: currentTheme.error, fontSize: '14px', margin: '0 0 10px 0' }}>Please fix these issues:</h3>
-            <ul style={{ margin: '0', paddingLeft: '20px' }}>
+            <h3 style={{ color: 'var(--brand-coral)', fontSize: '20px', margin: '0 0 20px 0', fontWeight: '900', fontFamily: 'var(--font-display)', letterSpacing:'-0.5px' }}>🚨 OPTIMIZATION REQUIRED:</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
               {validationErrors.map((error, index) => (
-                <li key={index} style={{ color: currentTheme.error, fontSize: '12px', marginBottom: '5px' }}>{error}</li>
+                <div key={index} style={{ color: 'var(--text-heading)', fontSize: '15px', fontWeight: '700', display:'flex', alignItems:'center', gap:'12px' }}>
+                  <div style={{ width:'8px', height:'8px', background:'var(--brand-coral)', borderRadius:'50%' }} />
+                  {error.toUpperCase()}
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
 
         {isEditing ? (
           /* Edit Mode */
-          <div style={{ display: 'flex', gap: '20px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '40px' }}>
             {/* Left Column */}
-            <div style={{ flex: '1' }}>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               {/* Template Selection */}
-              <div style={sectionStyle}>
-                <h2 style={{ fontSize: '18px', marginBottom: '15px', color: currentTheme.accent }}>Choose Template</h2>
-                <div style={{ display: 'flex', gap: '10px' }}>
+              <div className="pf-glass" style={sectionStyle}>
+                <h2 style={{ fontSize: '22px', fontWeight: '900', marginBottom: '30px', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-0.5px' }}>NEURAL TEMPLATE</h2>
+                <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap' }}>
                   {Object.entries(TEMPLATES).map(([key, template]) => (
                     <button
                       key={key}
                       onClick={() => setSelectedTemplate(key)}
+                      className={selectedTemplate === key ? "pf-glow-btn" : "pf-glass"}
                       style={{
-                        background: selectedTemplate === key ? currentTheme.accent : currentTheme.inputBg,
-                        color: '#FFFFFF',
-                        border: `1px solid ${currentTheme.border}`,
-                        padding: '8px 16px',
-                        borderRadius: '6px',
+                        border:'none',
+                        padding: '16px 30px',
+                        borderRadius: '20px',
                         cursor: 'pointer',
-                        fontSize: '12px'
+                        fontSize: '14px',
+                        fontWeight: '900',
+                        textTransform:'uppercase',
+                        letterSpacing:'1.5px'
                       }}
                     >
                       {template.name}
@@ -758,331 +562,121 @@ function ATSResume({ userData, onBack, onProgressUpdate, theme }) {
               </div>
 
               {/* Personal Information */}
-              <div style={sectionStyle}>
-                <h2 style={{ fontSize: '18px', marginBottom: '15px', color: currentTheme.accent }}>Personal Information</h2>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                  <input
-                    style={inputStyle}
-                    placeholder="Full Name *"
-                    value={formData.fullName}
-                    onChange={(e) => handleInputChange('fullName', e.target.value)}
-                  />
-                  <input
-                    style={inputStyle}
-                    placeholder="Email *"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                  />
-                  <input
-                    style={inputStyle}
-                    placeholder="Phone *"
-                    value={formData.phone}
-                    onChange={(e) => handleInputChange('phone', e.target.value)}
-                  />
-                  <input
-                    style={inputStyle}
-                    placeholder="Location"
-                    value={formData.location}
-                    onChange={(e) => handleInputChange('location', e.target.value)}
-                  />
-                  <input
-                    style={inputStyle}
-                    placeholder="Website"
-                    value={formData.website}
-                    onChange={(e) => handleInputChange('website', e.target.value)}
-                  />
-                  <input
-                    style={inputStyle}
-                    placeholder="LinkedIn"
-                    value={formData.linkedin}
-                    onChange={(e) => handleInputChange('linkedin', e.target.value)}
-                  />
+              <div className="pf-glass" style={sectionStyle}>
+                <h2 style={{ fontSize: '22px', fontWeight: '900', marginBottom: '30px', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-0.5px' }}>CORE IDENTITY</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  <input style={inputStyle} placeholder="FULL NAME *" value={formData.fullName} onChange={(e) => handleInputChange('fullName', e.target.value)} />
+                  <input style={inputStyle} placeholder="EMAIL ADDRESS *" type="email" value={formData.email} onChange={(e) => handleInputChange('email', e.target.value)} />
+                  <input style={inputStyle} placeholder="PHONE NUMBER *" value={formData.phone} onChange={(e) => handleInputChange('phone', e.target.value)} />
+                  <input style={inputStyle} placeholder="LOCATION" value={formData.location} onChange={(e) => handleInputChange('location', e.target.value)} />
+                  <input style={inputStyle} placeholder="PORTFOLIO LINK" value={formData.website} onChange={(e) => handleInputChange('website', e.target.value)} />
+                  <input style={inputStyle} placeholder="LINKEDIN" value={formData.linkedin} onChange={(e) => handleInputChange('linkedin', e.target.value)} />
+                  <input style={inputStyle} placeholder="GITHUB" value={formData.github} onChange={(e) => handleInputChange('github', e.target.value)} />
                 </div>
+              </div>
+
+              {/* Summary */}
+              <div className="pf-glass" style={sectionStyle}>
+                <h2 style={{ fontSize: '22px', fontWeight: '900', marginBottom: '30px', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-0.5px' }}>NEURAL SUMMARY</h2>
                 <textarea
-                  style={{ ...inputStyle, minHeight: '100px' }}
-                  placeholder="Professional Summary (min 50 characters) *"
+                  style={{ ...inputStyle, height: '220px', resize: 'none', lineHeight: '1.8' }}
+                  placeholder="SYNTHESIZE YOUR PROFESSIONAL NARRATIVE... (ATS LIKES KEYWORDS RELEVANT TO YOUR DOMAIN)"
                   value={formData.summary}
                   onChange={(e) => handleInputChange('summary', e.target.value)}
                 />
               </div>
-
-              {/* Experience */}
-              <div style={sectionStyle}>
-                <h2 style={{ fontSize: '18px', marginBottom: '15px', color: currentTheme.accent }}>Work Experience</h2>
-                {formData.experience.map((exp, index) => (
-                  <div key={index} style={{ background: currentTheme.inputBg, padding: '15px', borderRadius: '8px', marginBottom: '10px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                      <input
-                        style={{ ...inputStyle, marginBottom: '8px' }}
-                        placeholder="Position"
-                        value={exp.position}
-                        onChange={(e) => updateExperience(index, 'position', e.target.value)}
-                      />
-                      <input
-                        style={{ ...inputStyle, marginBottom: '8px' }}
-                        placeholder="Company"
-                        value={exp.company}
-                        onChange={(e) => updateExperience(index, 'company', e.target.value)}
-                      />
-                      <input
-                        style={{ ...inputStyle, marginBottom: '8px' }}
-                        placeholder="Duration (e.g., Jan 2020 - Present)"
-                        value={exp.duration}
-                        onChange={(e) => updateExperience(index, 'duration', e.target.value)}
-                      />
-                      <input
-                        style={{ ...inputStyle, marginBottom: '8px' }}
-                        placeholder="Location"
-                        value={exp.location}
-                        onChange={(e) => updateExperience(index, 'location', e.target.value)}
-                      />
-                    </div>
-                    <textarea
-                      style={{ ...inputStyle, minHeight: '80px' }}
-                      placeholder="Job description and achievements..."
-                      value={exp.description}
-                      onChange={(e) => updateExperience(index, 'description', e.target.value)}
-                    />
-                    <button
-                      onClick={() => removeExperience(index)}
-                      style={{
-                        background: currentTheme.error,
-                        color: 'white',
-                        border: 'none',
-                        padding: '8px 16px',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        marginTop: '8px'
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  onClick={addExperience}
-                  style={{
-                    background: currentTheme.accentLight,
-                    color: '#FFFFFF',
-                    border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: '8px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Add Experience
-                </button>
-              </div>
             </div>
 
             {/* Right Column */}
-            <div style={{ flex: '1' }}>
-              {/* Education */}
-              <div style={sectionStyle}>
-                <h2 style={{ fontSize: '18px', marginBottom: '15px', color: currentTheme.accent }}>Education</h2>
-                {formData.education.map((edu, index) => (
-                  <div key={index} style={{ background: currentTheme.inputBg, padding: '15px', borderRadius: '8px', marginBottom: '10px' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                      <input
-                        style={{ ...inputStyle, marginBottom: '8px' }}
-                        placeholder="Degree"
-                        value={edu.degree}
-                        onChange={(e) => updateEducation(index, 'degree', e.target.value)}
-                      />
-                      <input
-                        style={{ ...inputStyle, marginBottom: '8px' }}
-                        placeholder="Institution"
-                        value={edu.institution}
-                        onChange={(e) => updateEducation(index, 'institution', e.target.value)}
-                      />
-                      <input
-                        style={{ ...inputStyle, marginBottom: '8px' }}
-                        placeholder="Field of Study"
-                        value={edu.field}
-                        onChange={(e) => updateEducation(index, 'field', e.target.value)}
-                      />
-                      <input
-                        style={{ ...inputStyle, marginBottom: '8px' }}
-                        placeholder="Year"
-                        value={edu.year}
-                        onChange={(e) => updateEducation(index, 'year', e.target.value)}
-                      />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              {/* Experience */}
+              <div className="pf-glass" style={sectionStyle}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px' }}>
+                  <h2 style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-0.5px', margin: 0 }}>PROFESSIONAL LOG</h2>
+                  <button onClick={addExperience} className="pf-glass" style={{ border:'none', padding: '12px 28px', borderRadius: '18px', fontSize: '12px', fontWeight: '900', color: 'var(--brand-teal)', cursor: 'pointer', textTransform:'uppercase', letterSpacing:'1.5px' }}>+ EXP UNIT</button>
+                </div>
+                {formData.experience.map((exp, index) => (
+                  <div key={index} className="pf-glass" style={{ background: 'rgba(0,0,0,0.02) !important', padding: '35px', borderRadius: '30px', marginBottom: '25px', border: '1px solid rgba(0,0,0,0.04) !important' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom:'20px' }}>
+                      <input style={inputStyle} placeholder="ROLE / POSITION" value={exp.position} onChange={(e) => updateExperience(index, 'position', e.target.value)} />
+                      <input style={inputStyle} placeholder="ORGANIZATION" value={exp.company} onChange={(e) => updateExperience(index, 'company', e.target.value)} />
+                      <input style={inputStyle} placeholder="TIMEFRAME" value={exp.duration} onChange={(e) => updateExperience(index, 'duration', e.target.value)} />
+                      <input style={inputStyle} placeholder="GEOGRAPHY" value={exp.location} onChange={(e) => updateExperience(index, 'location', e.target.value)} />
                     </div>
-                    <button
-                      onClick={() => removeEducation(index)}
-                      style={{
-                        background: currentTheme.error,
-                        color: 'white',
-                        border: 'none',
-                        padding: '8px 16px',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        marginTop: '8px'
-                      }}
-                    >
-                      Remove
-                    </button>
+                    <textarea
+                      style={{ ...inputStyle, height: '140px', resize:'none', background:'white !important' }}
+                      placeholder="CORE RESPONSIBILITIES & KEY ACHIEVEMENTS..."
+                      value={exp.description}
+                      onChange={(e) => updateExperience(index, 'description', e.target.value)}
+                    />
+                    <button onClick={() => removeExperience(index)} style={{ border:'none', background:'none', color:'var(--brand-coral)', fontSize:'12px', fontWeight:'900', cursor:'pointer', marginTop:'20px', textTransform:'uppercase', letterSpacing:'1.5px' }}>TERMINATE UNIT</button>
                   </div>
                 ))}
-                <button
-                  onClick={addEducation}
-                  style={{
-                    background: currentTheme.accentLight,
-                    color: '#FFFFFF',
-                    border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: '8px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Add Education
-                </button>
+              </div>
+
+              {/* Education */}
+              <div className="pf-glass" style={sectionStyle}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px' }}>
+                  <h2 style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-0.5px', margin: 0 }}>ACADEMIC RECORD</h2>
+                  <button onClick={addEducation} className="pf-glass" style={{ border:'none', padding: '12px 28px', borderRadius: '18px', fontSize: '12px', fontWeight: '900', color: 'var(--brand-teal)', cursor: 'pointer', textTransform:'uppercase', letterSpacing:'1.5px' }}>+ EDU UNIT</button>
+                </div>
+                {formData.education.map((edu, index) => (
+                  <div key={index} className="pf-glass" style={{ background: 'rgba(0,0,0,0.02) !important', padding: '35px', borderRadius: '30px', marginBottom: '25px', border: '1px solid rgba(0,0,0,0.04) !important' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                      <input style={inputStyle} placeholder="QUALIFICATION / DEGREE" value={edu.degree} onChange={(e) => updateEducation(index, 'degree', e.target.value)} />
+                      <input style={inputStyle} placeholder="INSTITUTION" value={edu.institution} onChange={(e) => updateEducation(index, 'institution', e.target.value)} />
+                      <input style={inputStyle} placeholder="CORE DOMAIN" value={edu.field} onChange={(e) => updateEducation(index, 'field', e.target.value)} />
+                      <input style={inputStyle} placeholder="YEAR" value={edu.year} onChange={(e) => updateEducation(index, 'year', e.target.value)} />
+                    </div>
+                    <button onClick={() => removeEducation(index)} style={{ border:'none', background:'none', color:'var(--brand-coral)', fontSize:'12px', fontWeight:'900', cursor:'pointer', marginTop:'20px', textTransform:'uppercase', letterSpacing:'1.5px' }}>TERMINATE UNIT</button>
+                  </div>
+                ))}
               </div>
 
               {/* Skills */}
-              <div style={sectionStyle}>
-                <h2 style={{ fontSize: '18px', marginBottom: '15px', color: currentTheme.accent }}>Skills</h2>
-                {formData.skills.map((skill, index) => (
-                  <div key={index} style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                    <input
-                      style={{ ...inputStyle, marginBottom: '0', flex: '2' }}
-                      placeholder="Skill name"
-                      value={skill.name}
-                      onChange={(e) => updateSkill(index, 'name', e.target.value)}
-                    />
-                    <select
-                      style={{ ...inputStyle, marginBottom: '0', flex: '1' }}
-                      value={skill.level}
-                      onChange={(e) => updateSkill(index, 'level', e.target.value)}
-                    >
-                      {SKILL_LEVELS.map(level => (
-                        <option key={level} value={level} style={{ background: currentTheme.cardBg }}>{level}</option>
-                      ))}
-                    </select>
-                    <button
-                      onClick={() => removeSkill(index)}
-                      style={{
-                        background: currentTheme.error,
-                        color: 'white',
-                        border: 'none',
-                        padding: '8px 16px',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontSize: '12px'
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  onClick={addSkill}
-                  style={{
-                    background: currentTheme.accentLight,
-                    color: '#FFFFFF',
-                    border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: '8px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Add Skill
-                </button>
-              </div>
-
-              {/* Projects */}
-              <div style={sectionStyle}>
-                <h2 style={{ fontSize: '18px', marginBottom: '15px', color: currentTheme.accent }}>Projects</h2>
-                {formData.projects.map((project, index) => (
-                  <div key={index} style={{ background: currentTheme.inputBg, padding: '15px', borderRadius: '8px', marginBottom: '10px' }}>
-                    <input
-                      style={{ ...inputStyle, marginBottom: '8px' }}
-                      placeholder="Project Name"
-                      value={project.name}
-                      onChange={(e) => updateProject(index, 'name', e.target.value)}
-                    />
-                    <textarea
-                      style={{ ...inputStyle, minHeight: '60px' }}
-                      placeholder="Project description..."
-                      value={project.description}
-                      onChange={(e) => updateProject(index, 'description', e.target.value)}
-                    />
-                    <button
-                      onClick={() => removeProject(index)}
-                      style={{
-                        background: currentTheme.error,
-                        color: 'white',
-                        border: 'none',
-                        padding: '8px 16px',
-                        borderRadius: '6px',
-                        cursor: 'pointer',
-                        fontSize: '12px',
-                        marginTop: '8px'
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  onClick={addProject}
-                  style={{
-                    background: currentTheme.accentLight,
-                    color: '#FFFFFF',
-                    border: 'none',
-                    padding: '10px 20px',
-                    borderRadius: '8px',
-                    cursor: 'pointer'
-                  }}
-                >
-                  Add Project
-                </button>
+              <div className="pf-glass" style={sectionStyle}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '35px' }}>
+                  <h2 style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', fontFamily: 'var(--font-display)', letterSpacing:'-0.5px', margin: 0 }}>SKILL MATRIX</h2>
+                  <button onClick={addSkill} className="pf-glass" style={{ border:'none', padding: '12px 28px', borderRadius: '18px', fontSize: '12px', fontWeight: '900', color: 'var(--brand-teal)', cursor: 'pointer', textTransform:'uppercase', letterSpacing:'1.5px' }}>+ SKILL</button>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '20px' }}>
+                  {formData.skills.map((skill, index) => (
+                    <div key={index} className="pf-glass" style={{ background: 'white !important', padding: '20px', borderRadius: '25px', position:'relative', border: '1px solid rgba(0,0,0,0.05) !important' }}>
+                      <input style={{ ...inputStyle, padding:'12px', fontSize:'14px', marginBottom:'10px', boxShadow:'none', border:'1px solid rgba(0,0,0,0.04)' }} placeholder="SKILL" value={skill.name} onChange={(e) => updateSkill(index, 'name', e.target.value)} />
+                      <select style={{ ...inputStyle, padding:'12px', fontSize:'13px', marginBottom:0, background:'rgba(0,0,0,0.03) !important', boxShadow:'none' }} value={skill.level} onChange={(e) => updateSkill(index, 'level', e.target.value)}>
+                        {SKILL_LEVELS.map(l => <option key={l} value={l}>{l}</option>)}
+                      </select>
+                      <button onClick={() => removeSkill(index)} style={{ position:'absolute', top:'-10px', right:'-10px', border:'none', background:'var(--brand-coral)', color:'white', width:'28px', height:'28px', borderRadius:'50%', fontSize:'16px', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center', fontWeight:'900', boxShadow: '0 5px 15px rgba(255, 107, 107, 0.3)' }}>×</button>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         ) : (
           /* Preview Mode */
-          <div>
+          <div style={{ animation:'pf-fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1)' }}>
             {/* Export Options */}
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', justifyContent: 'center' }}>
-              <button
-                onClick={exportToPDF}
-                style={{
-                  background: currentTheme.accent,
-                  color: '#FFFFFF',
-                  border: 'none',
-                  padding: '12px 24px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold'
-                }}
-              >
-                📄 Export to PDF
-              </button>
-              <button
-                onClick={exportToWord}
-                style={{
-                  background: currentTheme.accentLight,
-                  color: '#FFFFFF',
-                  border: 'none',
-                  padding: '12px 24px',
-                  borderRadius: '8px',
-                  cursor: 'pointer',
-                  fontWeight: 'bold'
-                }}
-              >
-                📝 Export to Word
-              </button>
+            <div style={{ display: 'flex', gap: '20px', marginBottom: '50px', justifyContent: 'center' }}>
+              <button onClick={exportToPDF} className="pf-glow-btn" style={{ border:'none', padding: '22px 55px', borderRadius: '30px', fontWeight: '900', textTransform: 'uppercase', letterSpacing:'2.5px', fontSize:'15px' }}>📄 SYNTHESIZE PDF</button>
+              <button onClick={exportToWord} className="pf-glass" style={{ border:'none', padding: '22px 55px', borderRadius: '30px', fontWeight: '900', textTransform: 'uppercase', letterSpacing:'2.5px', fontSize:'15px' }}>📝 EXPORT DOCX</button>
             </div>
 
             {/* Resume Preview */}
-            {renderTemplate()}
+            <div style={{ maxWidth:'1000px', margin:'0 auto' }}>
+              {renderTemplate()}
+            </div>
           </div>
         )}
       </div>
+
+      <style>{`
+        @media print {
+          body * { visibility: hidden; }
+          .pf-resume-paper, .pf-resume-paper * { visibility: visible; }
+          .pf-resume-paper { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; padding: 0; border-radius: 0; }
+        }
+      `}</style>
     </div>
   );
 }

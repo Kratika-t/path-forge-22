@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { analyzeResumeWithGemini } from './gemini';
 
-const defaultTheme = { pageBg:'#1D2226', cardBg:'#1B1F23', inputBg:'#283039', border:'#38434F', textPrimary:'#E7E9EA', textMuted:'#B0B7BF', accent:'#0A66C2', accentHover:'#004182', accentLight:'#70B5F9', success:'#057642', warning:'#F5C518', error:'#CC1016' };
+const defaultTheme = { 
+  pageBg:'transparent', 
+  cardBg:'rgba(255, 255, 255, 0.7)', 
+  inputBg:'rgba(255, 255, 255, 0.8)', 
+  border:'none', 
+  textPrimary:'var(--text-heading)', 
+  textMuted:'var(--text-body)', 
+  accent:'var(--brand-teal)', 
+  accentHover:'var(--brand-yellow)', 
+  accentLight:'rgba(0, 212, 170, 0.1)', 
+  success:'var(--brand-teal)', 
+  warning:'var(--brand-yellow)', 
+  error:'var(--brand-coral)' 
+};
 
 export default function ResumeAnalysis({ onComplete, onBack, theme = defaultTheme }) {
   const [mode, setMode] = useState(null); // 'skilled' or 'beginner'
@@ -48,16 +61,6 @@ export default function ResumeAnalysis({ onComplete, onBack, theme = defaultThem
 
   const [auditReport, setAuditReport] = useState(null);
   const [fraudAlert, setFraudAlert] = useState(null);
-
-  // Layer 2: Resume Content Keywords — must be present in a real resume
-  const RESUME_KEYWORDS = [
-    'experience', 'education', 'skills', 'projects', 'internship',
-    'bachelor', 'master', 'university', 'college', 'certification',
-    'objective', 'summary', 'work', 'employment', 'profile',
-    'java', 'python', 'react', 'html', 'css', 'javascript', 'node',
-    'sql', 'aws', 'git', 'github', 'linux', 'flutter', 'figma',
-    'gpa', 'cgpa', 'b.tech', 'b.e', 'mca', 'bca', 'computer science'
-  ];
 
   const handleFileUpload = (e) => {
     const uploadedFile = e.target.files[0];
@@ -212,164 +215,176 @@ export default function ResumeAnalysis({ onComplete, onBack, theme = defaultThem
   };
 
   const cardStyle = {
-    background: theme.cardBg,
-    backdropFilter: 'blur(10px)',
-    border: `1px solid ${theme.border}`,
-    borderRadius: '24px',
-    padding: '40px',
+    background: 'rgba(255, 255, 255, 0.75)',
+    borderRadius: '45px',
+    padding: '60px',
     textAlign: 'center',
-    maxWidth: '500px',
+    maxWidth: '650px',
     width: '100%',
-    boxShadow: '0 20px 50px rgba(0,0,0,0.3)'
+    boxShadow: '0 30px 80px rgba(0,0,0,0.06)',
+    border: 'none',
+    animation: 'fadeSlideIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) both',
   };
 
   const buttonStyle = {
-    padding: '16px 32px',
-    borderRadius: '12px',
+    padding: '22px 35px',
+    borderRadius: '20px',
     border: 'none',
     fontSize: '16px',
-    fontWeight: 'bold',
+    fontWeight: '900',
     cursor: 'pointer',
-    transition: 'all 0.3s ease',
+    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
     width: '100%',
-    marginBottom: '12px'
+    marginBottom: '15px',
+    letterSpacing:'0.5px'
   };
 
   if (analyzing) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: theme.pageBg, color: theme.textPrimary }}>
-        <div style={cardStyle}>
-          <div className="loader" style={{ fontSize: '40px', marginBottom: '20px' }}>🧠</div>
-          <h2 style={{ fontSize: '24px', marginBottom: '10px' }}>AI is Analyzing...</h2>
-          <p style={{ color: theme.textMuted }}>
-            {mode === 'skilled' ? 'Extracting skills from your resume...' : 'Mapping your Career DNA...'}
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', color: 'var(--text-body)', fontFamily:'var(--font-main)' }}>
+        <div className="pf-glass" style={cardStyle}>
+          <div className="loader" style={{ fontSize: '70px', marginBottom: '35px', filter:'drop-shadow(0 0 20px var(--brand-teal))' }}>🧠</div>
+          <h2 style={{ fontSize: '32px', fontWeight: '900', marginBottom: '15px', fontFamily:'var(--font-display)', letterSpacing:'-1.5px' }}>Neural Synapse Scan</h2>
+          <p style={{ color: 'var(--text-body)', fontWeight:'700', opacity:0.6, fontSize:'17px' }}>
+            {mode === 'skilled' ? 'Extracting multi-dimensional skills from your resume...' : 'Mapping your unique Career DNA architecture...'}
           </p>
-          <div style={{ width: '100%', height: '4px', background: theme.border, borderRadius: '2px', marginTop: '20px', overflow: 'hidden' }}>
-            <div style={{ width: '60%', height: '100%', background: theme.accent, borderRadius: '2px' }} className="progress-bar-anim"></div>
+          <div style={{ width: '100%', height: '8px', background: 'rgba(0,0,0,0.05)', borderRadius: '4px', marginTop: '40px', overflow: 'hidden' }}>
+            <div style={{ width: '60%', height: '100%', background: 'var(--brand-teal)', borderRadius: '4px', boxShadow:'0 0 15px rgba(0, 212, 170, 0.5)' }} className="progress-bar-anim"></div>
           </div>
         </div>
         <style>{`
           @keyframes progress { 0% { transform: translateX(-100%); } 100% { transform: translateX(200%); } }
-          .progress-bar-anim { animation: progress 1.5s infinite linear; }
+          @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+          .progress-bar-anim { animation: progress 2s infinite cubic-bezier(0.4, 0, 0.2, 1); }
         `}</style>
       </div>
     );
   }
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: theme.pageBg, color: theme.textPrimary, padding: '20px' }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: 'transparent', color: 'var(--text-body)', padding: '40px 20px', fontFamily:'var(--font-main)' }}>
 
       {!mode ? (
-        <div style={cardStyle}>
-          <h1 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '10px', color: theme.accent }}>Who are you?</h1>
-          <p style={{ color: theme.textMuted, marginBottom: '30px' }}>Select your path to start your personalized journey.</p>
+        <div className="pf-glass" style={cardStyle}>
+          <h1 className="pf-shimmer-text" style={{ fontSize: '56px', fontWeight: '900', marginBottom: '15px', fontFamily:'var(--font-display)', letterSpacing:'-3px' }}>PROTOCOL SELECT</h1>
+          <p style={{ color: 'var(--text-body)', marginBottom: '50px', fontSize:'20px', fontWeight:'700', opacity:0.6 }}>Define your entry point to initialize the PathForge engine.</p>
 
           <button
             onClick={() => setMode('skilled')}
-            style={{ ...buttonStyle, background: theme.accent, color: '#FFFFFF' }}
+            className="pf-glow-btn"
+            style={{ ...buttonStyle, background: 'var(--brand-teal)', color: '#FFFFFF', textTransform:'uppercase', letterSpacing:'1.5px' }}
           >
-            📄 I have a Resume (Skilled)
+            📄 RESUME AUDIT (SKILLED)
           </button>
 
           <button
             onClick={() => setMode('beginner')}
-            style={{ ...buttonStyle, background: theme.inputBg, color: theme.textPrimary, border: `1px solid ${theme.border}` }}
+            className="pf-glass"
+            style={{ ...buttonStyle, background: 'white', color: 'var(--text-heading)', border: 'none', textTransform:'uppercase', letterSpacing:'1.5px', boxShadow:'0 10px 30px rgba(0,0,0,0.03)' }}
           >
-            🌱 I am a Beginner (No Exp)
+            🌱 DNA MAPPING (BEGINNER)
           </button>
 
-          <button onClick={onBack} style={{ background: 'transparent', color: theme.textMuted, border: 'none', cursor: 'pointer', marginTop: '10px' }}>← Go Back</button>
+          <button onClick={onBack} style={{ background: 'transparent', color: 'var(--text-body)', border: 'none', cursor: 'pointer', marginTop: '25px', fontWeight:'900', fontSize:'13px', letterSpacing:'1.5px', opacity:0.5 }}>← PREVIOUS PHASE</button>
         </div>
       ) : mode === 'skilled' ? (
-        <div style={cardStyle}>
-          <h2 style={{ fontSize: '24px', marginBottom: '10px' }}>Upload your Resume</h2>
-          <p style={{ color: theme.textMuted, marginBottom: '20px' }}>Our AI will scan your file content and generate a verified skill report.</p>
+        <div className="pf-glass" style={cardStyle}>
+          <h2 style={{ fontSize: '36px', fontWeight: '900', marginBottom: '15px', fontFamily:'var(--font-display)', letterSpacing:'-1.5px' }}>RESUME UPLOAD</h2>
+          <p style={{ color: 'var(--text-body)', marginBottom: '40px', fontWeight:'700', opacity:0.6, fontSize:'17px' }}>Our Neural Scanner will audit your document to generate a verified skill matrix.</p>
 
           {/* Fraud Alert Box */}
           {fraudAlert && (
-            <div style={{ background: 'rgba(231,76,60,0.15)', border: `1px solid ${theme.error}`, borderRadius: '12px', padding: '16px', marginBottom: '20px', textAlign: 'left' }}>
-              <p style={{ color: theme.error, fontWeight: 'bold', marginBottom: '8px' }}>🚫 Upload Rejected</p>
-              <p style={{ color: theme.textPrimary, fontSize: '13px', lineHeight: '1.6' }}>{fraudAlert.message}</p>
-              {fraudAlert.found && fraudAlert.found.length > 0 && (
-                <p style={{ color: theme.textMuted, fontSize: '12px', marginTop: '8px' }}>Detected signals: {fraudAlert.found.join(', ')}</p>
-              )}
+            <div className="pf-glass" style={{ background: 'rgba(255,107,107,0.1)', border: 'none', borderRadius: '25px', padding: '25px 35px', marginBottom: '35px', textAlign: 'left', animation:'fadeSlideIn 0.4s ease' }}>
+              <p style={{ color: 'var(--brand-coral)', fontWeight: '900', marginBottom: '10px', fontSize:'16px', letterSpacing:'-0.5px' }}>🚫 UPLOAD ANOMALY DETECTED</p>
+              <p style={{ color: 'var(--text-heading)', fontSize: '15px', lineHeight: '1.6', fontWeight:'700' }}>{fraudAlert.message}</p>
             </div>
           )}
 
           {/* Audit Report Card (shown after successful scan) */}
           {auditReport && (
-            <div style={{ background: 'rgba(46,204,113,0.08)', border: `1px solid ${theme.success}`, borderRadius: '12px', padding: '16px', marginBottom: '20px', textAlign: 'left' }}>
-              <p style={{ color: theme.success, fontWeight: 'bold', marginBottom: '12px' }}>✅ Resume Verified — Generating Report...</p>
-              <p style={{ color: theme.textMuted, fontSize: '12px', marginBottom: '8px' }}>🔍 Domain Detected: <strong style={{ color: theme.textPrimary }}>{auditReport.skillTitle}</strong></p>
-              <p style={{ color: theme.textMuted, fontSize: '12px', marginBottom: '8px' }}>📊 Signals Found: <strong style={{ color: theme.accent }}>{auditReport.keywordScore}</strong></p>
-              <p style={{ color: theme.textMuted, fontSize: '12px', marginBottom: '8px' }}>🏷️ Status: <strong style={{ color: auditReport.readinessLevel === 'Industry Ready' ? theme.success : theme.warning }}>{auditReport.readinessLevel}</strong></p>
-              <div style={{ marginTop: '12px', fontSize: '12px', lineHeight: '1.8' }}>
+            <div className="pf-glass" style={{ background: 'rgba(0, 212, 170, 0.1)', border: 'none', borderRadius: '30px', padding: '30px 40px', marginBottom: '35px', textAlign: 'left', animation:'fadeSlideIn 0.4s ease' }}>
+              <p style={{ color: 'var(--brand-teal)', fontWeight: '900', marginBottom: '20px', fontSize:'18px', letterSpacing:'-0.5px' }}>✅ RESUME AUDIT SUCCESSFUL</p>
+              <div style={{ display:'grid', gap:'12px' }}>
+                <p style={{ color: 'var(--text-body)', fontSize: '14px', fontWeight:'800', opacity:0.6, textTransform:'uppercase', letterSpacing:'1px' }}>🔍 DOMAIN: <span style={{ color: 'var(--text-heading)', opacity:1 }}>{auditReport.skillTitle.toUpperCase()}</span></p>
+                <p style={{ color: 'var(--text-body)', fontSize: '14px', fontWeight:'800', opacity:0.6, textTransform:'uppercase', letterSpacing:'1px' }}>📊 SIGNALS: <span style={{ color: 'var(--brand-teal)', opacity:1 }}>{auditReport.keywordScore} DETECTED</span></p>
+                <p style={{ color: 'var(--text-body)', fontSize: '14px', fontWeight:'800', opacity:0.6, textTransform:'uppercase', letterSpacing:'1px' }}>🏷️ STATUS: <span style={{ color: auditReport.readinessLevel === 'Industry Ready' ? 'var(--brand-teal)' : 'var(--brand-yellow)', opacity:1 }}>{auditReport.readinessLevel.toUpperCase()}</span></p>
+              </div>
+              <div style={{ marginTop: '20px', padding:'15px', background:'white', borderRadius:'18px', fontSize: '13px', lineHeight: '1.8', fontWeight:'700' }}>
                 {auditReport.whyThisScore.map((line, i) => (
-                  <div key={i} style={{ color: theme.textPrimary }}>{line}</div>
+                  <div key={i} style={{ color: 'var(--text-heading)', display:'flex', gap:'8px' }}><span>•</span> {line}</div>
                 ))}
               </div>
             </div>
           )}
 
           {!auditReport && (
-            <div style={{ border: `2px dashed ${theme.border}`, borderRadius: '16px', padding: '40px', marginBottom: '20px', cursor: 'pointer' }} onClick={() => document.getElementById('resume-up').click()}>
-              <span style={{ fontSize: '40px' }}>📥</span>
-              <p style={{ marginTop: '10px', fontSize: '14px', color: theme.textPrimary }}>Click to upload PDF or Docx</p>
-              <p style={{ fontSize: '11px', color: theme.textMuted, marginTop: '6px' }}>Our AI will verify the content — fake uploads will be rejected</p>
+            <div className="pf-glass" style={{ border: '2px dashed rgba(0, 212, 170, 0.3)', borderRadius: '35px', padding: '60px 40px', marginBottom: '40px', cursor: 'pointer', background:'white', transition:'all 0.3s' }} onClick={() => document.getElementById('resume-up').click()}>
+              <span style={{ fontSize: '60px', display:'block', marginBottom:'15px' }}>📥</span>
+              <p style={{ fontSize: '18px', color: 'var(--text-heading)', fontWeight:'900', fontFamily:'var(--font-display)' }}>TRANSMIT DOCUMENT</p>
+              <p style={{ fontSize: '13px', color: 'var(--text-body)', marginTop: '10px', fontWeight:'700', opacity:0.5 }}>PDF or DOCX format required for Neural Scan</p>
               <input id="resume-up" type="file" hidden onChange={handleFileUpload} accept=".pdf,.doc,.docx" />
             </div>
           )}
 
-          <button onClick={() => { setMode(null); setFraudAlert(null); setAuditReport(null); }} style={{ background: 'transparent', color: theme.textMuted, border: 'none', cursor: 'pointer' }}>← Back</button>
+          <button onClick={() => { setMode(null); setFraudAlert(null); setAuditReport(null); }} style={{ background: 'transparent', color: 'var(--text-body)', border: 'none', cursor: 'pointer', fontWeight:'900', fontSize:'13px', letterSpacing:'1.5px', opacity:0.5 }}>← PREVIOUS PHASE</button>
         </div>
       ) : (
-        <div style={cardStyle}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-            <span style={{ fontSize: '12px', color: theme.accent, fontWeight: 'bold' }}>QUESTION {quizStep + 1} OF {beginnerQuestions.length}</span>
-            <span style={{ fontSize: '12px', color: theme.textMuted }}>Potential Mapping</span>
+        <div className="pf-glass" style={cardStyle}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px', alignItems:'center' }}>
+            <span style={{ fontSize: '12px', color: 'var(--brand-teal)', fontWeight: '900', letterSpacing:'2px' }}>STEP {quizStep + 1} / {beginnerQuestions.length}</span>
+            <span style={{ fontSize: '12px', color: 'var(--text-body)', fontWeight:'900', opacity:0.4, letterSpacing:'1px' }}>DNA POTENTIAL MAPPING</span>
           </div>
-          <h2 style={{ fontSize: '22px', marginBottom: '24px', textAlign: 'left', color: theme.textPrimary }}>{beginnerQuestions[quizStep].question}</h2>
+          <h2 style={{ fontSize: '32px', marginBottom: '45px', textAlign: 'left', color: 'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-1px', lineHeight:'1.1' }}>{beginnerQuestions[quizStep].question}</h2>
 
           {showOtherInput ? (
-            <div style={{ animation: 'fadeSlideIn 0.3s ease both' }}>
+            <div style={{ animation: 'fadeSlideIn 0.4s ease both' }}>
               <input 
                 type="text" 
-                placeholder="Type your skill/interest (e.g. Game Dev)" 
+                placeholder="DEFINE YOUR INTEREST..." 
                 value={otherText}
                 onChange={(e) => setOtherText(e.target.value)}
                 autoFocus
-                style={{ width: '100%', padding: '16px', borderRadius: '12px', border: `1px solid ${theme.accent}`, background: theme.inputBg, color: theme.textPrimary, fontSize: '16px', marginBottom: '16px', outline: 'none' }}
+                style={{ width: '100%', padding: '24px', borderRadius: '22px', border: 'none', background: 'white', color: 'var(--text-heading)', fontSize: '18px', marginBottom: '25px', outline: 'none', fontWeight:'900', fontFamily:'var(--font-display)', boxShadow:'0 10px 30px rgba(0,0,0,0.03)' }}
               />
               <button 
                 onClick={submitOther}
-                style={{ ...buttonStyle, background: theme.accent, color: '#FFFFFF' }}
+                className="pf-glow-btn"
+                style={{ ...buttonStyle, background: 'var(--brand-teal)', color: '#FFFFFF', textTransform:'uppercase', letterSpacing:'2px' }}
               >
-                Confirm Interest →
+                INITIALIZE MAPPING →
               </button>
               <button 
                 onClick={() => setShowOtherInput(false)}
-                style={{ background: 'transparent', color: theme.textMuted, border: 'none', cursor: 'pointer', fontSize: '13px' }}
+                style={{ background: 'transparent', color: 'var(--text-body)', border: 'none', cursor: 'pointer', fontSize: '12px', fontWeight:'900', letterSpacing:'1px', opacity:0.5 }}
               >
-                ← Choose from list
+                ← SELECT FROM PRESETS
               </button>
             </div>
           ) : (
-            beginnerQuestions[quizStep].options.map((opt, i) => (
-              <button 
-                key={i} 
-                onClick={() => handleBeginnerChoice(opt.value)}
-                style={{ ...buttonStyle, background: theme.inputBg, color: theme.textPrimary, textAlign: 'left', border: `1px solid ${theme.border}`, fontSize: '14px', padding: '20px' }}
-              >
-                {opt.label}
-              </button>
-            ))
+            <div style={{ display:'grid', gap:'12px' }}>
+              {beginnerQuestions[quizStep].options.map((opt, i) => (
+                <button 
+                  key={i} 
+                  onClick={() => handleBeginnerChoice(opt.value)}
+                  className="pf-glass"
+                  style={{ ...buttonStyle, background: 'white', color: 'var(--text-heading)', textAlign: 'left', border: 'none', fontSize: '15px', padding: '24px 35px', fontWeight:'800', boxShadow:'0 8px 25px rgba(0,0,0,0.02)', display:'flex', alignItems:'center', justifyContent:'space-between' }}
+                >
+                  <span>{opt.label}</span>
+                  <span style={{ fontSize:'20px', opacity:0.3 }}>→</span>
+                </button>
+              ))}
+            </div>
           )}
           
           {!showOtherInput && (
-            <button onClick={() => setMode(null)} style={{ background: 'transparent', color: theme.textMuted, border: 'none', cursor: 'pointer', marginTop: '10px' }}>← Cancel</button>
+            <button onClick={() => setMode(null)} style={{ background: 'transparent', color: 'var(--text-body)', border: 'none', cursor: 'pointer', marginTop: '30px', fontWeight:'900', fontSize:'13px', letterSpacing:'1.5px', opacity:0.5 }}>← ABORT MAPPING</button>
           )}
         </div>
       )}
+      <style>{`
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+      `}</style>
     </div>
   );
 }
+

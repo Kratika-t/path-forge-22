@@ -256,7 +256,20 @@ const CERTIFICATIONS_DATA = {
   ]
 };
 
-const defaultTheme = { pageBg:'#1D2226', cardBg:'#1B1F23', inputBg:'#283039', border:'#38434F', textPrimary:'#E7E9EA', textMuted:'#B0B7BF', accent:'#0A66C2', accentHover:'#004182', accentLight:'#70B5F9', success:'#057642', warning:'#F5C518', error:'#CC1016' };
+const defaultTheme = { 
+  pageBg:'var(--bg-base)', 
+  cardBg:'var(--glass-bg)', 
+  inputBg:'rgba(255, 255, 255, 0.6)', 
+  border:'var(--glass-border)', 
+  textPrimary:'var(--text-heading)', 
+  textMuted:'var(--text-body)', 
+  accent:'var(--brand-teal)', 
+  accentHover:'var(--brand-yellow)', 
+  accentLight:'rgba(0, 212, 170, 0.1)', 
+  success:'var(--brand-teal)', 
+  warning:'var(--brand-yellow)', 
+  error:'var(--brand-coral)' 
+};
 
 export default function Certifications({ userData, onBack, onProgressUpdate, theme = defaultTheme }) {
   const [selectedCategory, setSelectedCategory] = useState('Frontend Development');
@@ -319,37 +332,39 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
     return (
       <div style={{
         minHeight: '100vh',
-        background: theme.pageBg,
-        color: theme.textPrimary,
-        fontFamily: 'Arial, sans-serif',
-        padding: '20px'
+        background: 'var(--bg-base)',
+        color: 'var(--text-body)',
+        fontFamily: 'var(--font-main)',
+        padding: '80px 20px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent:'space-between', maxWidth: '1400px', margin: '0 auto 60px' }}>
           <button 
             onClick={() => setCurrentVideo(null)}
+            className="pf-glass"
             style={{
-              background: 'transparent', color: theme.textMuted,
-              border: `1px solid ${theme.border}`, padding: '8px 18px',
-              borderRadius: '20px', cursor: 'pointer', fontSize: '13px'
+              border: 'none', color: 'var(--text-body)',
+              padding: '16px 35px', borderRadius: '25px', cursor: 'pointer', fontSize: '13px', fontWeight:'900', letterSpacing:'1.5px', textTransform:'uppercase'
             }}
           >
-            ← Back to Course
+            ← BACK TO COURSE
           </button>
-          <h1 style={{ color: theme.accent, fontSize: '22px', fontWeight: 'bold' }}>⚡ PathForge</h1>
+          <h1 className="pf-shimmer-text" style={{ fontSize: '32px', fontWeight: '900', fontFamily:'var(--font-display)', margin:0, letterSpacing:'-1px' }}>⚡ PathForge Academy</h1>
         </div>
 
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '24px' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '2.2fr 1fr', gap: '40px' }}>
             {/* Video Player */}
             <div>
-              <div style={{
-                background: theme.cardBg,
-                border: `1px solid ${theme.border}`,
-                borderRadius: '16px',
+              <div className="pf-glass" style={{
+                borderRadius: '32px',
                 overflow: 'hidden',
-                marginBottom: '16px'
+                marginBottom: '40px',
+                background:'white !important',
+                padding:'20px',
+                border:'none',
+                boxShadow:'0 40px 100px rgba(0,0,0,0.05)'
               }}>
-                <div style={{ position: 'relative', paddingBottom: '56.25%' }}>
+                <div style={{ position: 'relative', paddingBottom: '56.25%', borderRadius:'20px', overflow:'hidden' }}>
                   <iframe
                     src={currentVideo.url}
                     title={currentVideo.title}
@@ -366,25 +381,26 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
                 </div>
               </div>
               
-              <div style={{ textAlign: 'center' }}>
-                <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px' }}>
+              <div className="pf-glass" style={{ textAlign: 'center', padding:'50px', background:'white !important', borderRadius:'32px' }}>
+                <h3 style={{ fontSize: '38px', fontWeight: '900', marginBottom: '15px', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-1px' }}>
                   {currentVideo.title}
                 </h3>
-                <p style={{ color: theme.textMuted }}>
+                <p style={{ color: 'var(--text-muted)', fontWeight:'700', fontSize: '18px' }}>
                   Duration: {currentVideo.duration}
                 </p>
                 <button
                   onClick={() => handleVideoComplete(selectedCourse.id, currentVideo.id)}
+                  className="pf-glow-btn"
                   style={{
-                    background: theme.success,
-                    color: '#FFFFFF',
                     border: 'none',
-                    padding: '12px 24px',
-                    borderRadius: '20px',
-                    fontSize: '14px',
-                    fontWeight: 'bold',
+                    padding: '22px 60px',
+                    borderRadius: '40px',
+                    fontSize: '18px',
+                    fontWeight: '900',
                     cursor: 'pointer',
-                    marginTop: '16px'
+                    marginTop: '35px',
+                    textTransform:'uppercase',
+                    letterSpacing:'2px'
                   }}
                 >
                   ✅ Mark as Completed
@@ -393,44 +409,48 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
             </div>
 
             {/* Course Content */}
-            <div>
-              <h4 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '16px' }}>
+            <div className="pf-glass" style={{ padding:'40px', background:'white !important', borderRadius:'32px', height:'fit-content' }}>
+              <h4 style={{ fontSize: '24px', fontWeight: '900', marginBottom: '35px', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-0.5px' }}>
                 Course Content
               </h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {selectedCourse.videos.map((video, index) => (
                   <div
                     key={video.id}
                     onClick={() => setCurrentVideo(video)}
+                    className="pf-glass"
                     style={{
-                      background: completedVideos[video.id] ? theme.success + '1A' : theme.cardBg,
-                      border: completedVideos[video.id] ? `1px solid ${theme.success}` : `1px solid ${theme.border}`,
-                      borderRadius: '12px',
-                      padding: '12px',
+                      background: currentVideo?.id === video.id ? 'var(--brand-teal) !important' : (completedVideos[video.id] ? 'rgba(0, 212, 170, 0.05) !important' : 'rgba(0,0,0,0.02) !important'),
+                      borderRadius: '20px',
+                      padding: '24px',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '12px'
+                      gap: '20px',
+                      transition:'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                      border:'none'
                     }}
                   >
-                    <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '8px',
-                      background: currentVideo?.id === video.id ? theme.accent : theme.inputBg,
+                    <div className="pf-glass" style={{
+                      width: '44px',
+                      height: '44px',
+                      borderRadius: '14px',
+                      background: currentVideo?.id === video.id ? 'white' : (completedVideos[video.id] ? 'var(--brand-teal)' : 'white'),
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '14px',
-                      fontWeight: 'bold'
+                      fontSize: '18px',
+                      fontWeight: '900',
+                      color: currentVideo?.id === video.id ? 'var(--brand-teal)' : (completedVideos[video.id] ? 'white' : 'var(--text-heading)'),
+                      border:'none'
                     }}>
                       {completedVideos[video.id] ? '✓' : index + 1}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '14px', fontWeight: '600' }}>
+                      <div style={{ fontSize: '17px', fontWeight: '800', color: currentVideo?.id === video.id ? 'white' : 'var(--text-heading)' }}>
                         {video.title}
                       </div>
-                      <div style={{ fontSize: '12px', color: theme.textMuted }}>
+                      <div style={{ fontSize: '14px', color: currentVideo?.id === video.id ? 'rgba(255,255,255,0.8)' : 'var(--text-muted)', fontWeight:'700' }}>
                         {video.duration}
                       </div>
                     </div>
@@ -450,153 +470,165 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
     return (
       <div style={{
         minHeight: '100vh',
-        background: theme.pageBg,
-        color: theme.textPrimary,
-        fontFamily: 'Arial, sans-serif',
-        padding: '20px'
+        background: 'var(--bg-base)',
+        color: 'var(--text-body)',
+        fontFamily: 'var(--font-main)',
+        padding: '80px 20px'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent:'space-between', maxWidth: '1200px', margin: '0 auto 60px' }}>
           <button 
             onClick={() => setSelectedCourse(null)}
+            className="pf-glass"
             style={{
-              background: 'transparent', color: theme.textMuted,
-              border: `1px solid ${theme.border}`, padding: '8px 18px',
-              borderRadius: '20px', cursor: 'pointer', fontSize: '13px'
+              border: 'none', color: 'var(--text-body)',
+              padding: '16px 35px', borderRadius: '25px', cursor: 'pointer', fontSize: '13px', fontWeight:'900', letterSpacing:'1.5px', textTransform:'uppercase'
             }}
           >
-            ← Back to Certifications
+            ← BACK TO COURSES
           </button>
-          <h1 style={{ color: theme.accent, fontSize: '22px', fontWeight: 'bold' }}>⚡ PathForge</h1>
+          <h1 className="pf-shimmer-text" style={{ fontSize: '32px', fontWeight: '900', fontFamily:'var(--font-display)', margin:0, letterSpacing:'-1px' }}>⚡ PathForge Academy</h1>
         </div>
 
-        <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{
-            background: theme.cardBg,
-            border: `1px solid ${theme.border}`,
-            borderRadius: '20px',
-            padding: '32px',
-            marginBottom: '24px'
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div className="pf-glass" style={{
+            background: 'white !important',
+            padding: '60px',
+            marginBottom: '60px',
+            borderRadius: '50px',
+            boxShadow:'0 40px 100px rgba(0,0,0,0.05)',
+            border:'none'
           }}>
-            <div style={{ display: 'flex', gap: '32px', marginBottom: '24px' }}>
-              <img 
-                src={selectedCourse.thumbnail}
-                alt={selectedCourse.title}
-                style={{
-                  width: '200px',
-                  height: '150px',
-                  borderRadius: '12px',
-                  objectFit: 'cover'
-                }}
-              />
+            <div style={{ display: 'flex', gap: '60px', marginBottom: '60px', alignItems:'flex-start' }}>
+              <div className="pf-glass" style={{ padding:'15px', borderRadius:'32px', background:'white', border:'none', boxShadow:'0 30px 70px rgba(0,0,0,0.08)' }}>
+                <img 
+                  src={selectedCourse.thumbnail}
+                  alt={selectedCourse.title}
+                  style={{
+                    width: '320px',
+                    height: '240px',
+                    borderRadius: '20px',
+                    objectFit: 'cover'
+                  }}
+                />
+              </div>
               <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px' }}>
-                  <span style={{
-                    background: theme.inputBg,
-                    color: theme.accent,
-                    padding: '4px 12px',
-                    borderRadius: '20px',
-                    fontSize: '12px',
-                    fontWeight: 'bold'
+                <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '25px' }}>
+                  <span className="pf-glass" style={{
+                    background: 'var(--brand-teal)',
+                    color: 'white',
+                    padding: '8px 24px',
+                    borderRadius: '25px',
+                    fontSize: '13px',
+                    fontWeight: '900',
+                    border:'none',
+                    letterSpacing:'1.5px'
                   }}>
-                    {selectedCourse.provider}
+                    {selectedCourse.provider.toUpperCase()}
                   </span>
-                  <span style={{
-                    background: theme.inputBg,
-                    color: theme.accentLight,
-                    padding: '4px 12px',
-                    borderRadius: '20px',
-                    fontSize: '12px',
-                    fontWeight: 'bold'
+                  <span className="pf-glass" style={{
+                    background: 'rgba(0,0,0,0.03)',
+                    color: 'var(--text-heading)',
+                    padding: '8px 24px',
+                    borderRadius: '25px',
+                    fontSize: '13px',
+                    fontWeight: '900',
+                    border:'none',
+                    letterSpacing:'1.5px'
                   }}>
-                    {selectedCourse.level}
+                    {selectedCourse.level.toUpperCase()}
                   </span>
                 </div>
-                <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '12px' }}>
+                <h2 style={{ fontSize: '48px', fontWeight: '900', marginBottom: '20px', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-1.5px', lineHeight:1.1 }}>
                   {selectedCourse.title}
                 </h2>
-                <p style={{ color: theme.textMuted, lineHeight: '1.6', marginBottom: '16px' }}>
+                <p style={{ color: 'var(--text-muted)', lineHeight: '1.7', marginBottom: '35px', fontWeight:'600', fontSize:'18px' }}>
                   {selectedCourse.description}
                 </p>
-                <div style={{ display: 'flex', gap: '24px', fontSize: '14px', color: theme.textMuted }}>
-                  <div>📅 {selectedCourse.duration}</div>
-                  <div>⭐ {selectedCourse.rating} rating</div>
-                  <div>👥 {selectedCourse.enrolled.toLocaleString()} enrolled</div>
+                <div style={{ display: 'flex', gap: '40px', fontSize: '17px', color: 'var(--text-muted)', fontWeight:'700' }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>📅 <span>{selectedCourse.duration}</span></div>
+                  <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>⭐ <span>{selectedCourse.rating} rating</span></div>
+                  <div style={{ display:'flex', alignItems:'center', gap:'12px' }}>👥 <span>{selectedCourse.enrolled.toLocaleString()} enrolled</span></div>
                 </div>
               </div>
             </div>
 
             {/* Progress Bar */}
             {isEnrolled(selectedCourse.id) && (
-              <div style={{ marginBottom: '24px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '14px', fontWeight: '600' }}>Your Progress</span>
-                  <span style={{ fontSize: '14px', color: theme.accent }}>{progress}%</span>
+              <div className="pf-glass" style={{ marginBottom: '60px', padding:'40px', background:'rgba(0,0,0,0.02) !important', borderRadius:'32px', border:'none' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
+                  <span style={{ fontSize: '18px', fontWeight: '900', color:'var(--text-heading)', letterSpacing:'1.5px' }}>YOUR PROGRESS</span>
+                  <span style={{ fontSize: '28px', fontWeight: '900', color: 'var(--brand-teal)', fontFamily:'var(--font-display)' }}>{progress}%</span>
                 </div>
                 <div style={{
-                  width: '100%', height: '8px', background: theme.inputBg,
-                  borderRadius: '4px', overflow: 'hidden'
+                  width: '100%', height: '18px', background: 'rgba(0,0,0,0.03)',
+                  borderRadius: '9px', overflow: 'hidden', padding:'4px'
                 }}>
                   <div style={{
                     width: `${progress}%`, height: '100%',
-                    background: theme.accent,
-                    borderRadius: '4px', transition: 'width 0.3s ease'
+                    background: 'var(--brand-teal)',
+                    borderRadius: '5px', transition: 'width 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow:'0 0 20px rgba(0, 212, 170, 0.4)'
                   }} />
                 </div>
               </div>
             )}
 
-            {/* Skills You'll Learn */}
-            <div style={{ marginBottom: '24px' }}>
-              <h4 style={{ fontSize: '16px', fontWeight: 'bold', marginBottom: '12px' }}>Skills You'll Learn</h4>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                {selectedCourse.skills.map(skill => (
-                  <span key={skill} style={{
-                    background: theme.inputBg,
-                    padding: '6px 12px',
-                    borderRadius: '20px',
-                    fontSize: '12px'
-                  }}>
-                    {skill}
-                  </span>
-                ))}
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'50px', marginBottom:'60px' }}>
+              {/* Skills You'll Learn */}
+              <div>
+                <h4 style={{ fontSize: '24px', fontWeight: '900', marginBottom: '25px', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-0.5px' }}>Skills You'll Learn</h4>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                  {selectedCourse.skills.map(skill => (
+                    <span key={skill} style={{
+                      background: 'rgba(0,0,0,0.04)',
+                      padding: '12px 24px',
+                      borderRadius: '15px',
+                      fontSize: '15px',
+                      fontWeight:'800',
+                      color:'var(--text-heading)'
+                    }}>
+                      {skill}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            {/* Certificate Info */}
-            <div style={{
-              background: theme.inputBg,
-              border: `1px solid ${theme.success}`,
-              borderRadius: '12px',
-              padding: '16px',
-              marginBottom: '24px'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <div style={{ fontSize: '24px' }}>🏆</div>
-                <div>
-                  <div style={{ fontWeight: 'bold', color: theme.success }}>
-                    Certificate of Completion
-                  </div>
-                  <div style={{ fontSize: '14px', color: theme.textMuted }}>
-                    {selectedCourse.certificate}
+              {/* Certificate Info */}
+              <div className="pf-glass" style={{
+                background: 'rgba(0, 212, 170, 0.05) !important',
+                border: '1px solid rgba(0, 212, 170, 0.2) !important',
+                borderRadius: '32px',
+                padding: '35px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '30px' }}>
+                  <div style={{ fontSize: '56px' }}>🏆</div>
+                  <div>
+                    <div style={{ fontWeight: '900', color: 'var(--brand-teal)', fontSize:'18px', letterSpacing:'1px', textTransform:'uppercase' }}>
+                      CERTIFICATE OF COMPLETION
+                    </div>
+                    <div style={{ fontSize: '18px', color: 'var(--text-heading)', fontWeight:'800', marginTop:'8px' }}>
+                      {selectedCourse.certificate}
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div style={{ display: 'flex', gap: '16px' }}>
+            <div style={{ display: 'flex', gap: '25px' }}>
               {!isEnrolled(selectedCourse.id) ? (
                 <button
                   onClick={() => handleEnroll(selectedCourse)}
+                  className="pf-glow-btn"
                   style={{
-                    background: theme.accent,
-                    color: '#FFFFFF',
                     border: 'none',
-                    padding: '14px 32px',
-                    borderRadius: '25px',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    cursor: 'pointer'
+                    padding: '24px 80px',
+                    borderRadius: '45px',
+                    fontSize: '20px',
+                    fontWeight: '900',
+                    cursor: 'pointer',
+                    textTransform:'uppercase',
+                    letterSpacing:'2px'
                   }}
                 >
                   🚀 Enroll Now
@@ -604,15 +636,16 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
               ) : (
                 <button
                   onClick={() => setCurrentVideo(selectedCourse.videos[0])}
+                  className="pf-glow-btn"
                   style={{
-                    background: theme.success,
-                    color: '#FFFFFF',
                     border: 'none',
-                    padding: '14px 32px',
-                    borderRadius: '25px',
-                    fontSize: '16px',
-                    fontWeight: 'bold',
-                    cursor: 'pointer'
+                    padding: '24px 80px',
+                    borderRadius: '45px',
+                    fontSize: '20px',
+                    fontWeight: '900',
+                    cursor: 'pointer',
+                    textTransform:'uppercase',
+                    letterSpacing:'2px'
                   }}
                 >
                   ▶️ Continue Learning
@@ -623,43 +656,46 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
 
           {/* Course Videos */}
           {isEnrolled(selectedCourse.id) && (
-            <div>
-              <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '16px' }}>
-                Course Videos
+            <div className="pf-glass" style={{ padding:'60px', background:'white !important', borderRadius:'50px', border:'none', boxShadow:'0 40px 100px rgba(0,0,0,0.05)' }}>
+              <h3 style={{ fontSize: '32px', fontWeight: '900', marginBottom: '45px', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-1px' }}>
+                Course Curriculum
               </h3>
-              <div style={{ display: 'grid', gap: '12px' }}>
+              <div style={{ display: 'grid', gap: '20px' }}>
                 {selectedCourse.videos.map((video, index) => (
                   <div
                     key={video.id}
                     onClick={() => setCurrentVideo(video)}
+                    className="pf-glass video-curriculum-item"
                     style={{
-                      background: completedVideos[video.id] ? theme.success + '1A' : theme.cardBg,
-                      border: completedVideos[video.id] ? `1px solid ${theme.success}` : `1px solid ${theme.border}`,
-                      borderRadius: '12px',
-                      padding: '16px',
+                      background: completedVideos[video.id] ? 'rgba(0, 212, 170, 0.03) !important' : 'rgba(0,0,0,0.02) !important',
+                      border: 'none',
+                      borderRadius: '30px',
+                      padding: '35px',
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '16px'
+                      gap: '35px',
+                      transition:'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
                     }}
                   >
-                    <div style={{
-                      width: '60px',
-                      height: '40px',
-                      borderRadius: '8px',
-                      background: theme.inputBg,
+                    <div className="pf-glass" style={{
+                      width: '90px',
+                      height: '60px',
+                      borderRadius: '18px',
+                      background: completedVideos[video.id] ? 'var(--brand-teal)' : 'white',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontSize: '20px'
+                      fontSize: '28px',
+                      border:'none'
                     }}>
                       {completedVideos[video.id] ? '✅' : '▶️'}
                     </div>
                     <div style={{ flex: 1 }}>
-                      <div style={{ fontSize: '16px', fontWeight: '600', marginBottom: '4px' }}>
+                      <div style={{ fontSize: '22px', fontWeight: '900', color: 'var(--text-heading)', marginBottom: '8px', letterSpacing:'-0.5px' }}>
                         {index + 1}. {video.title}
                       </div>
-                      <div style={{ fontSize: '14px', color: theme.textMuted }}>
+                      <div style={{ fontSize: '16px', color: 'var(--text-muted)', fontWeight:'700' }}>
                         {video.duration}
                       </div>
                     </div>
@@ -669,6 +705,9 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
             </div>
           )}
         </div>
+        <style>{`
+          .video-curriculum-item:hover { background: white !important; transform: translateX(15px); box-shadow: 0 20px 50px rgba(0,0,0,0.05) !important; }
+        `}</style>
       </div>
     );
   }
@@ -676,51 +715,52 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
   return (
     <div style={{
       minHeight: '100vh',
-      background: theme.pageBg,
-      color: theme.textPrimary,
-      fontFamily: 'Arial, sans-serif',
-      padding: '20px'
+      background: 'var(--bg-base)',
+      color: 'var(--text-body)',
+      fontFamily: 'var(--font-main)',
+      padding: '80px 20px'
     }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent:'space-between', maxWidth: '1300px', margin: '0 auto 60px' }}>
         <button 
           onClick={onBack}
+          className="pf-glass"
           style={{
-            background: 'transparent', color: theme.textMuted,
-            border: `1px solid ${theme.border}`, padding: '8px 18px',
-            borderRadius: '20px', cursor: 'pointer', fontSize: '13px'
+            border: 'none', color: 'var(--text-body)',
+            padding: '16px 35px', borderRadius: '25px', cursor: 'pointer', fontSize: '13px', fontWeight:'900', letterSpacing:'1.5px', textTransform:'uppercase'
           }}
         >
-          ← Back
+          ← BACK
         </button>
-        <h1 style={{ color: theme.accent, fontSize: '22px', fontWeight: 'bold' }}>⚡ PathForge</h1>
+        <h1 className="pf-shimmer-text" style={{ fontSize: '32px', fontWeight: '900', fontFamily:'var(--font-display)', margin:0, letterSpacing:'-1px' }}>⚡ PathForge Academy</h1>
       </div>
 
-      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-          <h2 style={{ fontSize: '32px', fontWeight: 'bold', marginBottom: '8px' }}>
+      <div style={{ maxWidth: '1300px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+          <h2 style={{ fontSize: '64px', fontWeight: '900', marginBottom: '20px', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-2.5px', lineHeight:1.1 }}>
             🎓 Professional Certifications
           </h2>
-          <p style={{ color: theme.textMuted, fontSize: '16px' }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '22px', fontWeight:'700', opacity:0.8, maxWidth:'800px', margin:'0 auto' }}>
             Industry-recognized courses from top companies like Infosys, Microsoft, IBM, and Google
           </p>
         </div>
 
         {/* Category Tabs */}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '32px', flexWrap: 'wrap' }}>
+        <div className="pf-glass" style={{ display: 'inline-flex', gap: '10px', marginBottom: '80px', padding:'10px', border:'none', background:'rgba(0,0,0,0.03) !important', borderRadius:'45px', left:'50%', transform:'translateX(-50%)', position:'relative' }}>
           {availableCategories.map(category => (
             <button
               key={category}
               onClick={() => setSelectedCategory(category)}
               style={{
-                padding: '10px 20px',
-                borderRadius: '25px',
+                padding: '16px 40px',
+                borderRadius: '35px',
                 cursor: 'pointer',
-                fontSize: '14px',
-                fontWeight: selectedCategory === category ? 'bold' : 'normal',
-                background: selectedCategory === category ? theme.accent : theme.inputBg,
-                color: selectedCategory === category ? '#FFFFFF' : theme.textPrimary,
+                fontSize: '16px',
+                fontWeight: '900',
+                background: selectedCategory === category ? 'white' : 'transparent',
+                color: selectedCategory === category ? 'var(--brand-teal)' : 'var(--text-muted)',
                 border: 'none',
-                transition: 'all 0.3s ease'
+                transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+                boxShadow: selectedCategory === category ? '0 15px 35px rgba(0,0,0,0.08)' : 'none'
               }}
             >
               {category}
@@ -729,7 +769,7 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
         </div>
 
         {/* Courses Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '24px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(420px, 1fr))', gap: '40px' }}>
           {CERTIFICATIONS_DATA[selectedCategory].map(course => {
             const progress = isEnrolled(course.id) ? getCourseProgress(course) : 0;
             
@@ -737,105 +777,56 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
                 <div
                 key={course.id}
                 onClick={() => setSelectedCourse(course)}
+                className="pf-glass course-card"
                 style={{
-                  background: theme.cardBg,
-                  border: `1px solid ${theme.border}`,
-                  borderRadius: '16px',
+                  background: 'white !important',
+                  borderRadius: '32px',
                   overflow: 'hidden',
                   cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.background = theme.inputBg;
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.background = theme.cardBg;
+                  transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+                  border:'none',
+                  display:'flex',
+                  flexDirection:'column',
+                  boxShadow:'0 30px 60px rgba(0,0,0,0.04)'
                 }}
               >
-                <img 
-                  src={course.thumbnail}
-                  alt={course.title}
-                  style={{
-                    width: '100%',
-                    height: '180px',
-                    objectFit: 'cover'
-                  }}
-                />
-                
-                <div style={{ padding: '20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
-                    <span style={{
-                      background: theme.inputBg,
-                      color: theme.accent,
-                      padding: '4px 8px',
-                      borderRadius: '12px',
-                      fontSize: '11px',
-                      fontWeight: 'bold'
-                    }}>
-                      {course.provider}
-                    </span>
-                    <span style={{
-                      background: theme.inputBg,
-                      color: theme.accentLight,
-                      padding: '4px 8px',
-                      borderRadius: '12px',
-                      fontSize: '11px',
-                      fontWeight: 'bold'
-                    }}>
-                      {course.level}
-                    </span>
-                  </div>
-                  
-                  <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '8px' }}>
-                    {course.title}
-                  </h3>
-                  
-                  <p style={{ color: theme.textMuted, fontSize: '14px', lineHeight: '1.5', marginBottom: '12px' }}>
-                    {course.description}
-                  </p>
-                  
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                    <div style={{ fontSize: '12px', color: theme.textMuted }}>
-                      📅 {course.duration}
-                    </div>
-                    <div style={{ fontSize: '12px', color: theme.textMuted }}>
-                      ⭐ {course.rating}
-                    </div>
-                  </div>
-
-                  {/* Progress Bar for Enrolled Courses */}
+                <div style={{ position:'relative' }}>
+                  <img 
+                    src={course.thumbnail}
+                    alt={course.title}
+                    style={{
+                      width: '100%',
+                      height: '260px',
+                      objectFit: 'cover'
+                    }}
+                  />
                   {isEnrolled(course.id) && (
-                    <div style={{ marginBottom: '12px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
-                        <span style={{ fontSize: '12px' }}>Progress</span>
-                        <span style={{ fontSize: '12px', color: theme.accent }}>{progress}%</span>
-                      </div>
-                      <div style={{
-                        width: '100%', height: '4px', background: theme.inputBg,
-                        borderRadius: '2px', overflow: 'hidden'
-                      }}>
-                        <div style={{
-                          width: `${progress}%`, height: '100%',
-                          background: theme.accent,
-                          borderRadius: '2px'
-                        }} />
-                      </div>
+                    <div style={{ position:'absolute', top:20, right:20, background:'var(--brand-teal)', color:'white', padding:'10px 25px', borderRadius:'25px', fontSize:'14px', fontWeight:'900', boxShadow:'0 10px 25px rgba(0, 212, 170, 0.3)' }}>
+                      ENROLLED
                     </div>
                   )}
-
-                  <div style={{
-                    background: theme.inputBg,
-                    border: `1px solid ${theme.success}`,
-                    borderRadius: '8px',
-                    padding: '8px 12px',
-                    fontSize: '12px',
-                    color: theme.success,
-                    textAlign: 'center',
-                    fontWeight: '600'
-                  }}>
-                    🏆 {course.certificate}
+                </div>
+                
+                <div style={{ padding:'35px', flex:1, display:'flex', flexDirection:'column' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '20px' }}>
+                    <span style={{ background:'rgba(0, 212, 170, 0.1)', color:'var(--brand-teal)', padding:'6px 16px', borderRadius:'20px', fontSize:'12px', fontWeight:'900', letterSpacing:'1px' }}>{course.provider.toUpperCase()}</span>
+                    <span style={{ background:'rgba(0,0,0,0.04)', color:'var(--text-muted)', padding:'6px 16px', borderRadius:'20px', fontSize:'12px', fontWeight:'900', letterSpacing:'1px' }}>{course.level.toUpperCase()}</span>
+                  </div>
+                  
+                  <h3 style={{ fontSize:'24px', fontWeight:'900', marginBottom:'15px', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-0.5px' }}>{course.title}</h3>
+                  <p style={{ color:'var(--text-muted)', fontSize:'15px', lineHeight:1.6, marginBottom:'25px', fontWeight:'600' }}>{course.description}</p>
+                  
+                  <div style={{ marginTop:'auto' }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'15px' }}>
+                      <span style={{ color:'var(--text-muted)', fontSize:'14px', fontWeight:'700' }}>{course.videos.length} Modules • {course.duration}</span>
+                      <span style={{ color:'var(--text-heading)', fontSize:'15px', fontWeight:'900' }}>⭐ {course.rating}</span>
+                    </div>
+                    
+                    {isEnrolled(course.id) && (
+                      <div style={{ width:'100%', height:'8px', background:'rgba(0,0,0,0.03)', borderRadius:'4px', overflow:'hidden' }}>
+                        <div style={{ width:`${progress}%`, height:'100%', background:'var(--brand-teal)', transition:'width 0.8s ease' }} />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -843,6 +834,9 @@ export default function Certifications({ userData, onBack, onProgressUpdate, the
           })}
         </div>
       </div>
+      <style>{`
+        .course-card:hover { transform: translateY(-10px); background: white !important; box-shadow: 0 30px 60px rgba(0,0,0,0.08) !important; }
+      `}</style>
     </div>
   );
 }

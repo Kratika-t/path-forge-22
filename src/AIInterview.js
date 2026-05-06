@@ -15,21 +15,22 @@ const MAX_WARNINGS = 5;
 const MAX_PERSON_WARNINGS = 3; // Terminate after 3 person violations
 const MAX_EYE_WARNINGS = 5; // Terminate after 5 eye tracking violations
 
+const defaultTheme = {
+  pageBg: 'var(--bg-base)',
+  cardBg: 'var(--glass-bg)',
+  inputBg: 'rgba(255, 255, 255, 0.6)',
+  border: 'var(--glass-border)',
+  textPrimary: 'var(--text-heading)',
+  textMuted: 'var(--text-body)',
+  accent: 'var(--brand-teal)',
+  accentHover: 'var(--brand-yellow)',
+  accentLight: 'rgba(0, 212, 170, 0.2)',
+  success: 'var(--brand-teal)',
+  warning: 'var(--brand-yellow)',
+  error: 'var(--brand-coral)',
+};
+
 export default function AIInterview({ userData, onBack, onComplete, theme }) {
-  const defaultTheme = {
-    pageBg: '#1D2226',
-    cardBg: '#1B1F23',
-    inputBg: '#283039',
-    border: '#38434F',
-    textPrimary: '#E7E9EA',
-    textMuted: '#B0B7BF',
-    accent: '#0A66C2',
-    accentHover: '#004182',
-    accentLight: '#70B5F9',
-    success: '#057642',
-    warning: '#F5C518',
-    error: '#CC1016',
-  };
   const currentTheme = theme || defaultTheme;
   // Setup Phase
   const [setupPhase, setSetupPhase] = useState(true);
@@ -546,18 +547,28 @@ export default function AIInterview({ userData, onBack, onComplete, theme }) {
 
   if (setupPhase) {
     return (
-      <div style={{ minHeight:'100vh', background:currentTheme.pageBg, color:currentTheme.textPrimary, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px' }}>
-        <div style={{ maxWidth:'600px', width:'100%', background:currentTheme.cardBg, border:`1px solid ${currentTheme.border}`, padding:'40px', borderRadius:'30px', textAlign:'center' }}>
-          <div style={{ fontSize:'50px', marginBottom:'10px' }}>🎥</div>
-          <h2 style={{ fontSize:'28px', fontWeight:'900', marginBottom:'15px' }}>Mock Interview Studio</h2>
-          <p style={{ color:currentTheme.textMuted, marginBottom:'30px' }}>Select your target field for a precise AI evaluation.</p>
+      <div style={{ minHeight:'100vh', background:'var(--bg-base)', color:'var(--text-body)', display:'flex', alignItems:'center', justifyContent:'center', padding:'80px 20px', fontFamily:'var(--font-main)' }}>
+        <div className="pf-glass" style={{ maxWidth:'1000px', width:'100%', padding:'80px', textAlign:'center', borderRadius:'60px', border:'none', boxShadow: '0 60px 150px rgba(0,0,0,0.08)', background:'white !important' }}>
+          <div style={{ fontSize:'120px', marginBottom:'50px', filter:'drop-shadow(0 30px 60px rgba(0, 212, 170, 0.25))' }}>🎥</div>
+          <h2 className="pf-shimmer-text" style={{ fontSize:'72px', fontWeight:'900', marginBottom:'25px', fontFamily:'var(--font-display)', letterSpacing:'-3.5px', lineHeight:1 }}>Interview Studio</h2>
+          <p style={{ color:'var(--text-muted)', marginBottom:'80px', fontWeight:'900', fontSize:'24px', opacity:0.6, letterSpacing: '1px' }}>SELECT YOUR TARGET DOMAIN FOR A PRECISION TECHNICAL AUDIT.</p>
           
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(2, 1fr)', gap:'10px', marginBottom:'25px' }}>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:'25px', marginBottom:'60px' }}>
             {PREDEFINED_FIELDS.map(f => (
               <button 
                 key={f}
                 onClick={() => setSelectedField(f)}
-                style={{ padding:'12px', borderRadius:'12px', background: selectedField === f ? currentTheme.accent : currentTheme.inputBg, border:'1px solid ' + (selectedField === f ? currentTheme.accent : currentTheme.border), color: selectedField === f ? 'white' : currentTheme.textPrimary, cursor:'pointer', fontSize:'13px', fontWeight:'bold', transition:'all 0.2s' }}
+                className={selectedField === f ? "" : "pf-glass"}
+                style={{ 
+                  padding:'25px', borderRadius:'30px', 
+                  background: selectedField === f ? 'var(--brand-teal) !important' : 'rgba(0,0,0,0.01) !important', 
+                  border: 'none',
+                  color: selectedField === f ? 'white' : 'var(--text-heading)', 
+                  cursor:'pointer', fontSize:'16px', fontWeight:'900', transition:'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                  boxShadow: selectedField === f ? '0 20px 50px rgba(0, 212, 170, 0.3)' : '0 5px 15px rgba(0,0,0,0.02)',
+                  textTransform:'uppercase', letterSpacing:'2px',
+                  transform: selectedField === f ? 'translateY(-10px)' : 'translateY(0)'
+                }}
               >
                 {f}
               </button>
@@ -567,19 +578,21 @@ export default function AIInterview({ userData, onBack, onComplete, theme }) {
           {selectedField === 'Other' && (
             <input 
               type="text" 
-              placeholder="Enter your field (e.g. DevOps Engineer)" 
+              placeholder="SPECIFY YOUR CORE EXPERTISE..." 
               value={customField}
               onChange={(e) => setCustomField(e.target.value)}
-              style={{ width:'100%', padding:'15px', borderRadius:'15px', background:currentTheme.inputBg, border:`1px solid ${isFieldValid ? currentTheme.border : currentTheme.error}`, color:currentTheme.textPrimary, marginBottom:'20px', outline:'none' }}
+              className="pf-glass"
+              style={{ width:'100%', padding:'35px', borderRadius:'40px', background:'rgba(0,0,0,0.01) !important', border:'none !important', color:'var(--text-heading)', marginBottom:'60px', outline:'none', fontSize:'22px', fontWeight:'800', fontFamily:'var(--font-main)', textAlign:'center', boxShadow: 'inset 0 2px 20px rgba(0,0,0,0.03)' }}
             />
           )}
 
           <button 
             onClick={generateQuestions}
             disabled={!isFieldValid || analyzing}
-            style={{ width:'100%', padding:'18px', borderRadius:'15px', background: isFieldValid ? currentTheme.accent : currentTheme.inputBg, color:currentTheme.textPrimary, border:'none', fontWeight:'bold', cursor: isFieldValid ? 'pointer' : 'not-allowed' }}
+            className={isFieldValid ? "pf-glow-btn" : "pf-glass"}
+            style={{ width:'100%', padding:'35px', borderRadius:'45px', border:'none', fontWeight:'900', cursor: isFieldValid ? 'pointer' : 'not-allowed', fontSize:'24px', textTransform:'uppercase', letterSpacing:'4px', opacity: isFieldValid ? 1 : 0.5 }}
           >
-            {analyzing ? 'Initializing AI...' : 'Start Proctored Session ⚡'}
+            {analyzing ? 'CALIBRATING AI INTERVIEWER...' : 'INITIATE PROCTORED SESSION ⚡'}
           </button>
         </div>
       </div>
@@ -587,232 +600,171 @@ export default function AIInterview({ userData, onBack, onComplete, theme }) {
   }
 
   return (
-    <div style={{ minHeight:'100vh', background:currentTheme.pageBg, color:currentTheme.textPrimary, padding:'40px 20px', fontFamily:'Arial, sans-serif' }}>
+    <div style={{ minHeight:'100vh', background:'var(--bg-base)', color:'var(--text-body)', padding:'80px 20px', fontFamily:'var(--font-main)' }}>
       
-      <div style={{ display:'flex', alignItems:'center', gap:'16px', maxWidth:'1000px', margin:'0 auto 30px' }}>
-        <button onClick={handleBack} style={{ background:'transparent', color:currentTheme.textMuted, border:`1px solid ${currentTheme.border}`, padding:'8px 18px', borderRadius:'20px', cursor:'pointer' }}>← Back</button>
-        <h1 style={{ color:currentTheme.accent, fontSize:'22px', fontWeight:'bold', margin:0 }}>🎥 AI Mock Interview Studio</h1>
+      <div style={{ display:'flex', alignItems:'center', gap:'30px', maxWidth:'1300px', margin:'0 auto 60px' }}>
+        <button onClick={handleBack} className="pf-glass" style={{ border:'none', padding:'16px 35px', cursor:'pointer', fontSize:'13px', fontWeight:'900', borderRadius:'25px', letterSpacing:'1.5px', textTransform:'uppercase' }}>BACK</button>
+        <h1 className="pf-shimmer-text" style={{ fontSize:'42px', fontWeight:'900', margin:0, fontFamily:'var(--font-display)', letterSpacing:'-2.5px' }}>⚡ AI INTERVIEW STUDIO</h1>
       </div>
 
       {securityViolation && (
-        <div style={{ maxWidth:'1000px', margin:'0 auto 30px', background:currentTheme.error + '26', border:'2px solid ' + currentTheme.error, borderRadius:'16px', padding:'20px', textAlign:'center', color:currentTheme.error }}>
-          <div style={{ fontSize:'24px', fontWeight:'bold' }}>⚠️ SECURITY TERMINATION</div>
-          <p>{securityViolation}</p>
-          <button onClick={() => window.location.reload()} style={{ marginTop:'15px', background:currentTheme.error, color:'white', border:'none', padding:'8px 20px', borderRadius:'12px', cursor:'pointer' }}>Restart Session</button>
+        <div className="pf-glass" style={{ maxWidth:'1100px', margin:'0 auto 80px', border:'none', borderRadius:'50px', padding:'60px', textAlign:'center', color:'var(--brand-coral)', background:'white !important', boxShadow: '0 40px 100px rgba(255, 107, 107, 0.15)' }}>
+          <div style={{ fontSize:'48px', fontWeight:'900', marginBottom:'25px', fontFamily:'var(--font-display)', letterSpacing:'-2px' }}>⚠️ SECURITY LOCK TRIGGERED</div>
+          <p style={{ fontWeight:'900', fontSize:'26px', opacity:0.8, letterSpacing:'-0.5px' }}>{securityViolation.toUpperCase()}</p>
+          <button onClick={() => window.location.reload()} className="pf-glow-btn" style={{ border:'none', marginTop:'50px', padding:'25px 60px', borderRadius:'35px', fontSize:'17px', background:'var(--brand-coral) !important', fontWeight:'900', textTransform:'uppercase', letterSpacing:'3px' }}>RE-AUTHENTICATE & RESTART</button>
         </div>
       )}
 
-      <div style={{ maxWidth:'1000px', margin:'0 auto', display:'grid', gridTemplateColumns: results ? '1fr 1.4fr' : '1fr', gap:'30px' }}>
+      <div style={{ maxWidth:'1400px', margin:'0 auto', display:'grid', gridTemplateColumns: results ? '1fr 1.2fr' : '1fr', gap:'80px' }}>
         
-        <div style={{ display:'flex', flexDirection:'column', gap:'20px' }}>
+        <div style={{ display:'flex', flexDirection:'column', gap:'50px' }}>
           {!results && (
-            <div style={{ background:currentTheme.inputBg, border:`1px solid ${currentTheme.accent}`, padding:'25px', borderRadius:'20px', animation:'fadeIn 0.5s ease' }}>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'12px' }}>
-                <div style={{ fontSize:'12px', color:currentTheme.accent, fontWeight:'800' }}>QUESTION {currentQIndex + 1} OF {questions.length}</div>
-                <div style={{ display:'flex', gap:'15px', alignItems:'center' }}>
-                  {recording && <div style={{ fontSize:'14px', fontWeight:'900', color:currentTheme.error }}>⏱️ {timer}s</div>}
+            <div className="pf-glass" style={{ padding:'60px', border:'none', background:'white !important', borderRadius:'50px', boxShadow: '0 30px 80px rgba(0,0,0,0.05)' }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'40px' }}>
+                <div style={{ fontSize:'14px', color:'var(--brand-teal)', fontWeight:'900', textTransform:'uppercase', letterSpacing:'3px', opacity:0.5 }}>CALIBRATION UNIT {currentQIndex + 1} / {questions.length}</div>
+                <div style={{ display:'flex', gap:'40px', alignItems:'center' }}>
+                  {recording && <div className="pf-shimmer-text" style={{ fontSize:'42px', fontWeight:'900', color:'var(--brand-coral)', fontFamily:'var(--font-display)', letterSpacing:'-2px', lineHeight:1 }}>⏱️ {timer}S</div>}
                   
-                  {/* Biometric Protection Indicators */}
-                  <div style={{ display:'flex', gap:'8px', alignItems:'center' }}>
+                  <div style={{ display:'flex', gap:'20px', alignItems:'center' }}>
                     <div style={{ 
-                      fontSize:'11px', 
-                      fontWeight:'900', 
-                      padding:'4px 8px',
-                      borderRadius:'6px',
-                      background: biometricStatus === 'terminated' ? currentTheme.error : biometricStatus === 'warning' ? currentTheme.warning : currentTheme.success,
-                      color: 'white'
+                      fontSize:'12px', fontWeight:'900', padding:'12px 25px', borderRadius:'20px',
+                      background: biometricStatus === 'terminated' ? 'var(--brand-coral)' : biometricStatus === 'warning' ? 'var(--brand-yellow)' : 'var(--brand-teal)',
+                      color: 'white', textTransform:'uppercase', letterSpacing:'2px', border:'none',
+                      boxShadow: '0 10px 25px rgba(0,0,0,0.1)'
                     }}>
-                      {biometricStatus === 'terminated' ? '🔒 BIOMETRIC LOCK' : biometricStatus === 'warning' ? '⚠️ BIOMETRIC WARNING' : '✅ BIOMETRIC ACTIVE'}
-                    </div>
-                    
-                    <div style={{ 
-                      fontSize:'11px', 
-                      fontWeight:'900', 
-                      color: personWarningCount >= 2 ? currentTheme.error : personWarningCount >= 1 ? currentTheme.warning : currentTheme.accent,
-                      padding:'4px 6px',
-                      borderRadius:'4px',
-                      background: currentTheme.inputBg
-                    }}>
-                      👥 PERSON: {personWarningCount}/{MAX_PERSON_WARNINGS}
-                    </div>
-                    
-                    <div style={{ 
-                      fontSize:'11px', 
-                      fontWeight:'900', 
-                      color: eyeWarningCount >= 4 ? currentTheme.error : eyeWarningCount >= 2 ? currentTheme.warning : currentTheme.accent,
-                      padding:'4px 6px',
-                      borderRadius:'4px',
-                      background: currentTheme.inputBg
-                    }}>
-                      👁️ EYES: {eyeWarningCount}/{MAX_EYE_WARNINGS}
+                      {biometricStatus === 'terminated' ? 'SESSION LOCKED' : biometricStatus === 'warning' ? 'ACTIVE MONITOR' : 'SECURE LINK'}
                     </div>
                   </div>
                 </div>
               </div>
-              <div style={{ fontSize:'20px', fontWeight:'700', lineHeight:'1.5' }}>{questions[currentQIndex]}</div>
+              <div style={{ fontSize:'38px', fontWeight:'900', lineHeight:'1.3', color:'var(--text-heading)', fontFamily:'var(--font-display)', letterSpacing:'-1px' }}>{questions[currentQIndex]}</div>
             </div>
           )}
 
-          <div style={{ position:'relative', borderRadius:'24px', overflow:'hidden', background:'#000', border:`1px solid ${currentTheme.border}` }}>
+          <div style={{ position:'relative', borderRadius:'60px', overflow:'hidden', background:'#000', border:'none', boxShadow:'0 60px 150px rgba(0,0,0,0.25)', aspectRatio:'16/9' }}>
             {!recorded ? (
               <>
-                <video ref={videoRef} autoPlay muted playsInline style={{ width:'100%', display:'block', filter: securityViolation ? 'blur(10px) grayscale(1)' : 'none' }} />
+                <video ref={videoRef} autoPlay muted playsInline style={{ width:'100%', height:'100%', objectFit:'cover', display:'block', filter: securityViolation ? 'blur(80px) grayscale(1)' : 'none' }} />
                 {boundingBox && !securityViolation && (
                   <div style={{ 
                     position:'absolute', 
-                    border:`2px solid ${personCount > 1 ? currentTheme.error : currentTheme.accent}`, 
-                    left: `${boundingBox.x}%`, 
-                    top: `${boundingBox.y}%`, 
-                    width: `${boundingBox.w}%`, 
-                    height: `${boundingBox.h}%`, 
-                    transition: 'all 0.15s ease-out',
-                    boxShadow: `0 0 15px ${personCount > 1 ? currentTheme.error + '80' : currentTheme.accent + '80'}`,
-                    borderRadius: '8px',
-                    pointerEvents: 'none'
+                    border:`4px solid ${personCount > 1 ? 'var(--brand-coral)' : 'var(--brand-teal)'}`, 
+                    left: `${boundingBox.x}%`, top: `${boundingBox.y}%`, 
+                    width: `${boundingBox.w}%`, height: `${boundingBox.h}%`, 
+                    transition: 'all 0.1s cubic-bezier(0.16, 1, 0.3, 1)',
+                    boxShadow: `0 0 100px ${personCount > 1 ? 'var(--brand-coral)' : 'var(--brand-teal)'}`,
+                    borderRadius: '40px', pointerEvents: 'none'
                   }}>
-                    <div style={{ position:'absolute', top:'-25px', left:0, background: personCount > 1 ? currentTheme.error : currentTheme.accent, color:'white', fontSize:'10px', padding:'2px 8px', borderRadius:'4px', fontWeight:'bold', whiteSpace:'nowrap' }}>
-                      {personCount > 1 ? '⚠️ MULTIPLE ENTITIES' : '🎯 TARGET LOCKED'}
+                    <div style={{ position:'absolute', top:'-50px', left:0, background: personCount > 1 ? 'var(--brand-coral)' : 'var(--brand-teal)', color:'white', fontSize:'13px', padding:'10px 25px', borderRadius:'15px', fontWeight:'900', whiteSpace:'nowrap', textTransform:'uppercase', letterSpacing:'2px', boxShadow: '0 10px 30px rgba(0,0,0,0.3)' }}>
+                      {personCount > 1 ? '⚠️ MULTIPLE ENTITIES DETECTED' : '🎯 NEURAL TRACKING ACTIVE'}
                     </div>
                   </div>
                 )}
               </>
             ) : (
-              <video src={videoUrl} controls style={{ width:'100%', display:'block' }} />
+              <video src={videoUrl} controls style={{ width:'100%', height:'100%', objectFit:'cover', display:'block' }} />
             )}
 
             {recording && currentTranscript && (
-              <div style={{ position:'absolute', bottom:20, left:20, right:20, background:currentTheme.pageBg, padding:'15px', borderRadius:'15px', border:`1px solid ${currentTheme.border}`, backdropFilter:'blur(10px)' }}>
-                <div style={{ fontSize:'10px', color:currentTheme.accent, fontWeight:'800', marginBottom:'5px' }}>LIVE SPEECH CAPTURE</div>
-                <div style={{ fontSize:'13px', color:currentTheme.textPrimary, fontStyle:'italic' }}>"...{currentTranscript.slice(-120)}"</div>
+              <div className="pf-glass" style={{ position:'absolute', bottom:60, left:60, right:60, padding:'40px', background:'rgba(255,255,255,0.98) !important', borderRadius:'40px', border:'none', boxShadow: '0 30px 60px rgba(0,0,0,0.15)' }}>
+                <div style={{ fontSize:'13px', color:'var(--brand-teal)', fontWeight:'900', marginBottom:'15px', textTransform:'uppercase', letterSpacing:'3px', opacity:0.6 }}>SYNCHRONIZED SPEECH CAPTURE</div>
+                <div style={{ fontSize:'22px', color:'var(--text-heading)', fontStyle:'italic', fontWeight:'700', lineHeight:1.6 }}>"...{currentTranscript.slice(-180)}"</div>
               </div>
             )}
 
             {!results && (
-              <div style={{ position:'absolute', top:20, left:20, display:'flex', flexDirection:'column', gap:'8px' }}>
-                <div style={{ display:'flex', gap:'8px', flexWrap:'wrap' }}>
+              <div style={{ position:'absolute', top:60, left:60, display:'flex', flexDirection:'column', gap:'25px' }}>
+                <div style={{ display:'flex', gap:'20px', flexWrap:'wrap' }}>
                   <div style={{ 
-                    background: personDetected ? currentTheme.success : currentTheme.error, 
-                    padding:'6px 12px', 
-                    borderRadius:'10px', 
-                    fontSize:'11px', 
-                    border:`1px solid ${currentTheme.border}`, 
-                    backdropFilter:'blur(5px)',
-                    fontWeight: 'bold'
+                    background: personDetected ? 'rgba(0, 212, 170, 0.95)' : 'rgba(255, 107, 107, 0.95)', 
+                    padding:'15px 30px', borderRadius:'20px', fontSize:'14px', color:'white',
+                    fontWeight: '900', textTransform:'uppercase', letterSpacing:'2px',
+                    boxShadow: '0 15px 30px rgba(0,0,0,0.2)'
                   }}>
-                    👤 {personDetected ? 'PERSON DETECTED' : 'NO PERSON'}
+                    👤 {personDetected ? 'SYNCED' : 'LOST'}
                   </div>
                   <div style={{ 
-                    background: eyeContactScore > 70 ? currentTheme.success : eyeContactScore > 40 ? currentTheme.warning : currentTheme.error, 
-                    padding:'6px 12px', 
-                    borderRadius:'10px', 
-                    fontSize:'11px', 
-                    border:`1px solid ${currentTheme.border}`, 
-                    backdropFilter:'blur(5px)',
-                    fontWeight: 'bold'
+                    background: eyeContactScore > 70 ? 'rgba(0, 212, 170, 0.95)' : 'rgba(245, 166, 35, 0.95)', 
+                    padding:'15px 30px', borderRadius:'20px', fontSize:'14px', color:'white',
+                    fontWeight: '900', textTransform:'uppercase', letterSpacing:'2px',
+                    boxShadow: '0 15px 30px rgba(0,0,0,0.2)'
                   }}>
-                    �️ EYE: {eyeContactScore}%
+                    👁️ EYE: {Math.round(eyeContactScore)}%
                   </div>
                   <div style={{ 
-                    background: noiseLevel > 65 ? currentTheme.error : currentTheme.success, 
-                    padding:'6px 12px', 
-                    borderRadius:'10px', 
-                    fontSize:'11px', 
-                    border:`1px solid ${currentTheme.border}`, 
-                    backdropFilter:'blur(5px)',
-                    fontWeight: 'bold'
+                    background: noiseLevel > 65 ? 'rgba(255, 107, 107, 0.95)' : 'rgba(0, 212, 170, 0.95)', 
+                    padding:'15px 30px', borderRadius:'20px', fontSize:'14px', color:'white',
+                    fontWeight: '900', textTransform:'uppercase', letterSpacing:'2px',
+                    boxShadow: '0 15px 30px rgba(0,0,0,0.2)'
                   }}>
-                    🔊 NOISE: {noiseLevel > 65 ? 'LOUD' : 'OPTIMAL'}
+                    🔊 ACOUSTIC: {noiseLevel > 65 ? 'NOISY' : 'CLEAN'}
                   </div>
                 </div>
-                
-                {/* Warning Counter */}
-                {warnings.length > 0 && (
-                  <div style={{ 
-                    background: currentTheme.error, 
-                    padding:'6px 12px', 
-                    borderRadius:'10px', 
-                    fontSize:'11px', 
-                    border:`1px solid ${currentTheme.error}`, 
-                    backdropFilter:'blur(5px)',
-                    fontWeight: 'bold',
-                    animation: 'pulse 2s infinite'
-                  }}>
-                    ⚠️ WARNINGS: {warnings.length}/5
-                  </div>
-                )}
               </div>
             )}
 
-            {/* Warnings Display */}
-            {warnings.length > 0 && (
-              <div style={{ 
-                position: 'absolute', 
-                top: 20, 
-                right: 20, 
-                maxWidth: '300px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '8px'
-              }}>
+            <div style={{ position:'absolute', top:60, right:60, maxWidth:'450px', display:'flex', flexDirection:'column', gap:'25px' }}>
                 {warnings.map(warning => (
-                  <div
-                    key={warning.id}
-                    style={{
-                      background: currentTheme.error,
-                      border: `1px solid ${currentTheme.error}`,
-                      borderRadius: '12px',
-                      padding: '12px',
-                      fontSize: '12px',
-                      fontWeight: '600',
-                      color: '#FFFFFF',
-                      backdropFilter: 'blur(10px)',
-                      animation: 'slideInRight 0.3s ease-out',
-                      boxShadow: `0 4px 15px ${currentTheme.error}4d`
-                    }}
-                  >
+                  <div key={warning.id} className="pf-glass" style={{
+                      background:'rgba(255, 107, 107, 0.98) !important', color:'#FFFFFF', border:'none',
+                      padding:'25px 40px', fontSize:'15px', fontWeight:'900', borderRadius:'30px',
+                      boxShadow: '0 30px 60px rgba(255, 107, 107, 0.4)', animation:'slideInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                      textTransform:'uppercase', letterSpacing:'1.5px'
+                  }}>
                     {warning.message}
                   </div>
                 ))}
-              </div>
-            )}
+            </div>
           </div>
 
           {!recording && !recorded && !securityViolation && (
-            <button onClick={startRecording} style={{ width:'100%', padding:'18px', borderRadius:'15px', background:currentTheme.accent, color:'#FFFFFF', border:'none', fontWeight:'bold', fontSize:'16px', cursor:'pointer' }}>Start Interview</button>
+            <button onClick={startRecording} className="pf-glow-btn" style={{ border:'none', width:'100%', padding:'35px', borderRadius:'45px', fontWeight:'900', fontSize:'26px', textTransform:'uppercase', letterSpacing:'5px' }}>ENGAGE AI INTERVIEW SEQUENCE</button>
           )}
           {recording && (
-             <button onClick={nextQuestion} style={{ width:'100%', padding:'18px', borderRadius:'15px', background:currentTheme.accentLight, color:'#FFFFFF', border:'none', fontWeight:'bold', fontSize:'16px', cursor:'pointer' }}>
-               {currentQIndex === questions.length - 1 ? 'Finish Interview' : 'Next Question'}
+             <button onClick={nextQuestion} className="pf-glow-btn" style={{ border:'none', width:'100%', padding:'35px', borderRadius:'45px', fontWeight:'900', fontSize:'26px', textTransform:'uppercase', letterSpacing:'5px', background:'var(--brand-yellow) !important' }}>
+               {currentQIndex === questions.length - 1 ? 'TERMINATE & GENERATE AUDIT' : 'PROCEED TO NEXT UNIT'}
              </button>
           )}
           {recorded && !results && !analyzing && (
-            <button onClick={analyzeInterview} style={{ width:'100%', padding:'18px', borderRadius:'15px', background:currentTheme.success, color:'#FFFFFF', border:'none', fontWeight:'bold', fontSize:'16px', cursor:'pointer' }}>Generate AI Scorecard</button>
+            <button onClick={analyzeInterview} className="pf-glow-btn" style={{ border:'none', width:'100%', padding:'35px', borderRadius:'45px', fontWeight:'900', fontSize:'26px', textTransform:'uppercase', letterSpacing:'5px', background:'var(--brand-teal) !important' }}>SYNTHESIZE TECHNICAL SCORECARD</button>
           )}
           {analyzing && (
-            <div style={{ textAlign:'center', padding:'30px', background:currentTheme.inputBg, borderRadius:'24px' }}>
-              <div style={{ fontSize:'40px', marginBottom:'15px' }}>🧠</div>
-              <div style={{ fontWeight:'bold', color:currentTheme.accentLight }}>GEMINI AI IS PERFORMING TECHNICAL AUDIT...</div>
+            <div className="pf-glass" style={{ textAlign:'center', padding:'100px', background:'white !important', borderRadius:'60px', border:'none', boxShadow: '0 30px 80px rgba(0,0,0,0.06)' }}>
+              <div style={{ fontSize:'120px', marginBottom:'50px', animation:'pf-pulse 1.5s infinite' }}>🧠</div>
+              <div style={{ fontWeight:'900', color:'var(--brand-teal)', fontSize:'24px', letterSpacing:'4px', textTransform:'uppercase' }}>PATHFORGE AI IS CONDUCTING DEEP TECHNICAL SYNTHESIS...</div>
             </div>
           )}
         </div>
 
         {results && (
-          <div style={{ background:currentTheme.cardBg, borderRadius:'24px', padding:'35px', border:`1px solid ${currentTheme.success}`, animation:'fadeIn 0.5s ease' }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'25px' }}>
-              <h3 style={{ fontSize:'24px', fontWeight:'900' }}>AI Technical Scorecard</h3>
-              <div style={{ fontSize:'32px', fontWeight:'900', color: results.rating > 5 ? currentTheme.success : currentTheme.error }}>{results.rating}/10</div>
+          <div className="pf-glass" style={{ padding:'80px', border:'none', background:'white !important', height:'fit-content', borderRadius:'60px', boxShadow:'0 60px 150px rgba(0,0,0,0.1)' }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'60px' }}>
+              <h3 className="pf-shimmer-text" style={{ fontSize:'56px', fontWeight:'900', fontFamily:'var(--font-display)', margin:0, letterSpacing:'-3px' }}>Technical Audit</h3>
+              <div style={{ fontSize:'84px', fontWeight:'900', color: results.rating > 5 ? 'var(--brand-teal)' : 'var(--brand-coral)', fontFamily:'var(--font-display)', letterSpacing:'-4px', lineHeight:1 }}>{results.rating}<span style={{fontSize:'32px', opacity:0.4, letterSpacing:0}}>/10</span></div>
             </div>
-            <div style={{ marginBottom:'30px' }}>
-              <div style={{ fontSize:'11px', color:currentTheme.accent, fontWeight:'900', textTransform:'uppercase', marginBottom:'10px' }}>Detailed Technical Audit</div>
-              <p style={{ fontSize:'14px', lineHeight:'1.7', color:currentTheme.textPrimary, background:currentTheme.inputBg, padding:'20px', borderRadius:'15px', borderLeft:`4px solid ${currentTheme.accent}` }}>{results.detailedJudgement}</p>
+            
+            <div style={{ marginBottom:'60px' }}>
+              <div style={{ fontSize:'14px', color:'var(--brand-teal)', fontWeight:'900', textTransform:'uppercase', marginBottom:'30px', letterSpacing:'4px', opacity:0.5 }}>CRITICAL AUDIT SUMMARY</div>
+              <p className="pf-glass" style={{ fontSize:'24px', lineHeight:'1.8', color:'var(--text-heading)', padding:'50px', borderRadius:'40px', borderLeft:'15px solid var(--brand-teal) !important', background:'rgba(0, 212, 170, 0.04) !important', fontWeight:'600' }}>{results.detailedJudgement}</p>
             </div>
-            <button onClick={handleBack} style={{ width:'100%', marginTop:'35px', padding:'18px', borderRadius:'15px', background:currentTheme.inputBg, color:currentTheme.textPrimary, border:'none', fontWeight:'bold', cursor:'pointer' }}>Return to Dashboard</button>
+
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(2, 1fr)', gap:'30px', marginBottom:'80px' }}>
+               <div className="pf-glass" style={{ padding:'45px', textAlign:'center', borderRadius:'40px', background:'rgba(0,0,0,0.01) !important', border:'none' }}>
+                  <div style={{ fontSize:'14px', fontWeight:'900', color:'var(--text-muted)', textTransform:'uppercase', marginBottom:'15px', letterSpacing:'3px' }}>COGNITIVE SYNC</div>
+                  <div className="pf-shimmer-text" style={{ fontSize:'56px', fontWeight:'900', fontFamily:'var(--font-display)', letterSpacing:'-2px' }}>{results.metrics?.communication || 0}%</div>
+               </div>
+               <div className="pf-glass" style={{ padding:'45px', textAlign:'center', borderRadius:'40px', background:'rgba(0,0,0,0.01) !important', border:'none' }}>
+                  <div style={{ fontSize:'14px', fontWeight:'900', color:'var(--text-muted)', textTransform:'uppercase', marginBottom:'15px', letterSpacing:'3px' }}>NEURAL INTEGRITY</div>
+                  <div className="pf-shimmer-text" style={{ fontSize:'56px', fontWeight:'900', fontFamily:'var(--font-display)', letterSpacing:'-2px' }}>{results.metrics?.integrity || 100}%</div>
+               </div>
+            </div>
+
+            <button onClick={handleBack} className="pf-glow-btn" style={{ border:'none', width:'100%', padding:'35px', borderRadius:'45px', fontWeight:'900', fontSize:'24px', textTransform:'uppercase', letterSpacing:'4px' }}>RETURN TO COMMAND CENTER</button>
           </div>
         )}
       </div>
-
       <style>{`
-        @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideInRight { from { transform: translateX(100px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
       `}</style>
     </div>
   );
